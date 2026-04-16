@@ -15,7 +15,7 @@ Current phase: **Phase 1 — Infrastructure**
 ## Phase 1 — Infrastructure (in progress)
 
 - [ ] **T1** — Deterministic sampling (`src/sampling.py` + tests + `data/samples/*.json`)
-- [ ] **T2** — Cache layer (`src/cache.py` + tests)
+- [x] **T2** — Cache layer (`src/cache.py` + tests)
 - [ ] **T3** — Eval harness (`src/eval.py` F1/EM/bootstrap + tests)
 - [ ] **T4** — IAA script (`src/iaa.py` Krippendorff α + tests)
 - [ ] **T5** — Extraction prompt v1 (`prompts/extract_v1.txt` + teammate review)
