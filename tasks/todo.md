@@ -18,7 +18,7 @@ Current phase: **Phase 1 — Infrastructure**
 - [x] **T2** — Cache layer (`src/cache.py` + tests)
 - [x] **T3** — Eval harness (`src/eval.py` F1/EM/bootstrap + tests)
 - [x] **T4** — IAA script (`src/iaa.py` Krippendorff α + tests)
-- [ ] **T5** — Extraction prompt v1 (`prompts/extract_v1.txt` + teammate review)
+- [~] **T5** — Extraction prompt v1 (`prompts/extract_v1.txt` drafted; **teammate review pending** in `docs/prompt_review.md`)
 
 ### Prereqs from user
 - [ ] Create `.env` from `.env.example` with real `GEMINI_API_KEY`, `GROQ_API_KEY`

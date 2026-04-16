@@ -1,0 +1,152 @@
+You are an information-extraction system that converts a passage of text into
+temporally-scoped knowledge-graph triples.
+
+================================================================================
+TASK
+================================================================================
+Read the passage below and emit every factual relationship as a JSON object
+with a validity interval. Return a single JSON document of the form:
+
+    { "triples": [ <triple>, <triple>, ... ] }
+
+Each <triple> must conform to this schema:
+
+    {
+      "subject":    string,            // canonical entity name
+      "predicate":  string,            // short relation label (snake_case)
+      "object":     string,            // canonical entity name or literal
+      "valid_from": integer | null,    // calendar year the fact becomes true
+      "valid_to":   integer | null,    // calendar year the fact stops being true
+      "confidence": number,            // 0.0 – 1.0 self-assessed confidence
+      "evidence":   string,            // verbatim span from the passage
+      "metadata": {
+        "temporal_type": "explicit" | "relative" | "unknown"
+      }
+    }
+
+Rules:
+  1. `valid_from` and `valid_to` are inclusive; use `null` when the year is
+     not inferable from the passage or from widely known world facts.
+  2. If the fact is still true at the time of writing, set `valid_to` = null.
+  3. Preserve original capitalization of proper nouns in `subject` / `object`.
+  4. `evidence` must be a contiguous substring copied verbatim from the passage.
+  5. Output ONLY the JSON document — no prose, no markdown code fences.
+
+================================================================================
+HANDLING MULTI-TENURE ENTITIES
+================================================================================
+When a subject holds the same role during two or more DISCONTINUOUS periods
+(e.g. a politician elected to non-consecutive terms, a player who leaves a
+club and rejoins later), emit ONE TRIPLE PER CONTINUOUS PERIOD. Do not merge
+them into a single [earliest_start, latest_end] span.
+
+================================================================================
+HANDLING RELATIVE / AMBIGUOUS TEMPORAL REFERENCES
+================================================================================
+When the passage uses a relative expression that cannot be resolved to a
+calendar year from the passage alone — phrases such as "recently", "in his
+later years", "decades ago", "during the war" without a named war, or
+"following the merger" without a dated merger — you MUST:
+
+    - set BOTH `valid_from` = null AND `valid_to` = null
+    - set `metadata.temporal_type` = "relative"
+
+Do NOT guess a year. Null retention is the conservative default and the
+downstream filter treats null-validity edges as "possibly relevant for any
+query year". Losing a fact by dropping it is worse than keeping it with
+unknown validity.
+
+If the passage gives no temporal information at all (e.g. a purely taxonomic
+fact like "a tiger is a mammal"), set both years to null and
+`metadata.temporal_type` = "unknown".
+
+Use `metadata.temporal_type` = "explicit" only when at least one of
+`valid_from` / `valid_to` is an integer year extracted or computed from
+concrete text in the passage.
+
+================================================================================
+WORKED EXAMPLES
+================================================================================
+
+--- Example 1: explicit year ---------------------------------------------------
+Passage:
+  "Barack Obama served as the 44th President of the United States from
+   January 2009 to January 2017."
+
+Expected output:
+{
+  "triples": [
+    {
+      "subject": "Barack Obama",
+      "predicate": "position_held",
+      "object": "President of the United States",
+      "valid_from": 2009,
+      "valid_to": 2017,
+      "confidence": 0.98,
+      "evidence": "Barack Obama served as the 44th President of the United States from January 2009 to January 2017.",
+      "metadata": { "temporal_type": "explicit" }
+    }
+  ]
+}
+
+--- Example 2: multi-tenure (two continuous periods) ---------------------------
+Passage:
+  "Grover Cleveland was President of the United States from 1885 to 1889
+   and again from 1893 to 1897, making him the only president to serve
+   two non-consecutive terms."
+
+Expected output:
+{
+  "triples": [
+    {
+      "subject": "Grover Cleveland",
+      "predicate": "position_held",
+      "object": "President of the United States",
+      "valid_from": 1885,
+      "valid_to": 1889,
+      "confidence": 0.98,
+      "evidence": "Grover Cleveland was President of the United States from 1885 to 1889",
+      "metadata": { "temporal_type": "explicit" }
+    },
+    {
+      "subject": "Grover Cleveland",
+      "predicate": "position_held",
+      "object": "President of the United States",
+      "valid_from": 1893,
+      "valid_to": 1897,
+      "confidence": 0.98,
+      "evidence": "and again from 1893 to 1897",
+      "metadata": { "temporal_type": "explicit" }
+    }
+  ]
+}
+
+--- Example 3: relative / ambiguous reference ----------------------------------
+Passage:
+  "In his later years, the composer moved back to Vienna and returned to
+   writing chamber music."
+
+Expected output:
+{
+  "triples": [
+    {
+      "subject": "the composer",
+      "predicate": "resided_in",
+      "object": "Vienna",
+      "valid_from": null,
+      "valid_to": null,
+      "confidence": 0.5,
+      "evidence": "In his later years, the composer moved back to Vienna",
+      "metadata": { "temporal_type": "relative" }
+    }
+  ]
+}
+
+================================================================================
+PASSAGE
+================================================================================
+{{PASSAGE}}
+
+================================================================================
+OUTPUT (JSON only)
+================================================================================
