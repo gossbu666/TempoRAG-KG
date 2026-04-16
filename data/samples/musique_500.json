@@ -1,0 +1,3928 @@
+[
+  {
+    "hop_count": 2,
+    "id": "2hop__10114_599630",
+    "patterns": [],
+    "question": "Where in Zhejiang is the city where Protestants are especially notable?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__104095_40501",
+    "patterns": [],
+    "question": "How many refugees emigrated to the country that Clara Peeters is a citizen of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__10515_21567",
+    "patterns": [
+      "time_period"
+    ],
+    "question": "Who introduced a system of musical notation in the 14th century that is used in the area where most of the invasion of the eastern Roman Empire took place?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__107601_110222",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When is the birthday of the creator of Le ruisseau noir?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__107690_124896",
+    "patterns": [],
+    "question": "Who was the father of The Portrait of George Dyer Talking's creator?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__12039_11957",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "What geological event caused the foundations of the land beneath the city where most university graduates stay after acquiring a degree?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__123145_66723",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "who was the first black student admitted to the university that Stewart Patridge attended?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__124807_135019",
+    "patterns": [],
+    "question": "Who is the mother of Nephalion's father?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__126188_396277",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "The author of Abel's Island wrote what 1982 book featuring a mouse-dentist?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__129721_40482",
+    "patterns": [],
+    "question": "From whom did the Huguenots in the state encompassing Zubly Cemetery purchase land from?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__130668_126089",
+    "patterns": [],
+    "question": "Who was in charge of the state where Graft-De Rijp is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__131818_161450",
+    "patterns": [],
+    "question": "Where is the Voshmgir District located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__132472_120537",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the company that makes ALARM abolished?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__132472_684936",
+    "patterns": [],
+    "question": "The company making ALARM follows which company?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__13592_85544",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "How many games do team in the league where Barcelona won titles in 1948 and 1949 play?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__136214_483189",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "The person whom Sikyona is named after is part of what?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__13986_161674",
+    "patterns": [],
+    "question": "What month did the person with whom Henry fought a short war in 1183 go away from the holy land?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__141365_417697",
+    "patterns": [],
+    "question": "What is Mohamed Atta's car, manufactured by the company that includes Datsun, an instance of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__141456_6455",
+    "patterns": [],
+    "question": "What was the resulting browser for the company Mozilla Messaging is a part of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__142881_127399",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the performer of the album From Them, Through Us, to You formed?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__144303_483189",
+    "patterns": [],
+    "question": "What mythology is the city where Eutychides was born in a part of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__144658_599630",
+    "patterns": [],
+    "question": "What county was Ye Rongguang born in?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__144763_599630",
+    "patterns": [],
+    "question": "In which county was Zhu Qinan born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__144784_623159",
+    "patterns": [],
+    "question": "The city where Dmitry Borisovich was born is located where in Russia?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__145082_35034",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "What was the population density of Tammy Leitner's city of birth in 2009?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__145203_34088",
+    "patterns": [],
+    "question": "Where does Ulysses Kay's birth city hold NASCAR races?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__146919_29244",
+    "patterns": [],
+    "question": "What is the busiest airport in the city where Marcel Bich died?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__149983_108549",
+    "patterns": [],
+    "question": "Who wrote the fictional work Doctor Fate exists in?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__14_59409",
+    "patterns": [],
+    "question": "Who was Beyonce's husband talking about in the the song Cry?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__151750_141308",
+    "patterns": [],
+    "question": "What company is the record label of Magic Christian Music part of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__152229_604644",
+    "patterns": [],
+    "question": "What was the record label of the record label of So Insane?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__15258_54866",
+    "patterns": [],
+    "question": "What actress plays the princess who England proposed to affiliate with Wales to quell a rebellion?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__152700_141308",
+    "patterns": [],
+    "question": "What company is the record label for Oh Woman, Oh Why a part of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__153009_44880",
+    "patterns": [],
+    "question": "Who is the mayor presiding now where Merrill Elam was born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__153532_45326",
+    "patterns": [],
+    "question": "How many episodes are in season 5 of the series The Bag or the Bat is part of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__153573_44085",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "What was the show named after the character featured in the video game Mickey's Safari in Letterland?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__153573_45901",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Who did the original voice for the character whose series Mickey's safari in Letterland is from?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__156700_63853",
+    "patterns": [],
+    "question": "What is the source of the river of which Kraai River is a tributary?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__157498_127908",
+    "patterns": [],
+    "question": "What league does the team that uses Dick's Sporting Goods Park play for?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__157737_46621",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the celestial body that all objects focus on according to Kepler's laws discovered to be the center of the solar system?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__158010_58067",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who was honoured with the highest award a citizen without military experience in India before becoming a president?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__159903_419949",
+    "patterns": [],
+    "question": "What is the capital of the country it is about?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__160223_58067",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who was given India's highest civilian honor before he became President of India?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__161915_78851",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "which professional sports team would you not see play a home game in the arena where the last place Cream performed?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__16581_16525",
+    "patterns": [
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "When did the person who first brought a postal service into Umayyad lands become caliph?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__16632_110014",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "What year was the person who described the use of bitumen and pitch to tar ships born?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__1667_40501",
+    "patterns": [],
+    "question": "How many refugees emigrated to the nation that founded New Amsterdam?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__16844_20510",
+    "patterns": [
+      "year_mention",
+      "when_what_year",
+      "before_after"
+    ],
+    "question": "When was the entity that was dissolved after the Indian Rebellion in 1857 chartered?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__168816_144857",
+    "patterns": [],
+    "question": "In what city was the author of Elephant born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__169443_83769",
+    "patterns": [],
+    "question": "Who did the screenwriter for Good Will Hunting play in Dazed and Confused?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__17192_77606",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "In ancient times, why was the geographical location of the country that secured southern Lebanon in 1978 strategic?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__175168_110222",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the creator of The Painter's Studio born?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__179322_83289",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Who stars in the video \"One Last Time\" by the performer of Baby I?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__194532_57594",
+    "patterns": [],
+    "question": "What gun does the director of Pollock use in Westworld?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__195917_575657",
+    "patterns": [],
+    "question": "In what county is William W. Blair's birthplace located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__198650_84856",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When does the new season start for the show starring the author of True Story: A Novel?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__199216_33564",
+    "patterns": [
+      "time_period"
+    ],
+    "question": "During what era was the manufacturer of Agni-V founded?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__201704_135481",
+    "patterns": [
+      "year_mention",
+      "before_after"
+    ],
+    "question": "What is the competition that the 1965 Federation Cup is part of named after?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__20536_96912",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who gives out the award named after the person who argued that colonies were redundant?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__207476_625987",
+    "patterns": [],
+    "question": "Who is the grandmother of Philippe, Duke of Orléans?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__21104_16254",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "By 1931, what percentage of the world's Jews were the group that represents at least 70% of Jews worldwide?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__21104_16335",
+    "patterns": [],
+    "question": "The group representing at least 70% of Jews worldwide and Italians may be genetically similar due to what two factors?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__215898_67465",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the performer of I Love Life, Thank You release Best Day Ever?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__223823_29898",
+    "patterns": [],
+    "question": "Which affiliate left the owner of Canadian Broadcasting Centre due to an agreement with CHBC?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__231805_514393",
+    "patterns": [],
+    "question": "What is the birthplace of St. Simeon Stylites' author?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__23297_23366",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Why did the leader who broke the Molotov–Ribbentrop Pact by invading Bukovina first sign it?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__23459_22946",
+    "patterns": [],
+    "question": "Who said that the most influential figure in Islamic philosophy was one of the greatest thinkers?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__2416_53663",
+    "patterns": [],
+    "question": "Where is the river that the engine pumped water from located in the world?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__252521_80650",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who played the character in the Santa Clause 3 that has a series named after it that includes Frost at Christmas?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__25396_593388",
+    "patterns": [],
+    "question": "Who was the father of the person who issued the Tamworth manifesto?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__256336_714772",
+    "patterns": [],
+    "question": "Who is the spouse of a cast member from King of the Mountain?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__25788_25839",
+    "patterns": [],
+    "question": "What is the maximum load drawn by the device that was designed to standardize connection of computer peripherals?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__25788_25855",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "Drives attached via an industry standard connector remain powered when the computer is off using what Dell feature?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__25797_25855",
+    "patterns": [
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "What does Dell call the feature that enables drives using the feature where 1.1 was the first widely used version, to remain powered when a computer is off?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__25797_990",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Which iPod generation introduced compatibility with the industry standard connection that was first widely used at version 1.1?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__259267_22402",
+    "patterns": [],
+    "question": "How many students attend where Rudolf Wolf was educated?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__263728_705527",
+    "patterns": [],
+    "question": "Who is the father of the father of Anwer Ali?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__265989_531490",
+    "patterns": [],
+    "question": "Who is the mother of the screenwriter of WarGames?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__267938_92763",
+    "patterns": [],
+    "question": "What is the enrollment at Jack Clay's employer?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__268084_78303",
+    "patterns": [],
+    "question": "What was the name of the star of Forced Vengeance in Walter, Texas Ranger?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__2683_577502",
+    "patterns": [],
+    "question": "Who married the governor who passed a law in honor of Donda West?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__27650_27619",
+    "patterns": [],
+    "question": "Where is the mission for the bank that began to increase their coverage of weaker debts found?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__286621_67370",
+    "patterns": [
+      "year_mention",
+      "when_what_year"
+    ],
+    "question": "When does the show of the cast member of Politically Incorrect start again in 2018?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__29368_29376",
+    "patterns": [],
+    "question": "What event caused the founder of Australia's liberal party to become Prime Minister?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__29893_29905",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "How many mandatory transmitters of the owner and operator of most CBC TV stations were updated before the deadline?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__304852_758385",
+    "patterns": [],
+    "question": "What administrative territorial entity contains the place where KPRM is licensed to broadcast to?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__307218_161450",
+    "patterns": [],
+    "question": "In what part of the country is Minudasht County?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__30905_189318",
+    "patterns": [],
+    "question": "Where did the person who sponsored the resolution to reopen trade with Vietnam along with Kerry go to college?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__30905_213732",
+    "patterns": [],
+    "question": "Who is the child of the person who sponsored the resolution to reopen trade with Vietnam, along with Kerry?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__315246_88622",
+    "patterns": [],
+    "question": "Who is the head of the developer of Simon?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__31995_8583",
+    "patterns": [],
+    "question": "Who did the Slavs have contact with in the country that Steven Spielberg's grandparents were from?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__335899_124498",
+    "patterns": [],
+    "question": "Who is the father of the performer of Qui de noux deux?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__341305_332933",
+    "patterns": [],
+    "question": "What is the capital of the county that Pine Springs is located in?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__342746_679190",
+    "patterns": [],
+    "question": "Who is the spouse of the screenwriter of The Actress?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__34495_85544",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "How many games does the team play that had the most champion league wins between 1992 and 2013?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__34595_160249",
+    "patterns": [],
+    "question": "In which years did the war with the military leader from which the term Pyrrhic victory comes occur?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__345_59409",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "Who was the person who purchased Tidal's parent company in 2015 talking about in the song 'Cry?'",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__347652_47134",
+    "patterns": [],
+    "question": "What is the mascot of the institution that owns Memorial Union?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__35136_35117",
+    "patterns": [],
+    "question": "What's the life span of the scholar who theorized about pulmonary circulation?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__35137_22899",
+    "patterns": [
+      "age_duration"
+    ],
+    "question": "What age did the writer of The Canon of Medicine learn the entire quran?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__35137_22932",
+    "patterns": [],
+    "question": "Which interpretation of the work of the writer of The Canon of Medicine was taught more in Islamic schools?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__35137_22943",
+    "patterns": [],
+    "question": "Where did the author of The Canon of Medicine think Venus was in relation to the sun?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__354635_174222",
+    "patterns": [],
+    "question": "What company succeeded the owner of Empire Sports Network?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__358270_108549",
+    "patterns": [],
+    "question": "Who wrote the TV Series containing the Finale episodes?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__36269_73244",
+    "patterns": [],
+    "question": "Where is the origin of the river that Orlam clans crossed to migrate to Namibia?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__363214_590899",
+    "patterns": [],
+    "question": "The city that Psycho Donuts is located in is in which county?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__363216_787353",
+    "patterns": [],
+    "question": "Where is the headquarters of the 1st Combat Communication Squadron located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__365236_19320",
+    "patterns": [],
+    "question": "What worldwide ranking is held by Mario Pani's alma mater?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__370911_589237",
+    "patterns": [],
+    "question": "Who is the spouse of the Redcap cast member?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__373544_80420",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Who was the first African American student at the university Robert Khayat was educated at?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__3739_13529",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the football star who backed out due to relay controversy signed by Barcelona?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__37656_160040",
+    "patterns": [],
+    "question": "Who is the guy defending this stuff from the highest authority in Protestantism for morals?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__38030_23241",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "According to Pew, in 2010, what percent of Nigeria's population practiced the religion dominant in the countries surrounding Armenia?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__385392_756039",
+    "patterns": [],
+    "question": "What administrative territorial entity includes the place that KTRP is licensed to broadcast to?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__388523_75487",
+    "patterns": [],
+    "question": "Who is the federal leader of the party that James Rajotte is a member of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__39063_593388",
+    "patterns": [],
+    "question": "Who is the father of the person who came up with the concept of the \"new\" police?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__391857_162018",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "What year did the author of Prince Prigio die?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__391873_88622",
+    "patterns": [],
+    "question": "Who is the head of the agency that created MYSTIC?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__39420_39345",
+    "patterns": [
+      "year_mention",
+      "when_what_year"
+    ],
+    "question": "When did the president of Notre Dame in 2012 begin his tenure?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__398344_439882",
+    "patterns": [],
+    "question": "Who is the creator of the main character in the Steven the Sword Fighter series?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__398344_85513",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When is the next episode of the series that Steven the Sword Fighter is a part of being released?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__39954_80940",
+    "patterns": [],
+    "question": "What is the largest national park in the country where hunters are estimated to spend fifty to one hundred times that of the average ecotourist?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__421324_97805",
+    "patterns": [],
+    "question": "Which war did the operator of Finnish coastal defence ship Väinämöinen serve in?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__422295_8311",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the sibling of Alice de Lusignan, Countess of Surrey crowned?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__423874_128023",
+    "patterns": [],
+    "question": "In which league was Ilsinho's team?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__423972_540249",
+    "patterns": [],
+    "question": "Who was the sibling of Nannina de' Medici?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__424294_19033",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "Where did the author of A Lion's Tale: Around the World in Spandex win in 2008?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__42578_55840",
+    "patterns": [],
+    "question": "Who played the monarch at the end of WW2 in The King's Speech?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__42747_83837",
+    "patterns": [],
+    "question": "Who sings Home Alone Tonight with the singer of Light It Up?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__433694_20273",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "In what year did Margaret Knox's spouse pass away?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__44259_747874",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "Who is the sibling of the player who won the 2012 U.S. Open Men's Singles final?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__445963_6098",
+    "patterns": [],
+    "question": "Over how many slaves ended up getting emancipated on the birth place of Francis Watson?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__446324_620302",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "The author of Elizabeth and After attended which university?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__458672_20057",
+    "patterns": [],
+    "question": "Who started the foundation that developed the Free Software Directory?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__463353_80420",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Who was the first African American student to attend the school that owns Swayze Field?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__47071_162399",
+    "patterns": [
+      "year_mention",
+      "when_what_year"
+    ],
+    "question": "When did the person who launched the Bardoli Satyagraha on 4th february 1928 die?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__471509_136043",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "The Nicole and Natalie album's band is named after who?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__475808_71302",
+    "patterns": [],
+    "question": "In The Godfather, who does the producer of Mistress play?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__477492_240386",
+    "patterns": [],
+    "question": "What is the record label of the Metalworks Studio founder?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__49409_67668",
+    "patterns": [],
+    "question": "What character does the actor who played Barney on How I Met Your Mother play in Batman Under the Red Hood?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__49887_573255",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Who is the spouse of the first king chosen to rule over the Israelites?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__50068_494136",
+    "patterns": [],
+    "question": "Who is the spouse of the person who played Father in I Can Only Imagine?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__501624_181960",
+    "patterns": [],
+    "question": "Where did the painter of The Mud Bath study?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__502473_634689",
+    "patterns": [],
+    "question": "Mehmet Hayri Tarhan's birthplace is the capital of what municipality?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__511176_22458",
+    "patterns": [],
+    "question": "What does the acronym of the organization Danish Football Union is part of stand for?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__511296_2684",
+    "patterns": [],
+    "question": "What was the name of the law passed by the actor from Terminator?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__519160_78303",
+    "patterns": [],
+    "question": "What was the name of Forced Vengeance's producer in Walker, Texas Ranger?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__53433_59035",
+    "patterns": [],
+    "question": "The beautiful country used as a backdrop for the movie The Lord of the Rings was founded on what date?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__538412_126089",
+    "patterns": [],
+    "question": "Who was in charge of the province where Schermer is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__538735_3299",
+    "patterns": [],
+    "question": "What season was the performer of Addicted a part of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__53937_92673",
+    "patterns": [],
+    "question": "Where is the place where Rudolph the red-nosed reindeer lives on the world map?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__547045_131879",
+    "patterns": [],
+    "question": "What body of water is by the headquarters location of Wipac?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__562154_69048",
+    "patterns": [],
+    "question": "Who is the Chief Judge in the place where DeltaWomen's headquarters in located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__56307_604644",
+    "patterns": [],
+    "question": "What is the record label of the Hey Now, You're A Rockstar singer?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__56851_343058",
+    "patterns": [],
+    "question": "Who is the spouse of the actress who played the fairy god mother in Shrek 2?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__575188_342798",
+    "patterns": [],
+    "question": "Who is the child of Mahmoud Mirza's father?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__575282_114648",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "What year did Allegory of Isabella d'Este's Coronation's creator the Younger die?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__575797_91104",
+    "patterns": [],
+    "question": "What is the experimental satellite that was the forerunner to communication satellite of the operator of INSAT-4CR called?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__57638_88526",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who was picked in the NBA draft before the player with the highest point average in NBA history?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__587048_621800",
+    "patterns": [],
+    "question": "What administrative territorial entity does Heinrich Gross's birth place located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__59133_512508",
+    "patterns": [],
+    "question": "What undertaking included the person who discovered that the number of protons in each element's atoms is unique?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__591435_51329",
+    "patterns": [],
+    "question": "What movie won the Knock on Any Door cast member his only Oscar?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__59612_50883",
+    "patterns": [],
+    "question": "The London broil cut comes from a country with an emergency response guidebook with response guides in which section?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__596188_297986",
+    "patterns": [],
+    "question": "What administrative territorial entity contains the place where Mycenae House is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__598467_68489",
+    "patterns": [],
+    "question": "Who did the performer from Night Rocker play on Young and Restless?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__599396_19320",
+    "patterns": [],
+    "question": "What worldwide ranking does Javier Barros Sierra's employer hold?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__60229_38663",
+    "patterns": [
+      "time_period",
+      "first_last"
+    ],
+    "question": "What was the percentage the Dow Jones fell during the time the first cake mix come out?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__607517_161450",
+    "patterns": [],
+    "question": "Where is the province containing Bandar-e Gaz County located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__61664_786853",
+    "patterns": [],
+    "question": "Who is the spouse of the voice actor of Batman in The Lego Batman Movie?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__62020_158262",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the president of the Confederacy end his fight in the Mexican-American war?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__623931_656446",
+    "patterns": [],
+    "question": "Who is the spouse of a cast member of Secrets of a Windmill Girl?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__629030_56873",
+    "patterns": [
+      "year_mention",
+      "when_what_year"
+    ],
+    "question": "When did the 1979-80 European Cup winner win the FA Cup?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__631024_18974",
+    "patterns": [],
+    "question": "Who led the military expedition in the province where Gong Beibi was born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__63214_319330",
+    "patterns": [],
+    "question": "Who is the child of the president under whom prohibition occurred?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__635187_861533",
+    "patterns": [],
+    "question": "What province shares a border with the province where Lago District is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__635544_110949",
+    "patterns": [],
+    "question": "What is the date of birth of the person who was part of Ratata?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__64372_83289",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Who is the guy in the One Last Time music video by the singer of a new version of Somewhere Over the Rainbow?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__66167_72467",
+    "patterns": [],
+    "question": "Where did the player who scored the most points in a NBA season go in the NBA Draft?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__665660_135481",
+    "patterns": [
+      "year_mention",
+      "before_after"
+    ],
+    "question": "The 1967 Federation Cup is an instance of this tournament which is named after what organization?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__66708_573255",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Who was the spouse of the person the Bible says was the first king of Israel?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__668407_683671",
+    "patterns": [],
+    "question": "Who is the father of Empress Wang's husband?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__66843_494136",
+    "patterns": [],
+    "question": "Who is the spouse of the actor portraying Jerry Lee Lewis in Great Balls of Fire?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__6744_6731",
+    "patterns": [],
+    "question": "What two dialects are included in the other pattern other vowels follow?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__67660_67223",
+    "patterns": [],
+    "question": "Who married the narrator of How I Met Your Mother?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__68162_482364",
+    "patterns": [],
+    "question": "Who was the father of the leader of the Argonauts in the search for the golden fleece?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__682872_516436",
+    "patterns": [],
+    "question": "What field does the author of Parallel Worlds work in?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__685930_110949",
+    "patterns": [],
+    "question": "What is the date of birth for the performer of Hits?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__695432_18803",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "The operator of Brent field announced it was in the process of doing what in April 2010?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__6956_192417",
+    "patterns": [],
+    "question": "The league the New England Patriots belongs to is an example of what?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__698577_851686",
+    "patterns": [],
+    "question": "What is a notable work written by the author of The Timothy files?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__701525_342810",
+    "patterns": [],
+    "question": "What county shares a border with Cedar Springs?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__701895_752697",
+    "patterns": [],
+    "question": "What administrative territorial entity is the owner of Ciudad Deportiva located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__70338_160040",
+    "patterns": [],
+    "question": "Who is the guy defending this stuff from the book from which by the skin of your teeth originated?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__70584_198548",
+    "patterns": [],
+    "question": "Who is the spouse of the person who played the sergeant major in We Were Soldiers?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__706038_14251",
+    "patterns": [],
+    "question": "What line by a cast member of Birds of Feather is believed to have started the archie nickname?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__71034_343058",
+    "patterns": [],
+    "question": "Who is the spouse of the person who sang holding out for a hero in shrek 2?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__711639_110949",
+    "patterns": [],
+    "question": "What is the Sarah performer's birth date?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__71900_712629",
+    "patterns": [],
+    "question": "Who is the spouse of the longest reigning British monarch?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__72118_83769",
+    "patterns": [],
+    "question": "Who did the person portraying Batman in the Justice League movie play in Dazed and Confused?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__728969_131890",
+    "patterns": [],
+    "question": "Which is the body of water near George Mills' place of birth?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__731584_700117",
+    "patterns": [],
+    "question": "In which county is the city to which KKVU is licensed to broadcast?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__734582_71302",
+    "patterns": [],
+    "question": "Who is played by the director of The Good Shepherd in The Godfather?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__73760_712629",
+    "patterns": [],
+    "question": "Who is the spouse of the individual who lives in the houses in Windsor Castle?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__747758_58067",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who was honored with the award Dhondo Keshav Karve received prior to becoming president of India?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__747894_135844",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Whom is the birth place of Ravil Aryapov named after?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__748182_78303",
+    "patterns": [],
+    "question": "What was the name of one of Top Dog's cast members in the Walker, Texas Ranger?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__75207_365216",
+    "patterns": [],
+    "question": "In which province is San Clemente, from the country where Fuser and Alberto meet the indigenous couple who were traveling to look for work?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__754826_7292",
+    "patterns": [],
+    "question": "Which artist was featured on smooth jazz stations, along with Kenny G and the performer of Saxophonic?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__765678_310556",
+    "patterns": [],
+    "question": "Who was married to the star of No Escape?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__770487_494646",
+    "patterns": [],
+    "question": "What administrative territorial entity contains the headquarters of the Mono Lake Committee?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__77233_33207",
+    "patterns": [
+      "time_period"
+    ],
+    "question": "How did did the people fare during the reign of the abolisher of sati partha in India?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__776637_87295",
+    "patterns": [],
+    "question": "Who does the cast member from Julie play in Princess Diaries?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__779424_75487",
+    "patterns": [],
+    "question": "Who is the federal leader of the party that Pierre-Hugues Boisvenu is a member of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__780238_110949",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the composer of Till dom ensamma born?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__78401_158262",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the person chosen to be president of the confederacy end his fight in the Mexican-American war?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__78873_461854",
+    "patterns": [],
+    "question": "Who is the female star in Gone with the Wind married to?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__79875_72187",
+    "patterns": [],
+    "question": "What character in A League of their Own was played by the actress who played Thelma in the movie Thelma and Louise?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__80_59409",
+    "patterns": [],
+    "question": "Who was the artist who did a duet with Beyonce in the single \"Deja Vu\" talking about in the song \"Cry\"?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__811015_3300",
+    "patterns": [],
+    "question": "What season was the performer of Blue Skies on?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__81379_84616",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "For what did the singer of the original version of Moon River win a Tony award?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__814408_155922",
+    "patterns": [],
+    "question": "Into what does the river for which Toongabbie Creek serves as the mouth flow?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__815205_590407",
+    "patterns": [],
+    "question": "Where is the headquarters of the organization that the Office of Science Education is a part of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__816977_6455",
+    "patterns": [],
+    "question": "The developer of Mozilla Sunbird created which browser?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__819974_129669",
+    "patterns": [],
+    "question": "In which state is Póvoa de Santa Iria's municipality located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__82051_7298",
+    "patterns": [
+      "temporal_relation"
+    ],
+    "question": "Along with the subject of The One That Got Away, what notable pop artist started out his career on adult contemporary radio?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__822113_91104",
+    "patterns": [],
+    "question": "What is the experimental satellite which was the forerunner to the communication satellite of the operator of GSAT-7 called?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__82270_177869",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Who is the spouse of the first nominated African American presidential candidate?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__825727_584042",
+    "patterns": [],
+    "question": "What league includes the sports team that has Maycon Carvalho Inez?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__82713_84616",
+    "patterns": [],
+    "question": "What did the actress in My Fair Lady win a Tony for?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__82910_75184",
+    "patterns": [],
+    "question": "Who played the girlfriend of Alex P. Keaton's actor on Family Ties in Back to the Future?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__835171_141338",
+    "patterns": [],
+    "question": "What company is the college where Wolf V. Vishniac studied a part of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__835914_91104",
+    "patterns": [],
+    "question": "The space agency operating IRS-P2 had a communication satellite preceded by which experimental satellite?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__83800_747874",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "Who's the sibling of the player who won the men's wimbledon championship 2016?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__840174_78851",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "which professional sports team would you not see play a home game in the venue that held the 2004 Republican National Convention?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__84103_345851",
+    "patterns": [],
+    "question": "The actor who plays the girl in Spiderman Homecoming is signed to which record label?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__846415_88165",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who did Jokshan's father marry after the death of Sarah?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__846921_160249",
+    "patterns": [],
+    "question": "What years was Aeacides of Epirus's child at war?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__8496_21567",
+    "patterns": [
+      "before_after",
+      "time_period"
+    ],
+    "question": "Who introduced a system of musical notation used during the 14th century in the place where there is no evidence of a Slavic settlement before c. 600 AD?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__85596_807969",
+    "patterns": [],
+    "question": "What team is the highest goal scorer in the EPL a member of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__857585_14251",
+    "patterns": [],
+    "question": "What line by the Southern Roses cast member is believed to have started the Archie nickname?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__85958_87295",
+    "patterns": [],
+    "question": "What character does the person who played Eliza Doolittle in My Fair Lady play in The Princess Diaries?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__86689_728109",
+    "patterns": [],
+    "question": "What team drafted the winner of the NBA scoring title this year?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__87580_7298",
+    "patterns": [
+      "temporal_relation"
+    ],
+    "question": "Along with the person who played Andy's brother in The Office, what notable pop artist started his career in adult contemporary radio?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__88372_83837",
+    "patterns": [],
+    "question": "Who sings home alone tonight with the singer of you can crash my party anytime?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__89460_75184",
+    "patterns": [],
+    "question": "Who in Back To The Future played the girlfriend of the character played by the actor playing marty's daughter in back to the future 2?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__89632_40480",
+    "patterns": [],
+    "question": "Where did Huguenot nobility settle in the state where the Patriot was filmed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__89657_289940",
+    "patterns": [],
+    "question": "What team's player had the most league sacks?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__91248_84207",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Who was the last soldier of the conflict that saw the government getting involved in healthcare to die?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__91626_96912",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who gives out the prize named after the author of The Wealth of Nations?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__91667_67223",
+    "patterns": [],
+    "question": "Who married the person telling the story in how i met your mother?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__9174_9237",
+    "patterns": [
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "When did the first mosque in the capital of the Marshall Islands open?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__93145_54024",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "Which king, who was England's rule in 1616, translated the Bible?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__94507_654855",
+    "patterns": [],
+    "question": "What political party does the person that Adversary in the House is based on a member of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__94629_1110",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "In what year was Twilight Princess from the game series on which The Legend of Neil was based originally planned for release?",
+    "temporal": true
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__95673_62765",
+    "patterns": [],
+    "question": "who did the leading actor in Sammy Going South play in the ten commandments?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__95970_152907",
+    "patterns": [],
+    "question": "What city is the star of Sous les pieds des femmes from?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__96137_121319",
+    "patterns": [],
+    "question": "Where did the actor in The Woman in the Window study or work?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__96410_47902",
+    "patterns": [],
+    "question": "Who is the actor who plays the title character in The Bourne Betrayal?",
+    "temporal": false
+  },
+  {
+    "hop_count": 2,
+    "id": "2hop__96812_130869",
+    "patterns": [],
+    "question": "The Small Cowper Madonna painting is displayed in what state?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__103197_214799_259594",
+    "patterns": [],
+    "question": "What country gas the border troops of the country of the literature of the country of Andreas Zülow's citizenship?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__103881_443779_52195",
+    "patterns": [],
+    "question": "Who is the president of the newly declared independent country that is part of the Commission of Truth and Friendship with the country that Tony Gunawan is from?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__103890_10659_23296",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "After the Nazis, who invaded the country where, along with the nation that Ágnes Konkoly is from, many expelled French Jews relocated to?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__106313_443779_52195",
+    "patterns": [],
+    "question": "Who is president of the newly declared independent country that is part of the Commission of Truth and Friendship with the country where Opor originated?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__106688_160713_77246",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "What is the Arabic dictionary meaning, of the word for the majority religion in the part of British India, that became India when the country that released Mushkil was created?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__106864_160713_77246",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "What is the meaning in the Arabic Dictionary of the word for the majority religion in the area of British India that became India when Bedari's country was created?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__108881_720914_27537",
+    "patterns": [],
+    "question": "Why did Roncalli leave the city where the creator of The Worship of Venus died?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__109113_720914_41132",
+    "patterns": [],
+    "question": "How many times did plague occur in the place where Venus with a Mirror's creator died?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__109185_720914_27537",
+    "patterns": [],
+    "question": "Why did Roncalli leave the city where the creator of La Schiavona died?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__109196_720914_27537",
+    "patterns": [],
+    "question": "Why did Roncali leave the place of death of the creator of Malchiostro Annunciation?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__109422_720914_41132",
+    "patterns": [],
+    "question": "How many times did the plague occur in the place of death of the creator of The Punishment of Tythus?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__127821_157828_239539",
+    "patterns": [],
+    "question": "Where is the headquarters of Radio Television of this country that has a co-official language that is the same as the language of Olivera Markovic?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__132795_40769_64047",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the luxury division of the company that produces TMG EV P001 change the body style of rx 350?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__132798_40769_64047",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the luxury division of the maker of the Toyopet Master change the body style of the rx 350?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__133264_40769_64047",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the rx 350 model of the luxury division of the company that manufactures Scion Fuse change body style?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__133292_40769_64047",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the RX 350 from The Hino Dutro creator's luxury division change body style?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__135392_87694_64412",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the location of the basilica which is named for the same saint that the Bremen Cathedral is named for become a country?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__136016_87694_64412",
+    "patterns": [
+      "when_what_year",
+      "before_after"
+    ],
+    "question": "When did the place where the Basilica that is named after the same person as Leeds Minister located in become its own country?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__140345_2053_5289",
+    "patterns": [],
+    "question": "What label was bought by the company which, along with ABC and the network which aired Law of the Plainsman, is the other major broadcaster based in NY?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__140855_2053_52946",
+    "patterns": [
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "When is Celebrity Big Brother coming to the network that, along with the original network of Then Came Bronson and ABC, is based in New York?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__141138_2053_5289",
+    "patterns": [],
+    "question": "What UK label was bought by the company which, along with ABC and the network which broadcasted The Chisholms, is the other major broadcaster based in NY?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__141138_2053_52946",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When is Celebrity Big Brother coming to the network which, along with ABC and the network which broadcasted The Chisholms, is the other major broadcaster based in NY?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__144678_443779_52195",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "The Commission of Truth and Friendship established governments for Bustami's birth country and a second country that had who as president after declaring independence?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__145194_160545_34751",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "What year did the country where Siddhi Savetsila was born form an alliance with Japan?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__145194_160545_34754",
+    "patterns": [],
+    "question": "What does the US believe caused this country where Siddhi Savetsila was born in to help Japan?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__145212_443779_52195",
+    "patterns": [],
+    "question": "Arie Supriyatna's birth country was one participant in a Commission of Truth and Friendship. Who is the president of the other country that participated?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__145427_106426_77199",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the USA declare war on the country that produced The Longest Night in the city where You Wenhui was born?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__158139_19788_15107",
+    "patterns": [],
+    "question": "What percentage of Eritrea adheres to the religion widely practiced where suicides by females are more common in young than old?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__159737_160713_77246",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "What is the meaning of the word that is also a majority religion in the area that became India when the country that withdrew its forces was created in the Arabic dictionary?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__159802_39743_24526",
+    "patterns": [],
+    "question": "What is the average winter daytime temperature in the region where Richmond is found, in the state once governed by Andros?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__159803_89752_75165",
+    "patterns": [],
+    "question": "What's the population of the largest state in the region of the U.S. where trading practices were once threatened by the Navigation Acts?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__161433_33952_33939",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "In 1900, what was the population of the second largest city, in the state that the cross-border transactions committee focuses on?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__19768_19788_10117",
+    "patterns": [
+      "age_duration"
+    ],
+    "question": "Widely practiced in the region having the second largest rain-forest in the world, how long ago did this religion arrive in Zhejiang?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__19768_19788_15107",
+    "patterns": [],
+    "question": "What percentage of Eritrea is estimated to adhere to the religion widely practiced in the region with the 2nd largest rain-forest in the world?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__210639_147339_51423",
+    "patterns": [],
+    "question": "What is the name of the castle in the city where the creator of Scene in the Northwest: Portrait of John Henry Lefroy died?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__21282_692112_236857",
+    "patterns": [],
+    "question": "In what country is women's football played in the country where the German chancellor criticized by The Sun held citizenship?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__222380_443779_52195",
+    "patterns": [],
+    "question": "Who is the president of the newly declared independent country that is part of the Commission of Truth and Friendship with the country where Buru is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__222497_309482_41132",
+    "patterns": [],
+    "question": "How many times did plague occur in Al gran sole carico d'amore's composer's work location?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__222497_309482_89834",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the merchant of the city where the composer of Al gran sole carico d'amore takes place?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__222497_737465_93723",
+    "patterns": [],
+    "question": "Who played Spyder, from the \"Once Upon a Time\" film set in the place of death of the composer of Al gran sole carico d'amore?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__251085_831637_91775",
+    "patterns": [],
+    "question": "what does seal stand for in the operator of the list of destroyer classes of the operator of the USS Grouse seals?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__254856_400692_51423",
+    "patterns": [],
+    "question": "What is the name of the castle found in the birthplace of the performer of Falling Out?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__255970_831637_91775",
+    "patterns": [],
+    "question": "The military unit that operates destroyers and once had a ship named the USS Sanderling has a force called the seals. What does seal stand for?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__285585_538202_84283",
+    "patterns": [],
+    "question": "Who is the owner of the record label of the performer of Groovy Little Summer Song?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__30390_36635_87083",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "Who holds veto power in the organization that the victors of the conflict active when Hayek began \"Abuse of power\" were given permanent seats in.",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__305566_568433_51423",
+    "patterns": [],
+    "question": "What is the name of the castle in the city where the headquarters of the production company of A Cosmic Christmas is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__307152_400692_51423",
+    "patterns": [],
+    "question": "What is the name of the castle in the city where the performer of Fall was born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__315504_629431_124169",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the end date for the position of Governor of the place where the author of Mater et Magistra died?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__320697_547811_41132",
+    "patterns": [],
+    "question": "How many times did plague occur in the birth city of the composer of Nulla in mundo pax sincera?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__346812_15840_36002",
+    "patterns": [],
+    "question": "What were the Genesis's advantages over the platform that plays Drac's Night Out?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__346812_15840_36014",
+    "patterns": [],
+    "question": "What was Nintendo's limit on games per developer per year on the platform that plays Drac's Night Out?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__354480_834494_33939",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "What was the population of the city that is found in the same county as Eric Marcus Municipal Airport in 1900?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__365934_87694_124169",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "What date did the Governor of the city where the basilica named after the same saint as the one that Mantua Cathedral is dedicated to end?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__373866_5189_63702",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the U.S. and the country in effective control of political and military functions of the group the People's Socialist Republic of Albania was a member of become allies?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__380590_831637_91775",
+    "patterns": [],
+    "question": "What does the seal stand for in the operator of the list of destroyer classes of the operator of the USS ZigZag seals?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__389069_132457_47686",
+    "patterns": [],
+    "question": "Where do greyhound buses depart from, in the city where the performer of Sleep Is the Enemy was formed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__389069_132457_51423",
+    "patterns": [],
+    "question": "What is the name of the castle in the city where the performer of Sleep is the Enemy was formed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__389955_132457_47686",
+    "patterns": [],
+    "question": "Where do Greyhound buses leave from in the city where the band that recorded the album I'm Alive and on Fire formed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__401538_132457_51423",
+    "patterns": [],
+    "question": "What is the name of the castle in the city where the performer of We Sweat Blood formed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__404541_629431_124169",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the Governorship end of the city where the author of Paenitentiam Agere died?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__406043_831637_91775",
+    "patterns": [],
+    "question": "What does seal stand for in the seals of the service operating list of destroyer classes of the operator of USS Peril?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__408237_400692_51423",
+    "patterns": [],
+    "question": "What is the name of the castle in the birthplace of Harmony's performer?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__409517_547811_80702",
+    "patterns": [],
+    "question": "What is the name of the famous bridge in the birth city of the composer of Scanderbeg?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__423001_503371_21711",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the Palau de la Generalitat constructed in the city where Martin of the region of Pedrola died?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__446612_160545_34754",
+    "patterns": [],
+    "question": "What does the US believe caused the country where Ercole Manfredi died to help Japan?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__446612_160545_62931",
+    "patterns": [],
+    "question": "Where was the film The Beach filmed in the country where Ercole Manfredi died?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__458916_651917_47686",
+    "patterns": [],
+    "question": "Where do greyhound buses leave from in the birthplace of Spirit If...'s performer?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__459153_544076_84283",
+    "patterns": [],
+    "question": "Who is the owner of the record label that Seventeen's performer belongs to?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__480375_709625_84283",
+    "patterns": [],
+    "question": "Who is the owner of the record label of the Please Remember Me performer?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__483634_720378_15538",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the death penalty reinstated in the state that contains the county where Howard Mill is located?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__487301_443779_52195",
+    "patterns": [],
+    "question": "Who is the president of newly declared independent country part of the Commission of Truth and Friendship with the country where Kaimana is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__491648_339990_15538",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the state where Coles Creek is located reinstate the death penalty?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__49236_89752_54221",
+    "patterns": [],
+    "question": "What time do alcohol sales begin in the largest state of the region where the fictional Gilead is located in The Handmaid's Tale?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__506062_792411_51423",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "What is the name of the castle in the place of birth of the performer of When I Was a Boy?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__511157_709625_84283",
+    "patterns": [],
+    "question": "Who owns the record label of the performer of The Houston Kid?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__532517_214799_259594",
+    "patterns": [],
+    "question": "What country has the border troops of the country of the literature of the country of Karl Maron citizenship?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__536452_15840_36014",
+    "patterns": [],
+    "question": "What was Nintendo's limit on games per developer per year on the platform with a three letter abbreviation, that had the game Pinball Quest?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__53690_161697_49779",
+    "patterns": [],
+    "question": "Who was a host of Who Wants to be a Millionaire who shares the same nationality as the author of The Feminine Mystique?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__53690_161697_73916",
+    "patterns": [],
+    "question": "What is the average yearly income for the same nationality as the author of The Feminine Mystique?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__564628_42197_18397",
+    "patterns": [],
+    "question": "Where did the person who argued that the country where Autograph formed had become an imperialist power declare he would intervene in the Korean conflict?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__568951_567566_84283",
+    "patterns": [],
+    "question": "Who owns the record label of the Every Turn of the World performer?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__573244_339990_15538",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the state where Kashinka Hollow is located in reinstate the death penalty?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__579562_629431_124169",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "What year did the Governor of the city where Pacem in Terris' author died end?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__579562_629431_64412",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the city where the author of Pacem in Terris died become its own country?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__586087_339990_54675",
+    "patterns": [],
+    "question": "What mountains can you see from Portland, in the state with the county where McCauley Mountain is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__593597_40769_64047",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the luxury division of the manufacturer of Scion Fuse change the body style of the RX 350?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__604991_339990_54675",
+    "patterns": [],
+    "question": "What mountain can you see from Portland in the state where Frozen Run's county is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__617062_127905_54974",
+    "patterns": [],
+    "question": "What is the farthest home run ever hit in the league where the team that Jim Wilson plays for?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__624901_42197_18397",
+    "patterns": [],
+    "question": "Where did who argued the country of citizenship of Maya Kopitseva had itself become an imperialist power declare that he would intervene in the Korean conflict?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__639955_834494_34099",
+    "patterns": [
+      "age_duration"
+    ],
+    "question": "How long are the council terms of the city that shares a county with Helvetia?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__640171_228453_86925",
+    "patterns": [],
+    "question": "What is the symbol of the Saints from the city that is the location of Blanton's manufacturer's headquarters called?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__641921_42197_18397",
+    "patterns": [],
+    "question": "Where did the arguer that Nadezhda Tkachenko's country of citizenship had become an imperialist power declare he would intervene in the Korean conflict?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__654651_55349_651302",
+    "patterns": [],
+    "question": "What is the place of birth of who does the voice of stan on the series that Insecurity is part of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__671542_651917_47686",
+    "patterns": [],
+    "question": "Where do greyhound buses leave from in the city where the performer of Darlings was born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__671542_665330_47686",
+    "patterns": [],
+    "question": "Where do greyhound buses leave from in the city where the performer of Darlings formed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__68802_89752_49923",
+    "patterns": [],
+    "question": "How many counties are there in the largest state in the region where the film The Family Stone was set?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__68981_91191_16530",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "Who was appointed arbitrator by the first convert to the faith that is the most common religion in Southeast Asia?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__694534_160088_73916",
+    "patterns": [],
+    "question": "What is the average yearly income for a person of the same nationality as the creator of MacGruder and Loud?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__695430_831637_91775",
+    "patterns": [],
+    "question": "What does SEAL stand for in the military group that is part of the branch that operates the USS Chillicothe?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__702699_792411_51423",
+    "patterns": [],
+    "question": "What is the name of the castle in the birth city of the performer on the album Maria?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__726561_132457_47686",
+    "patterns": [],
+    "question": "Where do greyhound buses leave from in the city the performer of Born a Lion formed in?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__742464_15840_36002",
+    "patterns": [],
+    "question": "What were the Genesis's advantages over the platform in which Robodemons is played?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__765565_326948_78782",
+    "patterns": [],
+    "question": "Who was the British general in the birthplace of the performer of Here Come the Girls?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__765565_326948_86925",
+    "patterns": [],
+    "question": "What is the symbols of the Saints from the place where Here Come the Girl's performer was born called?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__768500_730460_70315",
+    "patterns": [],
+    "question": "Where did Katrina hit the hardest in the Toussaint performer's birthplace?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__79039_131926_87157",
+    "patterns": [],
+    "question": "What is the direction of flow of the body of water by the home of the juicy lucy?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__818422_160545_34754",
+    "patterns": [],
+    "question": "What does the U.S. believe caused the country Beatrice Heuser was born to help Japan?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__840353_503371_21711",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the Palau de la Generalitat built, in the place of death of Martin, of the region where Almudévar was located?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__841091_339990_54675",
+    "patterns": [],
+    "question": "What mountain can you see from Portland in the state where Knob Mountain is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__844109_720914_41132",
+    "patterns": [],
+    "question": "How many times did the plague occur where the creator of The Entombment died?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__857_846_7769",
+    "patterns": [],
+    "question": "How many square miles is the city where the Yongle emperor greeted the person to whom the edict was addressed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__857_846_7810",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "What was where the Yongle emperor greeted who the edict addressed GDP per person in 2013?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__857_846_7887",
+    "patterns": [],
+    "question": "How many tourists does visit annually the city where the Yongle Emperor greeted the one seen addressed on an preserved edict.",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__857_846_7888",
+    "patterns": [],
+    "question": "What are three natural attractions in the city where the Yongle emperor greeted the person to whom the edict was addressed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__90327_73181_68042",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the majority party in the body which approves members of the Cabinet gain control of the House?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__90327_83076_319330",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "Who is the child of the president who suffered a major defeat when the body which approves members of the American cabinet refused to ratify the Versailles treaty?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__9285_5188_86687",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the country the top-ranking Warsaw Pact operatives came from, despite it being headquartered in the country known as the nobilities commonwealth, agree to a unified Germany inside NATO?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__92991_73181_68042",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the majority party in the body which determines rules of the US House and US Senate gain control of the House?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__92991_78276_68042",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the majority party in the body which determines the rules of the US House and US Senate gain control of the House?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop1__93963_170667_18967",
+    "patterns": [],
+    "question": "what is the former name of the country where the airport that Lion Air is part is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__106842_30645_84681",
+    "patterns": [
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "When did the people who first settled the Delaware Valley come to the country which produced the show @Seven?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__11282_57233_56883",
+    "patterns": [
+      "when_what_year",
+      "time_period"
+    ],
+    "question": "The native country of emu birds started conscription. This occurred during the war depicted in The Things They Carried. What year did the draft start?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__125104_90098_10557",
+    "patterns": [
+      "time_period",
+      "first_last"
+    ],
+    "question": "What was where the last name sylvester comes from of who was Rotrude's father's era later known as?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__127483_156850_10557",
+    "patterns": [
+      "time_period"
+    ],
+    "question": "What was the language Auctor comes from during the era of Fastrada's spouse later known as?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__132957_295815_40768",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the maker of the Acura Legend, the manufacturer of Toyopet Master, and Nissan open US assembly plants?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__132957_433432_40768",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the maker of Acura Legend, the manufacturer of Lexus RX and Nissan open US assembly plants?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__132957_51933_40768",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the maker of the Acura Legend, the largest auto company in the world, and Nissan open US assembly plants?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__132957_52222_40768",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the maker of Acura Legend, the biggest automobile company in the world, and Nissan open US assembly plants?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__158279_71753_70784",
+    "patterns": [],
+    "question": "What region is directly north of where Israel and the final destination of export crops is?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__222979_133154_40768",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the maker of the Acura EL, the company that owns Scion, and Nissan, open US assembly plants?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__222979_380281_40768",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the team that John Surtees is a member of, the owner of Scion, and Nissan open US assembly plants?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__28727_92991_76291",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the party Alaska generally supports take control of the determiner of rules of the US House and US Senate?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__304722_238553_63959",
+    "patterns": [
+      "year_mention",
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "When was the last time Peter Till's sports team beat the winner of the 1894-95 FA Cup?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__304722_297619_63959",
+    "patterns": [
+      "year_mention",
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "When was the last time Cian Hughton's team beat the 1894–95 FA Cup winner?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__304722_330033_63959",
+    "patterns": [
+      "year_mention",
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "When was the last time Tony Richard's team beat the 1894-95 FA Cup Winner?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__304722_372858_63959",
+    "patterns": [
+      "year_mention",
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "When was the last time Gary Rowett's team beat the 1894-95 FA Cup winner?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__304722_740784_63959",
+    "patterns": [
+      "year_mention",
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "When was the last time Krystian Pearce's sports team beat the winner of the 1894-95 FA Cup?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__304722_796034_63959",
+    "patterns": [
+      "year_mention",
+      "when_what_year",
+      "first_last"
+    ],
+    "question": "When was the last time the sports team employing Winston Foster beat the 1894-95 FA Cup winner?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__326964_573858_7713",
+    "patterns": [
+      "age_duration"
+    ],
+    "question": "How long had China Sunergy's headquarters location been the capitol city of Yaxing Coach's headquarters location?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__326964_811351_7713",
+    "patterns": [
+      "age_duration"
+    ],
+    "question": "How long had Lijia Zhang's birthplace been the capitol city of Yaxing Coach's headquarters location?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__36852_326964_7713",
+    "patterns": [
+      "year_mention",
+      "age_duration"
+    ],
+    "question": "How long had the city the Qing lost in 1853 been the capitol city of Yaxing Coach's headquarters location?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__43892_23308_28343",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the troops of the country blamed for the stagnation and failure of the Tripartite discussion leave the country that receives the most U.S. foreign aid?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__565959_223623_162182",
+    "patterns": [],
+    "question": "In what region of the country containing Mount Can is the birthplace of John Phan located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__569322_223623_162182",
+    "patterns": [],
+    "question": "In what region of the country of S-Fone is The place of birth of John Phan located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__57186_89048_66294",
+    "patterns": [],
+    "question": "who played who sang is she really going out with him in the who sang she's out of my life movie?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__573858_326964_7713",
+    "patterns": [
+      "age_duration"
+    ],
+    "question": "How long had the headquarters location of China Sunergy been the capitol city of the headquarters location of Yaxing Coach?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__607269_223623_162182",
+    "patterns": [],
+    "question": "In what region of the country containing Hạ Hòa is John Phan's birthplace found?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__67618_30587_44003",
+    "patterns": [],
+    "question": "Where does the ocean adjacent to Miami meet the body of water where the Mississippi River empties into the sea?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__69814_76873_64554",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "After the war that provides the setting for Memoirs of a Geisha, a conflict in which Germany was divided into two countries, developed between the U.S. and what nation?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__831456_467331_162182",
+    "patterns": [],
+    "question": "What is the region of the country of Sa Thầy and the territory of the Zone 5 Military Museam located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__855821_467331_162182",
+    "patterns": [],
+    "question": "In what region of the country where Lam Dong is located is the city where Zone 5 Military Museum is found?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__89048_860687_66294",
+    "patterns": [],
+    "question": "Who played who sang is she really going out with him in the performer of The One movie?",
+    "temporal": false
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__90098_76623_10557",
+    "patterns": [
+      "time_period",
+      "first_last"
+    ],
+    "question": "What was the language from which the last name Sylvester originated during the era of the person crowned emperor of the west in 800 CE later known as?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__90098_91678_10557",
+    "patterns": [
+      "time_period",
+      "first_last"
+    ],
+    "question": "What was the language from which the last name Sylvester originated during the era of the person crowned first Holy Roman Emperor later known as?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__91678_90098_10557",
+    "patterns": [
+      "time_period",
+      "first_last"
+    ],
+    "question": "What was the form of the language that the last name Sylvester comes from, used in the era of the first Holy Roman Emperor, later known as?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__92991_27069_76291",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the party Oklahoma's US Senators come from take control of the body determining the rules of the US House and US Senate?",
+    "temporal": true
+  },
+  {
+    "hop_count": 3,
+    "id": "3hop2__93066_88342_90766",
+    "patterns": [
+      "year_mention",
+      "when_what_year",
+      "before_after",
+      "first_last"
+    ],
+    "question": "When was the last time the winner of the American League East in 2017 met the Dodgers in the event after which the MLB MVP award is given out?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__105002_17130_70784_61381",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the region immediately north of the area where the country that released Atalia is located and the Persian Gulf established?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__130404_59747_211319_557671",
+    "patterns": [],
+    "question": "Which county shares a border with the county where the most populous city in the state where WDXQ can be found is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__145087_32392_823060_610794",
+    "patterns": [],
+    "question": "What county is the city that shares a border with the state capital of the state where Velma Barfield was born located in?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__145422_698949_157828_162309",
+    "patterns": [
+      "when_what_year",
+      "before_after",
+      "first_last"
+    ],
+    "question": "When did the country, that has the original language of the film named after Vladimir Karalić's birthplace as a co-official language, first attend the Olympics as an independent team?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__152146_5274_458768_33633",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the explorer reach the headquarters location of the only company larger than Langa natter's record label?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__15607_59747_211319_557671",
+    "patterns": [],
+    "question": "Which county shares a border with the county where the most populous city in the state where armed robbery is a capital crime is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__161605_32392_823060_610794",
+    "patterns": [],
+    "question": "What county is the city that shares a border with the state capital of the state where Darlington County located in?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__21282_692112_214799_259594",
+    "patterns": [
+      "first_last"
+    ],
+    "question": "What is the abbreviation for Angela Merkel's original home country that once had border troops called the Deutsche Grenzpolizei?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__264443_49925_13759_736921",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Where is the district that the person who wanted to reform and address Edward Egan's religion preached a sermon on Marian devotion before his death located?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__277409_49925_13759_736921",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "The German priest, who wanted Joseph Strickland's religious denomination to reform, preached a sermon on Marian devotion soon before his death in what German state?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__33012_53706_795904_580996",
+    "patterns": [
+      "time_period"
+    ],
+    "question": "What city shares a border with the place where the person who went to the state known for its Mediterranean climate during the gold rush worked?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__343844_17130_70784_79935",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the region immediately north of the region where Urim's country is located and the Persian Gulf created?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__3496_5274_458768_33633",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "What date did the explorer reach the location of the headquarters of the only company larger than BMG's partner from 2005-2007?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__37608_32392_823060_610794",
+    "patterns": [],
+    "question": "Which county has the location that shares a border with the city that became the state capital of where Representative Thomas Tucker was from?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__391525_49925_13759_736921",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Where is the district that the person who wanted to reform and address John Kodwo Amissah's religion preached a sermon on Marian devotion before his death located?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__39871_314549_131976_44892",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "A line with Williamsburg, Main Street and another station are in a state that's next to an ocean. When did that ocean start to open up?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__39871_314549_131976_56103",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When do hurricanes occur in the ocean that borders the state where Williamsburg, Main Street Station and another share a track?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__433767_32392_823060_610794",
+    "patterns": [],
+    "question": "In what county is located the city that shares a border with the capital of the state where Mike Dow was born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__436202_378185_282674_759393",
+    "patterns": [],
+    "question": "What is the seat of the county sharing a border with the county in which J.P. Hayes was born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__455862_508773_85832_745702",
+    "patterns": [],
+    "question": "Whose navigator father explored the east coast of the region where Ignacio Esparza was later born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__473563_309800_355213_203322",
+    "patterns": [],
+    "question": "Which county shares border with the county having the birth city of the director of Let the Good Times Roll?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__525129_315334_131926_13165",
+    "patterns": [],
+    "question": "What treaty ceded territory to the US extending west to body of water by the city where the Lots More Blues, Rags and Hollers performer was formed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__56270_53706_795904_580996",
+    "patterns": [
+      "time_period"
+    ],
+    "question": "What shares a border with the city where the person who went to the state where the 951 area code is used during the gold rush works?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__58323_375563_161848_61344",
+    "patterns": [],
+    "question": "What continent is the country located near the country of citizenship of The Book Thief's author part of?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__58323_375563_161848_67585",
+    "patterns": [
+      "year_mention",
+      "first_last"
+    ],
+    "question": "How many stars are on the flag of the nation that first participated in the 1952 Olympics, located near the citizen country of the author of the 2005 novel Thief?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__608132_508773_85832_745702",
+    "patterns": [],
+    "question": "Who's the son of the Italian navigator who explored the eastern coast of the continent where Christian Sánchez was born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__625463_229349_66759_54221",
+    "patterns": [
+      "when_what_year",
+      "time_period"
+    ],
+    "question": "Storm of the Century filmed in state A based on the book by the author who wrote a story featuring the author of The Hope. When do alcohol sales start in state A?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__629520_49925_13759_736921",
+    "patterns": [],
+    "question": "In what region of Germany is the district where a sermon on Marian devotion was preached by the man who wanted to reform the religion of Victor Razafimahatratra?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__636860_49925_13759_736921",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "The German priest, who wanted Abraham Shimonaya's religious denomination to reform, preached a sermon on Marian devotion soon before his death in which German state?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__638988_17130_70784_61381",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the region immediately north of the region where the country in which Aluf can be found is located and the Persian Gulf established?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__668178_378185_282674_759393",
+    "patterns": [],
+    "question": "What is the capital of the county that shares a border with the county where Don Werner was born?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__707078_378185_282674_759393",
+    "patterns": [],
+    "question": "What is the capital of the county that shares a border with the county that contains the birthplace of Erik Jensen?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__708184_153080_33897_81096",
+    "patterns": [],
+    "question": "Who won the Indy Car Race in the largest populated city of the state where the performer of The Black Saint and the Sinner Lady is from?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__711773_508773_85832_745702",
+    "patterns": [],
+    "question": "Who's the son of the Italian navigator who explored the eastern coast of the continent Manuel Balbi was born in?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__720201_153080_159767_81096",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "Who won the 1993 Indy Car Race in the largest city of the state containing the city where the performer of the album Something Like a Bird is from?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__752321_153080_159767_81096",
+    "patterns": [],
+    "question": "The largest city in the state the performer of Pithecanthropus Erectus was from is also the state capital. Who won the indy car race in that city?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__813171_153080_159767_81096",
+    "patterns": [],
+    "question": "Who won the Indy car race in the largest city and capitol of the state where the Changes Two performer is from?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__814776_378185_282674_759393",
+    "patterns": [],
+    "question": "What city is the capital of the county, that shares a border with the other county, that contains the city where Western Islands is headquartered?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__846600_153080_33897_81096",
+    "patterns": [],
+    "question": "Who won the Indy car race in the largest populated city in the state where the performer of A Modern Jazz Symposium of Music and Poetry is from?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__860115_798482_131926_13165",
+    "patterns": [],
+    "question": "What treaty ceded territory to the US extending west to the river by the city sharing a border with Elizabeth Berg's birthplace?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__860115_798482_131926_89261",
+    "patterns": [],
+    "question": "Where does the river by the city sharing a border with Elizabeth Berg's birthplace empty into the Gulf of Mexico?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__88342_49853_128008_67954",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who was the all-star MVP of the league where the team with the most titles from the event after which they give out the MLB MVP award plays?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__88342_49853_128008_89859",
+    "patterns": [
+      "when_what_year",
+      "before_after"
+    ],
+    "question": "When does the regular season of the league where the team with the most titles from the series after which the MLB MVP award is given out plays?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__88342_75218_128008_46894",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who had the lowest batting average in the league where the team with the most games in the series after which the MLB MVP is awarded played?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__88342_75218_128008_67954",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who won the All-Star MVP for the league that the team that has attended the competition where they give out the MLB MVP award after the most?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__93316_53706_795904_580996",
+    "patterns": [
+      "time_period"
+    ],
+    "question": "What city shares a border with the city where a person went to work during the gold in the state that used the most geothermal energy in the US?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__94201_642284_131926_13165",
+    "patterns": [],
+    "question": "What treaty ceded territory to the US extending west to the body of water by the city where the designer of Southeast Library died?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop1__94201_642284_131926_87157",
+    "patterns": [],
+    "question": "What is the direction of the flow of the river near the city where the designer of Southeast Library died?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop2__161602_426860_88460_20985",
+    "patterns": [],
+    "question": "what is the largest city the country that is a natural boundary between the country that hosted the tournament and the country That Dam is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop2__161602_426860_88460_20999",
+    "patterns": [],
+    "question": "How were the Portuguese expelled from the country that is a natural boundary between the country that hosted the tournament and the country That Dam is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop2__161602_426860_88460_21057",
+    "patterns": [
+      "time_period"
+    ],
+    "question": "During British rule, what wood product was produced primarily in the country between the country that hosted the tournament and the country where That Dam is from?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop2__161602_426860_88460_63559",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was Burma's name changed to that of the country on the natural boundary between the country that hosted the tournament and the country where That Dam is from?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop2__161602_474028_88460_21062",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "Can foreign tourists cruise to the country between the nation that hosted 2020 AFC U-23 Championship qualification and the one that contains A Don.?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop2__5206_14670_8987_8529",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was \"Slavs\" used in the national anthem of the country whose military having the Air Defense Artillery was unprepared for the invasion of the country conquered by the Pact?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop2__567956_14670_8987_8974",
+    "patterns": [],
+    "question": "A country's military branch, which in the US contains the Air Defense Artillery, was unprepared for the invasion of the country that experienced a normalization period. The unprepared country was the only communist country to have an embassy where?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop2__71753_623626_70784_61381",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the region that lies to the north of where israel is located and the body of water where Kharg Island is located established?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop2__71753_685934_70784_61381",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the region that lies to the north of where Israel is located and where The World is located established?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop2__71753_685934_70784_79935",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When was the region that lies to the north of the region Israel is located and where The World is located created?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__129318_29339_508306_70744",
+    "patterns": [],
+    "question": "University of the state having Fort Hill or university of the state whose primary was won by Edwards besides the state having James B. Simmons House has more national championships?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__129682_29339_508306_70744",
+    "patterns": [],
+    "question": "Who won more national championships between the university that contains Fort Hill and the university of the state where Edwards won the primary besides the state where WSFN is located?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__130404_29339_508306_70744",
+    "patterns": [],
+    "question": "Who has more national championships, the university where Fort Hill is, or the university in the state where Edwards won the primary, along with winning in the state containing WDXQ?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__131820_29339_508306_70744",
+    "patterns": [],
+    "question": "Which university has more national championships, university of the state having Fort Hill or university of the state whose primary was won by Edwards besides the state having WEKL?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__152056_698586_57596_54362",
+    "patterns": [
+      "time_period"
+    ],
+    "question": "Who burned down the city where Dunn Dunn's artist died in the war during which income tax started?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__160230_470287_345497_72134",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the death city of Taito Kantonen become the capital of the US state having the statue being the title of the various Latin Mother goddess?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__279362_88460_30152_20999",
+    "patterns": [],
+    "question": "How were people from whom new coins were a proclamation of independence by the Somali Muslim Ajuran Empire expelled from the natural boundary between Thailand and Vat Yotkeo's country?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__312119_132409_146285_35031",
+    "patterns": [],
+    "question": "Among the top five largest urban areas in the state where Getting Away with Murder's performer was formed, where does city in which Alexander Golitzen died rank?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__312119_132409_371500_35031",
+    "patterns": [],
+    "question": "Among the top five largest urban areas in the state where Getting Away with Murder's performer was formed, where does Veoh's headquarters city rank?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__31333_29339_508306_70744",
+    "patterns": [
+      "year_mention"
+    ],
+    "question": "Edwards won the primary in a state excluding the state that sent the most tourists in to Tennessee in 2013. Who has the most national championships between that state's university and Fort Hill's city's university?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__316459_41402_145282_13584",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Besides areas of the country that gained control of Florida after the conflict Charles Edmund Nugent participated in, what other differences are there between Paco Godia's birthplace and Real Madrid?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__316459_41402_146223_13584",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Besides areas of the country gaining control of Florida after the conflict Charles Edmund Nugent participated in, what other differences exist between where Simon Sabiani died and Real Madrid?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__316459_41402_146281_13584",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "A country gained control of Florida after the war in which Charles Edmund Nugent saw action. Besides their locations in that country, what other differences are there between Real Madrid and the football team from the city where Aleran died?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__316459_41402_157761_13584",
+    "patterns": [
+      "year_mention",
+      "before_after"
+    ],
+    "question": "A country gained control of Florida after the war in which Charles Edmund Nugent saw action. Besides the different areas of that country, what other differences are there between Real Madrid and the team for the city he moved to in 1999?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__316459_41402_599212_13584",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "A country gained control of Florida after the war in which Charles Edward Nugent saw action. Besides being in different parts of that country, what other differences are there between Real Madrid and Hostafrancs's city's team?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__373573_132409_146285_35031",
+    "patterns": [],
+    "question": "Where does the city where Alexander Golitzen died rank in the top five largest urban areas of the state where Still Swingin's performers were formed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__387712_132409_146285_35031",
+    "patterns": [],
+    "question": "Where does the city where Alexander Golitzen died rank in the top five largest urban areas of the state where the band that Jacoby Shaddix is a member of formed?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__439878_88460_30152_20999",
+    "patterns": [],
+    "question": "How were people from whom new coins were a proclamation of independence by the Somali Muslim Ajuran Empire expelled from the natural boundary between Thailand and Ban Kenpha's country?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__524186_219173_638950_72134",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the city where Greenwood Laboratory School is located become capitol of the state where the screenwriter of The Poor Boob was born?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__601548_836463_161616_77103",
+    "patterns": [
+      "when_what_year"
+    ],
+    "question": "When did the birthplace of the Live and Beyond performer become the capitol of the state Knowles was from?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__650050_88460_30152_20999",
+    "patterns": [],
+    "question": "How were people from whom the new coins were a proclamation of independence by the Somali Muslim Ajuran Empire expelled from the natural boundary between Thailand and A Doi's country?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__661103_698586_1926_54362",
+    "patterns": [
+      "before_after"
+    ],
+    "question": "Who burned down the city where Dunn Dunn's artist died in the war after which black people declined living in NYC?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__661103_698586_89595_54362",
+    "patterns": [
+      "before_after",
+      "time_period"
+    ],
+    "question": "Who burned down the city where Dunn Dunn's recording artist died during the conflict after which occurred the historical period of A Rose for Emily?",
+    "temporal": true
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__673447_132409_145082_35031",
+    "patterns": [],
+    "question": "Among the top five largest urban areas in the state where Infest's performer was formed, where does Tammy Leitner's birth city rank?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__673447_132409_223216_35031",
+    "patterns": [],
+    "question": "Among the top five largest urban areas in the state Infest's performers were formed, what is the ranking of the city Pathology was formed in?",
+    "temporal": false
+  },
+  {
+    "hop_count": 4,
+    "id": "4hop3__860588_88460_30152_20999",
+    "patterns": [],
+    "question": "How were people from whom new coins were a proclamation of independence by the Somali Muslim Ajuran Empire expelled from the natural boundary between Thailand and Nahe mine's country?",
+    "temporal": false
+  }
+]
