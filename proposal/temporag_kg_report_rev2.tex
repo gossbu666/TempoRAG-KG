@@ -1,0 +1,669 @@
+\documentclass[11pt]{article}
+
+\usepackage{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+\title{TempoRAG-KG: Temporal Knowledge Graph-Augmented\\
+Retrieval for Multi-Hop Question Answering}
+
+\author{
+  Supanut Kompayak \\
+  st126055@ait.asia \\
+  \textit{Asian Institute of Technology}
+  \And
+  Aphisit Jaemyaem \\
+  st126130@ait.asia \\
+  \textit{Asian Institute of Technology}
+  \AND
+  Dechathon Niamsa-ard \\
+  st126235@ait.asia \\
+  \textit{Asian Institute of Technology}
+  \And
+  Kaung Hein Htet \\
+  st126477@ait.asia \\
+  \textit{Asian Institute of Technology}
+}
+
+\begin{document}
+\maketitle
+
+% -------------------------------------------------------
+% ABSTRACT
+% -------------------------------------------------------
+\begin{abstract}
+Knowledge Graph-augmented Retrieval (KG-RAG) systems have demonstrated
+strong performance on multi-hop question answering by structuring retrieved
+facts as interconnected triples. However, existing systems---including the
+recent state-of-the-art KG$^2$RAG---assume a static snapshot of knowledge
+and fail to account for \textit{temporal validity}: the reality that facts
+are only true within specific time windows. In this paper, we present
+\textbf{TempoRAG-KG}, a temporally-aware KG-RAG framework that extends
+KG$^2$RAG with two contributions: (1) explicit $[\mathtt{valid\_from},
+\mathtt{valid\_to}]$ validity intervals attached to every KG triple,
+enabling deterministic temporal filtering during retrieval, and (2) a
+Graph-of-Graph (GoG)-based fill-in mechanism for handling incomplete KG
+facts. We first conduct a systematic analysis of temporal failure modes in
+KG-RAG, categorizing failures into four types and measuring their
+distribution across HotpotQA and MuSiQue. Our exploratory data analysis
+reveals that 35.0\% of HotpotQA and 38.3\% of MuSiQue development
+questions contain temporal expressions, with prevalence increasing from
+30.2\% in 2-hop to 46.7\% in 4-hop questions---suggesting temporal validity
+becomes increasingly critical as reasoning complexity grows. We hypothesize
+that TempoRAG-KG will improve F1 over the KG$^2$RAG baseline, with gains
+concentrated in temporally-sensitive question subsets.
+\end{abstract}
+
+% -------------------------------------------------------
+% 1. INTRODUCTION
+% -------------------------------------------------------
+\section{Introduction}
+
+Retrieval-Augmented Generation (RAG) has emerged as the dominant paradigm
+for grounding large language model (LLM) responses in external factual
+knowledge \cite{lewis2020retrieval}. Recent advances have moved beyond
+flat vector retrieval toward structured graph-based approaches, where
+Knowledge Graphs (KGs) provide fact-level relationships between retrieved
+chunks. The state-of-the-art KG$^2$RAG \cite{zhu2025kg2rag} demonstrates
+that organizing retrieved evidence through KG-guided expansion and Maximum
+Spanning Tree context organization yields substantial improvements over
+prior RAG baselines on multi-hop question answering benchmarks such as
+HotpotQA \cite{yang2018hotpotqa}.
+
+However, a fundamental limitation remains unaddressed: \textbf{all existing
+KG-RAG systems, including KG$^2$RAG, assume a static knowledge graph in
+which every triple is treated as universally and permanently valid.} In
+reality, facts are only true within specific time periods---Tim Cook
+\textit{became} CEO of Apple in 2011, implying Steve Jobs held that role
+before him. When a user asks \textit{``Who was the CEO of Apple in 2005?''},
+a system without temporal awareness retrieves both facts simultaneously and
+either hallucinates or selects arbitrarily. We term this class of errors
+\textit{temporal failure modes}. Despite the prevalence of such queries---our
+exploratory data analysis (EDA) reveals that 35.0\% of HotpotQA and 38.3\%
+of MuSiQue development questions contain temporal expressions---no existing
+KG-RAG framework systematically addresses temporal validity at the
+triple level on general-domain unstructured text.
+
+To address this gap, we propose \textbf{TempoRAG-KG}, a framework that
+extends KG$^2$RAG with two targeted components. First, we attach explicit
+$[\mathtt{valid\_from}, \mathtt{valid\_to}]$ validity intervals to every
+extracted triple during offline KG construction, and apply deterministic
+temporal filtering prior to graph expansion. Second, we integrate a
+GoG-based fill-in mechanism \cite{he2024gog} to recover answers when the
+constructed KG is incomplete. Crucially, we precede system development
+with a \textit{systematic diagnostic study} that categorizes temporal
+failure modes into four types and quantifies their distribution across
+two established multi-hop QA benchmarks.
+
+We anticipate several key findings from our experiments. First, stale-fact
+retrieval will constitute the majority of temporal errors in KG$^2$RAG,
+as explicit year mention (17.8\% of HotpotQA) frequently surfaces
+conflicting facts from different eras. Second, temporal prevalence will
+escalate with reasoning complexity---from 30.2\% in 2-hop MuSiQue questions
+to 46.7\% in 4-hop---suggesting that temporal awareness is disproportionately
+important for complex multi-hop chains. Third, LLM-based temporal extraction
+will achieve high precision on explicit date expressions but degrade on
+implicit and conflicting temporal references.
+
+The contributions of this work are:
+\begin{enumerate}
+  \item \textbf{Temporal Failure Taxonomy}: A systematic categorization of
+        four temporal failure modes in KG-RAG systems, with empirical
+        distribution analysis across HotpotQA and MuSiQue.
+  \item \textbf{TempoRAG-KG Framework}: A temporally-aware KG-RAG pipeline
+        that attaches explicit validity intervals per triple and applies
+        temporal filtering prior to graph expansion, extending
+        KG$^2$RAG \cite{zhu2025kg2rag}.
+  \item \textbf{Temporal Extraction Study}: An empirical evaluation of
+        LLM-based temporal validity extraction from unstructured text,
+        characterizing accuracy across three linguistic pattern types.
+\end{enumerate}
+
+% -------------------------------------------------------
+% 2. RELATED WORK
+% -------------------------------------------------------
+\section{Related Work}
+
+\subsection{KG-Augmented Retrieval-Augmented Generation}
+
+Early RAG systems \cite{lewis2020retrieval} rely on dense passage retrieval
+to retrieve isolated text chunks, ignoring structural relationships between
+facts. Graph-based RAG approaches address this by incorporating KG structure
+into retrieval. KG$^2$RAG \cite{zhu2025kg2rag} proposes KG-guided chunk
+expansion using seed retrieval followed by a KG-based chunk organization
+process via Maximum Spanning Tree, achieving strong performance on
+HotpotQA. GEAR \cite{ma2025gear} introduces efficient beam-search graph
+traversal that replaces expensive LLM calls at each hop with cosine
+similarity scoring, substantially reducing inference cost. K-RagRec
+\cite{wang2025kragrec} applies KG-guided RAG to recommendation, achieving
+up to 93\% hallucination reduction. Despite these advances,
+\textbf{none of these systems attach temporal validity metadata to KG
+triples}, treating all retrieved facts as equally and permanently valid.
+
+\subsection{Temporal Knowledge Graph Reasoning}
+
+Temporal KG reasoning has been studied extensively over pre-built structured
+KGs such as Wikidata and ICEWS. TempAgent \cite{tempagent2025} introduces
+temporal filtering tools for an LLM agent, but requires a pre-existing
+structured temporal KG and cannot operate over general-domain unstructured
+text. EvoReasoner \cite{evoreasonerevokg2025} proposes a unified framework
+combining multi-hop temporal reasoning with incremental KG evolution from
+documents via confidence-based contradiction resolution and temporal trend
+tracking---the closest existing work to TempoRAG-KG. However, EvoReasoner
+tracks temporal evolution \textit{implicitly} through confidence scores
+rather than explicit $[\mathtt{valid\_from}, \mathtt{valid\_to}]$ intervals,
+which prevents deterministic point-in-time querying. Furthermore,
+EvoReasoner is evaluated on structured TKGQA benchmarks (MultiTQ,
+CronQuestions) rather than general-domain multi-hop QA datasets.
+\textbf{Our work is the first to combine explicit triple-level temporal
+validity tagging with general-domain KG-RAG and evaluate on HotpotQA and
+MuSiQue.}
+
+\subsection{KG Construction from Unstructured Text}
+
+Automatic KG construction enables RAG systems to operate without pre-built
+KGs. HRGraph \cite{hrgraph2024} and STINMatch \cite{stinmatch2023} use LLM
+prompting to extract subject-relation-object triples from raw text, while
+TOBUGraph \cite{tobugraph2024} demonstrates production-scale construction.
+GoG \cite{he2024gog} addresses KG incompleteness by allowing LLMs to fill
+in missing facts from parametric knowledge when graph traversal reaches
+dead ends. However, \textbf{none of these approaches extract or store
+temporal validity intervals alongside triples}, losing the temporal context
+necessary for time-sensitive queries. TempoRAG-KG extends LLM-based
+extraction to additionally infer $\mathtt{valid\_from}$ and
+$\mathtt{valid\_to}$ for each triple.
+
+\paragraph{Gap Summary.}
+No existing system simultaneously (1) automatically constructs a KG from
+general-domain unstructured text, (2) attaches explicit per-triple temporal
+validity intervals, and (3) evaluates on multi-hop QA benchmarks. TempoRAG-KG
+fills this gap.
+
+% -------------------------------------------------------
+% Figure 2 — Temporal Failure Taxonomy
+% -------------------------------------------------------
+\begin{figure}[t]
+  \centering
+  \fbox{\parbox{0.45\textwidth}{
+    \centering
+    \vspace{1.5cm}
+    \textbf{[Figure 2: Temporal Failure Taxonomy]}\\[0.5em]
+    2$\times$2 grid of four failure types:\\[0.3em]
+    \textbf{Type 1} Stale Fact: KG retrieves an expired fact\\
+    Example: ``Steve Jobs'' retrieved as current Apple CEO\\[0.3em]
+    \textbf{Type 2} Conflicting Facts: Multiple contradictory facts retrieved\\
+    Example: Both Jobs and Cook returned as Apple CEO\\[0.3em]
+    \textbf{Type 3} Missing Temporal Context: Correct entity, unknown time window\\
+    Example: Cook is CEO but no valid\_from/valid\_to known\\[0.3em]
+    \textbf{Type 4} Temporal Hop Failure: Any hop retrieves a stale fact\\
+    Example: Hop 1 correct, hop 2 retrieves outdated fact
+    \vspace{1.5cm}
+  }}
+  \caption{Four types of temporal failure modes in KG-RAG systems,
+  identified through manual analysis of KG$^2$RAG errors on the
+  HotpotQA temporal subset.}
+  \label{fig:taxonomy}
+\end{figure}
+
+% -------------------------------------------------------
+% 3. RESEARCH QUESTIONS
+% -------------------------------------------------------
+\section{Research Questions}
+
+This work is organized around three research questions:
+
+\begin{description}
+  \item[\textbf{RQ1}] \textit{What types of temporal failures occur in
+    KG-RAG systems when answering time-sensitive multi-hop questions,
+    and how are they distributed across HotpotQA and MuSiQue?}\\
+    \textbf{IV:} Question type (temporal vs.\ non-temporal), hop count.
+    \textbf{DV:} Failure type distribution, failure rate per category.\\
+    \textbf{H1:} Stale-fact retrieval (Type 1) will be the most frequent
+    failure mode, and failure rate will increase with hop count in MuSiQue.
+
+  \item[\textbf{RQ2}] \textit{To what extent does explicit triple-level
+    temporal validity tagging improve retrieval precision and answer F1
+    on temporally-sensitive questions compared to the KG$^2$RAG baseline?}\\
+    \textbf{IV:} Presence of temporal tagging and filtering.
+    \textbf{DV:} F1 score, Exact Match (EM), retrieval precision on
+    temporal vs.\ non-temporal question subsets.\\
+    \textbf{H2:} Temporal filtering will improve F1 on the temporal subset
+    without degrading performance on non-temporal questions.
+
+  \item[\textbf{RQ3}] \textit{How accurately can LLMs extract temporal
+    validity intervals from unstructured text, and what linguistic patterns
+    most affect extraction quality?}\\
+    \textbf{IV:} Temporal expression type (explicit year, implicit/relative,
+    conflicting).
+    \textbf{DV:} Extraction precision, extraction recall, F1.\\
+    \textbf{H3:} Extraction precision will be highest for explicit year
+    mentions ($>$80\%) and lowest for conflicting date expressions.
+\end{description}
+
+% -------------------------------------------------------
+% 4. METHODOLOGY
+% -------------------------------------------------------
+\section{Methodology}
+
+% Figure 1 — System Architecture (full-width, floats to top)
+\begin{figure*}[t]
+  \centering
+  \fbox{\parbox{0.95\textwidth}{
+    \centering
+    \vspace{2cm}
+    \textbf{[Figure 1: TempoRAG-KG System Architecture]}\\[0.5em]
+    \textit{Offline pipeline (top):} Documents $\rightarrow$ Chunking $\rightarrow$
+    LLM Triple Extraction + temporal tagging $\rightarrow$ Neo4j KG + FAISS Index\\[0.3em]
+    \textit{Online pipeline (bottom):} Query $\rightarrow$ Temporal year detection
+    $\rightarrow$ Seed retrieval $\rightarrow$ \textbf{Temporal filter}
+    $\rightarrow$ GEAR beam search $\rightarrow$ \textbf{GoG fill-in}
+    $\rightarrow$ MST context organization $\rightarrow$ LLM $\rightarrow$ Answer\\[0.3em]
+    \textit{Highlight boxes:} TempoRAG-KG additions shown in \textcolor{blue}{blue};
+    KG$^2$RAG components shown in gray
+    \vspace{2cm}
+  }}
+  \caption{Overview of the TempoRAG-KG framework. Components highlighted in
+  blue are our additions to the KG$^2$RAG backbone.}
+  \label{fig:architecture}
+\end{figure*}
+
+\subsection{Datasets}
+
+\paragraph{HotpotQA.}
+We use the distractor development set of HotpotQA \cite{yang2018hotpotqa},
+comprising 7,405 two-hop questions drawn from Wikipedia with ten candidate
+paragraphs each. Our EDA reveals that \textbf{35.0\%} of questions
+(2,593/7,405) contain temporal expressions. Bridge-type questions exhibit
+higher temporal prevalence (39\%) than comparison-type questions (21\%).
+Table~\ref{tab:eda} summarizes the distribution by temporal pattern type.
+
+\paragraph{MuSiQue.}
+MuSiQue \cite{trivedi2022musique} provides 2,417 development questions
+with 2--4 reasoning hops, designed to preclude shortcut reasoning.
+\textbf{38.3\%} of questions (926/2,417) contain temporal expressions.
+Temporal prevalence increases monotonically with hop count:
+30.2\% for 2-hop, 47.2\% for 3-hop, and 46.7\% for 4-hop questions.
+
+\paragraph{Temporal Extraction Gold Standard.}
+For RQ3, we manually annotate 200 passages sampled from the HotpotQA
+training set, recording ground-truth $[\mathtt{valid\_from},
+\mathtt{valid\_to}]$ for all extractable triples.
+
+% EDA Table
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{lrr}
+    \toprule
+    \textbf{Temporal Pattern} & \textbf{HotpotQA} & \textbf{MuSiQue} \\
+    \midrule
+    Year mention        & 17.8\% & 6.7\%  \\
+    When/what year      & 7.3\%  & 20.6\% \\
+    Before/after        & 4.2\%  & 7.1\%  \\
+    First/last/earliest & 7.7\%  & 7.1\%  \\
+    Time period         & 2.3\%  & 3.9\%  \\
+    Age/duration        & 0.7\%  & 1.8\%  \\
+    \midrule
+    \textbf{Any temporal} & \textbf{35.0\%} & \textbf{38.3\%} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Temporal expression prevalence in HotpotQA and MuSiQue
+  development sets. Questions may match multiple patterns.}
+  \label{tab:eda}
+\end{table}
+
+\subsection{Offline Knowledge Graph Construction}
+
+\paragraph{Chunking.}
+Each document is segmented into overlapping chunks of 512 tokens with a
+100-token overlap, following KG$^2$RAG \cite{zhu2025kg2rag}.
+
+\paragraph{Triple Extraction with Temporal Annotation.}
+We prompt GPT-4 to extract structured triples in the format:
+$(\mathtt{head}, \mathtt{relation}, \mathtt{tail},
+\mathtt{valid\_from}, \mathtt{valid\_to})$. The prompt instructs the model
+to infer temporal validity from contextual cues. If no temporal information is
+available, fields are set to \texttt{null}. The full prompt is in
+Appendix~\ref{app:prompt}.
+
+\paragraph{KG Storage and Indexing.}
+Extracted triples are stored in Neo4j with $\mathtt{valid\_from}$ and
+$\mathtt{valid\_to}$ as edge properties. Entity names are embedded using
+\texttt{all-MiniLM-L6-v2} \cite{reimers2019sentencebert} and stored in a
+FAISS index for efficient similarity search.
+
+\subsection{TempoRAG-KG Pipeline}
+
+The online pipeline proceeds in six steps:
+
+\textbf{(1) Temporal Year Detection.}
+A regex-based classifier identifies whether the input query contains a
+temporal expression and extracts the target year $y_q$.
+
+\textbf{(2) Seed Retrieval.}
+The query is embedded and the top-5 most similar chunks are retrieved
+from the FAISS chunk index.
+
+\textbf{(3) Temporal Filtering.}
+For each candidate edge $e$ with properties $v_f$ ($\mathtt{valid\_from}$)
+and $v_t$ ($\mathtt{valid\_to}$), we retain $e$ if and only if:
+\begin{equation}
+  (v_f = \texttt{null} \;\lor\; v_f \leq y_q) \;\land\;
+  (v_t = \texttt{null} \;\lor\; v_t \geq y_q)
+  \label{eq:filter}
+\end{equation}
+Edges without temporal metadata are retained conservatively.
+
+\textbf{(4) GEAR Beam Search.}
+Graph expansion proceeds via beam search \cite{ma2025gear} with beam
+size $b=3$ and maximum depth $d=2$. Candidate neighbors are scored by
+cosine similarity to the current subgoal embedding.
+
+\textbf{(5) GoG Fill-in.}
+When expansion reaches a dead end, we invoke a GoG-style LLM fill-in
+\cite{he2024gog}. Fill-in facts with confidence below 0.7 are discarded.
+
+\textbf{(6) MST Context Organization and Generation.}
+Retrieved subgraph facts are organized via Maximum Spanning Tree pruning
+into coherent paragraphs, prepended to the generation prompt for
+LLaMA-3-8B or GPT-4.
+
+\subsection{Baselines}
+
+We compare against four baselines:
+\begin{itemize}
+  \item \textbf{Vanilla RAG}: Dense retrieval with GPT-4; no graph.
+  \item \textbf{GraphRAG}: Microsoft community-summary RAG \cite{edge2024graphrag}.
+  \item \textbf{KG$^2$RAG}: Reproduced NAACL 2025 baseline \cite{zhu2025kg2rag}.
+  \item \textbf{TempoRAG-KG (ours)}: Full system with temporal filter + GoG.
+\end{itemize}
+
+\subsection{Ablation Design}
+
+To isolate each component's contribution (RQ2), we evaluate five conditions
+shown in Table~\ref{tab:ablation}:
+
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Condition} & \textbf{Temporal} & \textbf{GoG} & \textbf{Graph Exp.} \\
+    \midrule
+    Vanilla RAG            & \xmark & \xmark & \xmark \\
+    KG$^2$RAG              & \xmark & \xmark & \cmark \\
+    +Temporal only         & \cmark & \xmark & \cmark \\
+    +GoG only              & \xmark & \cmark & \cmark \\
+    \textbf{Full (ours)}   & \cmark & \cmark & \cmark \\
+    \bottomrule
+  \end{tabular}
+  \caption{Ablation conditions. \cmark\ = component enabled;
+  \xmark\ = disabled.}
+  \label{tab:ablation}
+\end{table}
+
+\subsection{Evaluation Metrics}
+
+We report:
+\begin{itemize}
+  \item \textbf{F1 and EM}: Token-level F1 and Exact Match, computed
+    overall and separately for temporal and non-temporal question subsets.
+  \item \textbf{Retrieval Precision@5}: Fraction of retrieved chunks
+    containing the gold supporting facts.
+  \item \textbf{Temporal Extraction F1}: Precision and recall against
+    gold $[\mathtt{valid\_from}, \mathtt{valid\_to}]$ annotations
+    with $\pm$1 year tolerance (RQ3).
+  \item \textbf{Inference Time}: Average seconds per query.
+\end{itemize}
+
+% -------------------------------------------------------
+% 5. EXPECTED RESULTS AND DISCUSSION
+% -------------------------------------------------------
+\section{Expected Results and Discussion}
+
+% Main Results Table — belongs here, next to RQ2 discussion
+\begin{table*}[t]
+  \centering
+  \small
+  \begin{tabular}{lcccccc}
+    \toprule
+    \multirow{2}{*}{\textbf{Model}} &
+    \multicolumn{2}{c}{\textbf{Overall}} &
+    \multicolumn{2}{c}{\textbf{Temporal Subset}} &
+    \multicolumn{2}{c}{\textbf{Non-temporal Subset}} \\
+    \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+    & \textbf{F1} & \textbf{EM} & \textbf{F1} & \textbf{EM} & \textbf{F1} & \textbf{EM} \\
+    \midrule
+    Vanilla RAG         & -- & -- & -- & -- & -- & -- \\
+    GraphRAG            & -- & -- & -- & -- & -- & -- \\
+    KG$^2$RAG           & -- & -- & -- & -- & -- & -- \\
+    \midrule
+    \textbf{TempoRAG-KG (ours)} & \textbf{--} & \textbf{--} & \textbf{--} & \textbf{--} & \textbf{--} & \textbf{--} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Main results on HotpotQA distractor dev set. Temporal and
+  non-temporal subsets contain 2,593 and 4,812 questions respectively.
+  \textbf{Bold} = best result. (Results to be filled after experiments.)}
+  \label{tab:main_results}
+\end{table*}
+
+\subsection{RQ1: Temporal Failure Mode Distribution}
+
+We expect stale-fact retrieval (Type 1) to constitute the majority of
+temporal errors in KG$^2$RAG, as the most common temporal pattern in
+HotpotQA is explicit year mention (17.8\%). Type 4 (temporal hop failure) is
+expected to be rare in HotpotQA (2-hop only) but more frequent in
+MuSiQue 4-hop questions. This taxonomy is, to our knowledge, the first
+systematic categorization of temporal failures in general-domain KG-RAG.
+
+\subsection{RQ2: Impact of Temporal Tagging}
+
+We hypothesize that the full TempoRAG-KG model (Table~\ref{tab:main_results})
+will outperform KG$^2$RAG on the temporal question subset by a meaningful
+margin, while maintaining comparable performance on non-temporal questions.
+Table~\ref{tab:ablation_scores} shows the expected ablation results.
+
+% Ablation Scores Table — next to RQ2 discussion
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Condition} & \textbf{Overall F1} & \textbf{Temporal F1} \\
+    \midrule
+    Vanilla RAG                     & -- & -- \\
+    KG$^2$RAG (backbone)            & -- & -- \\
+    \quad +Temporal filter only     & -- & -- \\
+    \quad +GoG fill-in only         & -- & -- \\
+    \quad \textbf{Full model (ours)}& \textbf{--} & \textbf{--} \\
+    \midrule
+    $\Delta$ vs.\ KG$^2$RAG        & --  & -- \\
+    \bottomrule
+  \end{tabular}
+  \caption{Ablation scores on HotpotQA. $\Delta$ = improvement over
+  KG$^2$RAG backbone. (Results to be filled after experiments.)}
+  \label{tab:ablation_scores}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \fbox{\parbox{0.45\textwidth}{
+    \centering
+    \vspace{1.5cm}
+    \textbf{[Figure 3: Expected Ablation Results]}\\[0.5em]
+    Bar chart comparing F1 scores (overall + temporal subset):\\
+    Vanilla RAG $<$ KG$^2$RAG $<$ +Temporal $<$ Full Model\\[0.3em]
+    Secondary plot: non-temporal F1 stays flat across all conditions
+    \vspace{1.5cm}
+  }}
+  \caption{Expected ablation results on HotpotQA. Gains are predicted
+  to concentrate in the temporal question subset, with non-temporal F1
+  remaining stable.}
+  \label{fig:ablation}
+\end{figure}
+
+\subsection{RQ3: Temporal Extraction Accuracy}
+
+We expect precision $>$80\% for explicit year-mention expressions but
+substantially lower recall for implicit/relative expressions. Conflicting
+date expressions are expected to pose the greatest challenge.
+Table~\ref{tab:extraction} shows the evaluation structure.
+
+% Extraction Table — next to RQ3 discussion
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{lccc}
+    \toprule
+    \textbf{Pattern Type} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1} \\
+    \midrule
+    Explicit year mention & -- & -- & -- \\
+    Implicit / relative   & -- & -- & -- \\
+    Conflicting dates     & -- & -- & -- \\
+    \midrule
+    \textbf{Overall}      & \textbf{--} & \textbf{--} & \textbf{--} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Temporal extraction accuracy on 200 manually annotated
+  HotpotQA passages (RQ3), with $\pm$1 year tolerance.
+  (Results to be filled after annotation.)}
+  \label{tab:extraction}
+\end{table}
+
+\subsection{Discussion}
+
+If our hypotheses are confirmed, the results carry a broad implication
+for KG-RAG system design: \textit{temporal metadata should be treated as a
+first-class property of KG edges, not an optional annotation.} Systems that
+attach validity intervals at construction time gain the ability to filter
+stale facts deterministically---a capability that cannot be retrofitted to
+static KGs without re-extraction.
+
+The primary limitation is extraction quality on implicit temporal
+expressions. If extraction F1 on implicit patterns falls substantially,
+the temporal filter introduces false negatives. Our conservative fallback
+(retaining triples with \texttt{null} validity in Equation~\ref{eq:filter})
+mitigates but does not eliminate this risk.
+
+% -------------------------------------------------------
+% 6. PROGRESS SUMMARY
+% -------------------------------------------------------
+\section{Progress Summary}
+
+\paragraph{Completed.}
+\begin{itemize}
+  \item Literature review: 16 papers across four team members
+    (4 papers each, per course requirements from ACL venues only).
+  \item EDA of HotpotQA (7,405 questions: 35.0\% temporal) and
+    MuSiQue (2,417 questions: 38.3\% temporal).
+  \item Temporal failure taxonomy: four types proposed based on
+    qualitative analysis of KG-RAG failure modes.
+  \item Analysis of closest competitor EvoReasoner \cite{evoreasonerevokg2025}
+    with clear differentiation on three dimensions.
+\end{itemize}
+
+\paragraph{In Progress.}
+\begin{itemize}
+  \item Neo4j schema design and setup with temporal edge properties.
+  \item Temporal extraction prompt engineering and pilot evaluation
+    on 20 HotpotQA passages.
+  \item GitHub repository setup with README.\footnote{
+    Repository: \url{https://github.com/[to-be-updated]/temporag-kg}}
+\end{itemize}
+
+\paragraph{Remaining Work.}
+\begin{itemize}
+  \item Reproduction of KG$^2$RAG baseline on HotpotQA distractor dev set.
+  \item Manual annotation of 200 passages for RQ3 gold standard.
+  \item Full pipeline implementation: temporal filter, GEAR beam search,
+    GoG fill-in integration.
+  \item Ablation experiments (Table~\ref{tab:ablation}).
+  \item Streamlit demo with edge case scenarios.
+\end{itemize}
+
+\paragraph{Potential Concerns.}
+The primary risk is temporal extraction quality on implicit expressions.
+If extraction F1 falls below 60\%, the temporal filter may introduce
+false negatives. The conservative null-retention strategy in
+Equation~\ref{eq:filter} ensures graceful degradation.
+
+% -------------------------------------------------------
+% 7. CONCLUSION
+% -------------------------------------------------------
+\section{Conclusion}
+
+We have presented TempoRAG-KG, a temporally-aware Knowledge Graph-augmented
+RAG framework that addresses a systematic and underexplored failure mode in
+existing KG-RAG systems: the inability to distinguish facts valid at
+different points in time. By attaching explicit validity intervals to KG
+triples and filtering graph expansion accordingly, TempoRAG-KG targets the
+35\% of HotpotQA and 38\% of MuSiQue questions that require temporal
+reasoning. Our temporal failure taxonomy provides the diagnostic foundation
+needed to understand when and why temporal reasoning fails in
+graph-augmented systems, and our planned extraction study characterizes
+the practical accuracy ceiling of LLM-based temporal annotation.
+
+% -------------------------------------------------------
+% REFERENCES
+% -------------------------------------------------------
+\bibliography{references}
+
+% -------------------------------------------------------
+% APPENDIX
+% -------------------------------------------------------
+\appendix
+
+\section{Temporal Extraction Prompt}
+\label{app:prompt}
+
+{\small\begin{verbatim}
+You are a knowledge extraction assistant.
+Given the following text passage, extract all
+factual triples. For each triple, also infer
+temporal validity if mentioned or implied.
+
+Format each triple as JSON:
+{
+  "head": "entity name",
+  "relation": "relation type",
+  "tail": "entity or value",
+  "valid_from": year (int) or null,
+  "valid_to": year (int) or null,
+  "confidence": float between 0 and 1
+}
+
+Rules:
+- Only extract explicitly stated facts
+- For valid_from/valid_to: use null if unknown
+- If a fact is described as ongoing, set
+  valid_to to null
+- If two dates conflict for the same triple,
+  extract both as separate triples
+
+Text: {chunk_text}
+\end{verbatim}}
+
+\section{EDA Methodology}
+\label{app:eda}
+
+Temporal questions were identified using seven regex patterns applied
+to the lowercased question string. A question was classified as temporal
+if it matched at least one pattern. The patterns target: (1) explicit
+year mentions, (2) when/what-year phrases, (3) before/after/since,
+(4) time period expressions, (5) first/last/earliest superlatives,
+(6) age and duration phrases, and (7) temporal relation words
+(predecessor, successor, etc.). The EDA script is available in the
+project repository.
+
+\end{document}

@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Secrets
+.env
+.env.local
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Raw datasets (too large for git — use scripts/download_data.sh)
+data/hotpot_dev_distractor_v1.json
+data/musique_*.jsonl
+data/musique_*.json
+data/dev_test_singlehop_questions_v1.0.json
+
+# API response cache (can grow large, never commit)
+cache/
+
+# Intermediate / temp results
+results/pilot/
+results/runs/
+*.tmp
+*.log
+logs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Build / dist
+build/
+dist/

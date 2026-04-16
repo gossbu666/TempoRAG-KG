@@ -1,0 +1,410 @@
+{
+  "hotpotqa": {
+    "total": 7405,
+    "temporal_count": 2593,
+    "temporal_pct": 35.0,
+    "pattern_breakdown": {
+      "first_last": 570,
+      "year_mention": 1317,
+      "when_what_year": 537,
+      "time_period": 170,
+      "before_after": 308,
+      "age_duration": 50,
+      "temporal_relation": 22
+    },
+    "difficulty_breakdown": {
+      "easy": 2015,
+      "medium": 533,
+      "hard": 45
+    },
+    "type_breakdown": {
+      "comparison": 1487,
+      "bridge": 5918
+    },
+    "temporal_by_type": {
+      "bridge": 2282,
+      "comparison": 311
+    },
+    "temporal_examples": [
+      {
+        "question": "What science fantasy young adult series, told in first person, has a set of companion books narrating the stories of enslaved worlds and alien species?",
+        "answer": "Animorphs",
+        "type": "bridge",
+        "patterns": [
+          "first_last"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "2014 S/S is the debut album of a South Korean boy group that was formed by who?",
+        "answer": "YG Entertainment",
+        "type": "bridge",
+        "patterns": [
+          "year_mention"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "What year did Guns N Roses perform a promo for a movie starring Arnold Schwarzenegger as a former New York Police detective?",
+        "answer": "1999",
+        "type": "bridge",
+        "patterns": [
+          "when_what_year"
+        ],
+        "difficulty": "medium"
+      },
+      {
+        "question": "The football manager who recruited David Beckham managed Manchester United during what timeframe?",
+        "answer": "from 1986 to 2013",
+        "type": "bridge",
+        "patterns": [
+          "time_period"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "The Vermont Catamounts men's soccer team currently competes in a conference that was formerly known as what from 1988 to 1996?",
+        "answer": "the North Atlantic Conference",
+        "type": "bridge",
+        "patterns": [
+          "year_mention"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "Roger O. Egeberg was Assistant Secretary for Health and Scientific Affairs during the administration of a president that served during what years?",
+        "answer": "1969 until 1974",
+        "type": "bridge",
+        "patterns": [
+          "time_period"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "Which other Mexican Formula One race car driver has held the podium besides the Force India driver born in 1990?",
+        "answer": "Pedro Rodríguez",
+        "type": "bridge",
+        "patterns": [
+          "year_mention"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "What was the father of Kasper Schmeichel voted to be by the IFFHS in 1992?",
+        "answer": "World's Best Goalkeeper",
+        "type": "bridge",
+        "patterns": [
+          "year_mention"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "Who was the writer of These Boots Are Made for Walkin' and who died in 2007?",
+        "answer": "Barton Lee Hazlewood",
+        "type": "bridge",
+        "patterns": [
+          "year_mention"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "The 2011–12 VCU Rams men's basketball team, led by third year head coach Shaka Smart, represented Virginia Commonwealth University which was founded in what year?",
+        "answer": "1838",
+        "type": "bridge",
+        "patterns": [
+          "year_mention",
+          "when_what_year"
+        ],
+        "difficulty": "medium"
+      },
+      {
+        "question": "When was Poison's album \"Shut Up, Make Love\" released?",
+        "answer": "2000",
+        "type": "bridge",
+        "patterns": [
+          "when_what_year"
+        ],
+        "difficulty": "medium"
+      },
+      {
+        "question": "Alexander Kerensky was defeated and destroyed by the Bolsheviks in the course of a civil war that ended when ?",
+        "answer": "October 1922",
+        "type": "bridge",
+        "patterns": [
+          "when_what_year"
+        ],
+        "difficulty": "medium"
+      },
+      {
+        "question": "Seven Brief Lessons on Physics was written by an Italian physicist that has worked in France since what year?",
+        "answer": "2000",
+        "type": "bridge",
+        "patterns": [
+          "when_what_year",
+          "before_after"
+        ],
+        "difficulty": "medium"
+      },
+      {
+        "question": "A Japanese manga series based on a 16 year old high school student Ichitaka Seto, is written and illustrated by someone born in what year?",
+        "answer": "1962",
+        "type": "bridge",
+        "patterns": [
+          "when_what_year",
+          "age_duration"
+        ],
+        "difficulty": "medium"
+      },
+      {
+        "question": "Who is the writer of this song that was inspired by words on a tombstone and was the first track on the box set Back to Mono?",
+        "answer": "Phil Spector",
+        "type": "bridge",
+        "patterns": [
+          "first_last"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "Which British first-generation jet-powered medium bomber was used in the South West Pacific theatre of World War II?",
+        "answer": "English Electric Canberra",
+        "type": "bridge",
+        "patterns": [
+          "first_last"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "Which year and which conference was the 14th season for this conference as part of the NCAA Division that the Colorado Buffaloes played in with a record of 2-6 in conference play?",
+        "answer": "2009 Big 12 Conference",
+        "type": "bridge",
+        "patterns": [
+          "when_what_year"
+        ],
+        "difficulty": "medium"
+      },
+      {
+        "question": "In 1991 Euromarché was bought by a chain that operated how any hypermarkets at the end of 2016?",
+        "answer": "1,462",
+        "type": "bridge",
+        "patterns": [
+          "year_mention"
+        ],
+        "difficulty": "easy"
+      },
+      {
+        "question": "Which Australian city founded in 1838 contains a boarding school opened by a Prime Minister of Australia and named after a school in London of the same name.",
+        "answer": "Marion, South Australia",
+        "type": "bridge",
+        "patterns": [
+          "year_mention",
+          "before_after"
+        ],
+        "difficulty": "hard"
+      },
+      {
+        "question": "According to the 2001 census, what was the population of the city in which Kirton End is located?",
+        "answer": "35,124",
+        "type": "bridge",
+        "patterns": [
+          "year_mention"
+        ],
+        "difficulty": "easy"
+      }
+    ],
+    "dataset": "HotpotQA"
+  },
+  "musique": {
+    "dataset": "MuSiQue",
+    "total": 2417,
+    "temporal_count": 926,
+    "temporal_pct": 38.3,
+    "pattern_breakdown": {
+      "year_mention": 163,
+      "time_period": 94,
+      "before_after": 172,
+      "when_what_year": 499,
+      "first_last": 171,
+      "age_duration": 44,
+      "temporal_relation": 11
+    },
+    "hop_distribution": {
+      "2": 1252,
+      "3": 760,
+      "4": 405
+    },
+    "temporal_by_hop": {
+      "2": 378,
+      "3": 359,
+      "4": 189
+    },
+    "temporal_examples": [
+      {
+        "question": "What was the average per capita GVA in 2013 of the country which created Burma's academic system?",
+        "answer": "£23,755",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention"
+        ]
+      },
+      {
+        "question": "During which era was the company that makes Nirbhay founded?",
+        "answer": "From the 1950s to the 1970s",
+        "n_hops": 2,
+        "patterns": [
+          "time_period"
+        ]
+      },
+      {
+        "question": "During what era was the manufacturer of Agni-V founded?",
+        "answer": "From the 1950s to the 1970s",
+        "n_hops": 2,
+        "patterns": [
+          "time_period"
+        ]
+      },
+      {
+        "question": "In what era was the company known as the manufacturer of Agni-V founded?",
+        "answer": "From the 1950s to the 1970s",
+        "n_hops": 2,
+        "patterns": [
+          "time_period"
+        ]
+      },
+      {
+        "question": "What is the performer of Heartbeat named after?",
+        "answer": "Natalie Albino",
+        "n_hops": 2,
+        "patterns": [
+          "before_after"
+        ]
+      },
+      {
+        "question": "The Move Ya Body song's band is named after who?",
+        "answer": "Natalie Albino",
+        "n_hops": 2,
+        "patterns": [
+          "before_after"
+        ]
+      },
+      {
+        "question": "When did the spacecraft that detected storms on Neptune leave our solar system?",
+        "answer": "August 30, 2007",
+        "n_hops": 2,
+        "patterns": [
+          "when_what_year"
+        ]
+      },
+      {
+        "question": "The Nicole and Natalie album's band is named after who?",
+        "answer": "Natalie Albino",
+        "n_hops": 2,
+        "patterns": [
+          "before_after"
+        ]
+      },
+      {
+        "question": "What is the place of birth of the person who submitted the first version of the equal rights amendment to congress in 1923?",
+        "answer": "Mount Laurel Township",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention",
+          "first_last"
+        ]
+      },
+      {
+        "question": "The Directory of Public Worship was approved by a parliament whose modern equivalent has been based where since 2004?",
+        "answer": "Scottish Parliament Building",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention",
+          "before_after"
+        ]
+      },
+      {
+        "question": "Since 2004, what is the location of the body to which, if a matter is not specifically reserved, it is devolved?",
+        "answer": "Scottish Parliament Building",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention",
+          "before_after"
+        ]
+      },
+      {
+        "question": "How old was Mary when engaged to the person from whom São José dos Campos takes it's name?",
+        "answer": "12–14 years old",
+        "n_hops": 2,
+        "patterns": [
+          "when_what_year",
+          "age_duration"
+        ]
+      },
+      {
+        "question": "The 1967 Federation Cup is an instance of this tournament which is named after what organization?",
+        "answer": "International Tennis Federation",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention",
+          "before_after"
+        ]
+      },
+      {
+        "question": "What is the competition that the 1965 Federation Cup is part of named after?",
+        "answer": "International Tennis Federation",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention",
+          "before_after"
+        ]
+      },
+      {
+        "question": "What is the competition the 1972 Federation Cup is part of named after?",
+        "answer": "International Tennis Federation",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention",
+          "before_after"
+        ]
+      },
+      {
+        "question": "Who is the sibling of the actress that played the little girl in Miracle on 34th street 1947?",
+        "answer": "Lana Wood",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention"
+        ]
+      },
+      {
+        "question": "What company did the company that initiated a successful price war among PC manufacturers in 1994 merge with in 2002?",
+        "answer": "Hewlett Packard",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention"
+        ]
+      },
+      {
+        "question": "What company merged in 2002 with the CEMM developer?",
+        "answer": "Hewlett Packard",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention"
+        ]
+      },
+      {
+        "question": "In 2002, what company merged with the top PC manufacturer from 1994?",
+        "answer": "Hewlett Packard",
+        "n_hops": 2,
+        "patterns": [
+          "year_mention"
+        ]
+      },
+      {
+        "question": "Who is the employer of the person Mach's principle was named after?",
+        "answer": "Charles University",
+        "n_hops": 2,
+        "patterns": [
+          "before_after"
+        ]
+      }
+    ]
+  }
+}
