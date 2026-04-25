@@ -4,6 +4,7 @@ Feeds a hand-crafted 10-row predictions bundle through the rule
 pipeline and asserts the primary_cause each row is assigned.
 """
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -94,20 +95,17 @@ def test_stage1_rules_label_each_category(tmp_path: Path):
          "--predictions-root", str(tmp_path),
          "--chunks", str(tmp_path / "chunks.jsonl"),
          "--out", str(out)],
-        env={"PYTHONPATH": ".", "PATH": "/usr/bin:/bin"},
+        env={**os.environ, "PYTHONPATH": "."},
         capture_output=True, text=True,
     )
     assert cp.returncode == 0, cp.stderr
 
     rows = [json.loads(l) for l in out.read_text().splitlines() if l.strip()]
     by_qid = {r["question_id"]: r for r in rows}
-    assert by_qid["T01"]["primary_cause"] == "A3"
-    assert by_qid["T02"]["primary_cause"] == "A4"
-    assert by_qid["T03"]["primary_cause"] == "A5"
-    assert by_qid["T04"]["primary_cause"] == "B2"
-    assert by_qid["T05"]["primary_cause"] == "NF"  # high F1 short-circuits B3
-    assert by_qid["T06"]["primary_cause"] == "B4"
-    assert by_qid["T07"]["primary_cause"] == "B5"
-    assert by_qid["T08"]["primary_cause"] == "NF"
-    assert by_qid["T09"]["primary_cause"] is None  # Stage 2 will decide
-    assert by_qid["T10"]["primary_cause"] is None
+    expected = {
+        "T01": "A3", "T02": "A4", "T03": "A5", "T04": "B2",
+        "T05": "NF", "T06": "B4", "T07": "B5", "T08": "NF",
+        "T09": None, "T10": None,
+    }
+    actual = {qid: by_qid[qid]["primary_cause"] for qid in expected}
+    assert actual == expected, f"primary_cause mismatch:\n  expected: {expected}\n  actual:   {actual}"
