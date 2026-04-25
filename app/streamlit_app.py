@@ -194,26 +194,27 @@ with st.sidebar:
     st.divider()
     st.header("Sample questions")
     SAMPLES = [
-        ("What was Microsoft's revenue in fiscal 2022?", [2022]),
-        (
-            "Compare Apple's Services revenue to Microsoft's cloud revenue for fiscal year 2022",
-            [2022],
-        ),
-        (
-            "How did Amazon's AWS operating income evolve from 2020 to 2023?",
-            [2020, 2021, 2022, 2023],
-        ),
-        (
-            "Which company had higher data-center revenue in FY2024, NVIDIA or Intel?",
-            [2024],
-        ),
-        (
-            "What was Cisco's total revenue for the fiscal year ending July 27, 2024?",
-            [2024],
-        ),
+        ("Single-hop intra (easy)",
+         "What was Microsoft's revenue in fiscal 2022?",
+         [2022]),
+        ("Cross-company (KG should help)",
+         "Compare Apple's Services revenue to Microsoft's cloud revenue "
+         "for fiscal year 2022",
+         [2022]),
+        ("Inter-year trajectory",
+         "How did Amazon's AWS operating income evolve from 2020 to 2023?",
+         [2020, 2021, 2022, 2023]),
+        ("Cross-company hop=3",
+         "Which company had higher data-center revenue in FY2024, NVIDIA "
+         "or Intel?",
+         [2024]),
+        ("Fiscal-vs-calendar boundary",
+         "What was Cisco's total revenue for the fiscal year ending "
+         "July 27, 2024?",
+         [2024]),
     ]
-    for i, (sq, sy) in enumerate(SAMPLES):
-        if st.button(sq, key=f"sample_{i}"):
+    for i, (label, sq, sy) in enumerate(SAMPLES):
+        if st.button(label, key=f"sample_{i}", help=sq, use_container_width=True):
             st.session_state["question"] = sq
             if condition in ("L1", "L3"):
                 st.session_state["years_input"] = sy
@@ -230,94 +231,169 @@ question = st.text_area(
     "Question",
     value=st.session_state["question"],
     height=80,
-    placeholder="Ask about revenue, segments, risks, or compare across companies / years ...",
+    placeholder="e.g. Compare Apple's Services revenue to Microsoft's cloud "
+                "revenue for fiscal year 2022",
+    label_visibility="collapsed",
 )
 
-col_ask, col_space = st.columns([1, 5])
+col_ask, col_compare, _ = st.columns([1, 2, 5])
 do_ask = col_ask.button("Ask", type="primary", disabled=not question.strip())
+do_compare = col_compare.button(
+    "Compare all 4 conditions",
+    disabled=not question.strip(),
+    help="Run L0 / L1 / L2 / L3 on the same question and stack the four answers.",
+)
 
-if do_ask:
+
+def _retrieve_for(cond: str, q: str) -> list[dict]:
+    """Dispatch to the right retriever for a given condition."""
+    if cond == "L0":
+        return retrieve(q, index, embed_client, qcache, k=top_k)
+    if cond == "L1":
+        return retrieve_with_year_filter(q, years, index, embed_client, qcache, k=top_k)
+    if cond == "L2":
+        return retrieve_kg2rag(q, index, kg, embed_client, qcache, k=top_k, seed_k=seed_k)
+    return retrieve_temporag_kg(q, years, index, kg, embed_client, qcache,
+                                k=top_k, seed_k=seed_k)
+
+
+def _kg_seed_set(q: str) -> set[str]:
+    """Vanilla top-seed_k chunk_ids — used to flag KG-expanded chunks."""
+    return {r["chunk_id"] for r in retrieve(q, index, embed_client, qcache, k=seed_k)}
+
+
+def _render_chunk(i: int, c: dict, seed_cids: set[str] | None,
+                  *, expanded: bool) -> None:
+    is_kg_expanded = seed_cids is not None and c["chunk_id"] not in seed_cids
+    badge = "  :violet-background[🧬 KG-expanded]" if is_kg_expanded else ""
+    label = (
+        f"[{i}] `{c['chunk_id']}` — {c.get('ticker','?')} FY{c.get('fy','?')} "
+        f"item {c.get('item','?')}  ·  score {c['retrieval_score']:.3f}{badge}"
+    )
+    with st.expander(label, expanded=expanded):
+        st.write(c.get("text", "(missing)"))
+        n_tr = len(kg.chunk_to_triples.get(c["chunk_id"], []))
+        if n_tr:
+            st.caption(f"{n_tr} triples extracted from this chunk")
+
+
+def _ask_one(cond: str, q: str) -> tuple[list[dict], dict, set[str] | None]:
+    """Returns (chunks, answer, seed_cids)."""
+    chunks = _retrieve_for(cond, q)
+    seed_cids = _kg_seed_set(q) if cond in ("L2", "L3") else None
+    ans = answer_question(
+        q, chunks, answer_clients[model_key], acache,
+        template=template, model=model_id,
+    )
+    return chunks, ans, seed_cids
+
+
+if do_ask or do_compare:
     q = question.strip()
     st.session_state["question"] = q
-
-    with st.spinner(f"Retrieving via {condition} ..."):
-        if condition == "L0":
-            chunks = retrieve(q, index, embed_client, qcache, k=top_k)
-        elif condition == "L1":
-            chunks = retrieve_with_year_filter(
-                q, years, index, embed_client, qcache, k=top_k
-            )
-        elif condition == "L2":
-            chunks = retrieve_kg2rag(
-                q, index, kg, embed_client, qcache, k=top_k, seed_k=seed_k
-            )
-        else:  # L3
-            chunks = retrieve_temporag_kg(
-                q, years, index, kg, embed_client, qcache,
-                k=top_k, seed_k=seed_k,
-            )
-
-    # Mark which chunks would have been in the vanilla top-k (seeds) so users
-    # can see what the KG expansion added.
-    seed_cids = {
-        r["chunk_id"]
-        for r in retrieve(q, index, embed_client, qcache, k=seed_k)
-    } if condition in ("L2", "L3") else None
-
-    with st.spinner(f"Asking {model_key} ..."):
-        try:
-            ans = answer_question(
-                q, chunks, answer_clients[model_key], acache,
-                template=template, model=model_id,
-            )
-        except Exception as exc:
-            st.error(f"Answer call failed: {type(exc).__name__}: {exc}")
-            st.stop()
-
     gold_rec = qa_lookup.get(q.lower())
 
-    # Layout: left column for answer, right column for retrieved chunks.
-    a_col, r_col = st.columns([4, 5])
-
-    with a_col:
-        st.subheader("Answer")
-        st.info(ans["answer"])
-        if ans.get("parse_error"):
-            st.warning(f"Parse note: {ans['parse_error']}")
-        cache_tag = "✓ cache" if ans.get("cache_hit") else "live call"
-        st.caption(f"Model `{model_id}` · {cache_tag}")
-
+    if do_compare:
+        st.markdown("### Comparison across all 4 retrieval conditions")
+        st.caption(
+            "Same question, same model, four retrieval strategies. "
+            "Watch for differences in retrieved chunks (right panel) and "
+            "in the answer (left panel)."
+        )
         if gold_rec:
-            st.markdown("**Gold answer** _(matched from labeled QA)_")
             gold = gold_rec["answer"]
-            st.success(gold if isinstance(gold, str) else ", ".join(gold))
-            f1 = f1_token(ans["answer"], gold)
-            st.metric("Token-F1 vs gold", f"{f1:.3f}")
+            gold_str = gold if isinstance(gold, str) else ", ".join(gold)
+            st.success(f"**Gold answer:** {gold_str}")
             st.caption(
-                f"scope={gold_rec.get('scope')}  ·  hop={gold_rec.get('hop_count')}"
-                f"  ·  source={gold_rec.get('source_dataset')}"
+                f"scope={gold_rec.get('scope')} · hop={gold_rec.get('hop_count')}"
+                f" · source={gold_rec.get('source_dataset')}"
             )
 
-    with r_col:
-        st.subheader(f"Retrieved chunks ({len(chunks)})")
-        for i, c in enumerate(chunks, 1):
-            kg_flag = ""
-            if seed_cids is not None and c["chunk_id"] not in seed_cids:
-                kg_flag = " ·  KG-expanded"
-            with st.expander(
-                f"[{i}] {c['chunk_id']} — {c.get('ticker','?')} FY{c.get('fy','?')} "
-                f"item {c.get('item','?')}  ·  score {c['retrieval_score']:.3f}{kg_flag}",
-                expanded=(i <= 2),
-            ):
-                st.write(c.get("text", "(missing)"))
-                n_tr = len(kg.chunk_to_triples.get(c["chunk_id"], []))
-                if n_tr:
-                    st.caption(f"{n_tr} triples extracted from this chunk")
+        for cond in ("L0", "L1", "L2", "L3"):
+            with st.spinner(f"Running {CONDITION_LABELS[cond]} ..."):
+                chunks, ans, seed_cids = _ask_one(cond, q)
+            f1_str = ""
+            if gold_rec:
+                gold = gold_rec["answer"]
+                f1 = f1_token(ans["answer"], gold)
+                f1_str = f"  ·  F1 = **{f1:.3f}**"
+
+            st.markdown(f"#### {CONDITION_LABELS[cond]}{f1_str}")
+            a_col, r_col = st.columns([4, 5])
+            with a_col:
+                st.info(ans["answer"])
+                cache_tag = "✓ cache" if ans.get("cache_hit") else "live call"
+                st.caption(f"`{model_id}` · {cache_tag}")
+            with r_col:
+                with st.expander(f"Retrieved chunks ({len(chunks)})", expanded=False):
+                    for i, c in enumerate(chunks, 1):
+                        _render_chunk(i, c, seed_cids, expanded=False)
+            st.divider()
+
+    else:  # single-condition Ask
+        with st.spinner(f"Retrieving via {CONDITION_LABELS[condition]} ..."):
+            chunks = _retrieve_for(condition, q)
+        seed_cids = _kg_seed_set(q) if condition in ("L2", "L3") else None
+
+        with st.spinner(f"Asking {model_key} ..."):
+            try:
+                ans = answer_question(
+                    q, chunks, answer_clients[model_key], acache,
+                    template=template, model=model_id,
+                )
+            except Exception as exc:
+                st.error(f"Answer call failed: {type(exc).__name__}: {exc}")
+                st.stop()
+
+        a_col, r_col = st.columns([4, 5])
+        with a_col:
+            st.subheader("Answer")
+            st.info(ans["answer"])
+            if ans.get("parse_error"):
+                st.warning(f"Parse note: {ans['parse_error']}")
+            cache_tag = "✓ cache" if ans.get("cache_hit") else "live call"
+            st.caption(f"Model `{model_id}` · {cache_tag}")
+
+            if gold_rec:
+                st.markdown("**Gold answer** _(matched from labeled QA)_")
+                gold = gold_rec["answer"]
+                st.success(gold if isinstance(gold, str) else ", ".join(gold))
+                f1 = f1_token(ans["answer"], gold)
+                st.metric(
+                    "Token-F1 vs gold",
+                    f"{f1:.3f}",
+                    help="SQuAD-style word-level overlap between the model's "
+                         "answer and the gold. Range 0–1; 1 = identical bag of "
+                         "tokens after lowercase + stop-punct + stop-words.",
+                )
+                st.caption(
+                    f"scope={gold_rec.get('scope')}  ·  hop={gold_rec.get('hop_count')}"
+                    f"  ·  source={gold_rec.get('source_dataset')}"
+                )
+
+        with r_col:
+            st.subheader(f"Retrieved chunks ({len(chunks)})")
+            for i, c in enumerate(chunks, 1):
+                _render_chunk(i, c, seed_cids, expanded=(i <= 2))
 
 else:
-    st.info(
-        "Pick a condition on the left, type a question above (or click a "
-        "sample), then press **Ask**. The app will show retrieved chunks "
-        "and the model's answer side-by-side. Known questions (from the "
-        "129 labeled set) also show gold + F1."
+    # Demo-friendly empty state with three quick-start steps.
+    st.markdown(
+        """
+        ### Try it out
+
+        **TempoRAG-KG** evaluates four retrieval strategies on the same
+        question, all backed by the same 25-filing 10-K corpus and the same
+        knowledge graph (~58k triples).
+
+        1. **Type a question** above (or click a sample on the left).
+        2. **Pick a retrieval condition** in the sidebar — `L0` is plain
+           cosine, `L3` adds a knowledge-graph walk filtered by temporal
+           validity.
+        3. **Press *Ask*** for one condition, or **Compare all 4** to see
+           every condition stacked on the same question.
+
+        When the question matches one of our 129 labelled QA items, the
+        gold answer and Token-F1 score are also shown.
+        """
     )
