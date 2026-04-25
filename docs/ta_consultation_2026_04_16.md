@@ -1,9 +1,3 @@
-# TempoRAG-KG — April Revision Summary
-**For TA consultation · 2026-04-16**
-**Team:** Supanut Kompayak (lead), Aphisit Jaemyaem, Dechathon Niamsa-ard, Kaung Hein Htet
-
----
-
 ## 1. Proposal recap
 
 TempoRAG-KG extends KG²RAG (NAACL 2025) by attaching explicit

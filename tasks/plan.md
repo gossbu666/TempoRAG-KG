@@ -1,476 +1,590 @@
-# TempoRAG-KG — Implementation Plan
+# TempoRAG-KG v2 — Implementation Plan (Post-TA-Pivot)
 
-**Last updated:** 2026-04-16
-**Status:** Phase 0 (bootstrap) complete. Starting Phase 1 (infrastructure).
+**Last updated:** 2026-04-19 (v2.2 — 10-ticker expansion)
+**Status:** Phase 0 partially stale — ticker set expanded to 10 tech (2026-04-19); A1/A3 need re-run for 5 new tickers + FY2024. Eval harness complete; blocked on teammate prompt review before P1 pilot.
 **Repo:** https://github.com/gossbu666/TempoRAG-KG
-**Related docs:** `proposal/temporag_kg_report_rev2.tex`, `tasks/todo.md`, `README.md`
+**Related docs:**
+- `docs/ta_consultation_2026_04_16.md` — full TA meeting record
+- `docs/ta_feedback_for_team_2026_04_16.md` — English summary for team
+- `docs/10k_scoping.md` — sector scope, chunk strategy, cost projection
+- `docs/temporal_methods_scan.md` — lit scan justifying extract+use as contribution (K4)
+- `docs/a3_report.md` — 10-K download + parse + chunk-count writeup (A3 delivered)
+- `docs/prompt_review.md` — open teammate review on `prompts/extract_v1.txt`
+- `tasks/archive/plan_v1_hotpotqa.md` — previous (v1) plan, superseded
+- `tasks/todo.md` — live checklist
+
+**If this document and memory disagree, this document wins.**
 
 ---
 
-## 1. Purpose of this document
+## 1. What changed from v1
 
-This is the **single source of truth** for what we are building, in what order, and how each piece is verified. It is designed to be read by any team member or by a Claude session in VSCode and used to continue work without re-deriving context.
+See `docs/ta_consultation_2026_04_16.md` for the full meeting record. Short version:
 
-If this document and memory disagree, **this document wins**. Update it when plans change; do not rely on conversation history.
+| Dimension | v1 (HotpotQA) | v2 (10-K) |
+|---|---|---|
+| Primary dataset | HotpotQA + MuSiQue (Wikipedia) | 10-K SEC filings (tech mega-caps, 10 tickers) |
+| Corpus size | 1,000 + 500 questions | 30 filings (10 tickers × FY2022-2024), ~4,600 chunks projected |
+| Primary RQ | RQ2 (F1 lift from temporal tagging) | **RQ4 (small-vs-large capability parity)** |
+| Temporal proof | Empirical ±1 year justification | **Dropped** — AI is probabilistic, not meaningful |
+| IAA target | α ≥ 0.70 hard target | **Dropped** — magic number; report α without threshold |
+| Framing | Cost reduction | **Capability** (cost is a by-product) |
+| Contribution | Temporal intervals in KG edges | **Extraction + usage** of temporal info (storage is not novel) |
 
----
+## 1b. Prior work positioning
+
+Research in 2026-04-18/19 surfaced four papers that must be defended against explicitly. Memory `project_prior_work_landscape.md` carries the full comparison; the table below is the TL;DR.
+
+| Paper | What they did | How we differ |
+|---|---|---|
+| **KG²RAG** (NAACL 2025) | KG-guided retrieval on Wikipedia, eval on HotpotQA | We port the retrieval mechanism to 10-K and add edge-level `[valid_from, valid_to]` |
+| **FinReflectKG** (arxiv 2508.17906) | Reflection-agent KG extraction from 743 S&P 100 10-Ks | Their temporal is "Month YYYY" strings, mostly filing-year default (`extraction_type="default"`, **76.6%** of our 10-ticker subset). Ours is explicit-extraction temporal on 10 tech tickers. Used as **baseline KG arm** in ablation. |
+| **FinReflectKG-MultiHop** (arxiv 2510.02906) | 555-Q multi-hop benchmark over their KG; KG retrieval beats page-window +24% LLM-Judge | Their inter-year scope is the weakest (6.72 vs 7.47 intra-doc LLM-Judge) — **that's the gap we target**. They don't isolate KG from temporal; we do (L1/L2/L3). |
+| **TA-RAG** (arxiv 2507.22917) | Timestamped chunk metadata (no KG) + interval filter | **This is our L1 citation** — shows temporal alone can lift vanilla RAG by +27.5–28.1pp without any KG. |
+
+**Our differentiation one-liner:**
+
+> TempoRAG-KG = KG²RAG retrieval backbone + FinReflectKG 10-K domain + **explicit edge-level temporal intervals** (not filing-year default) + **L1/L2/L3 layered ablation** that separates KG contribution from temporal contribution + **RQ4 cost-vs-capability story** (unique to us).
+
+## 1c. Three-layer justification chain
+
+Before claiming "Temporal + KG + RAG" is the right design, the progress report must walk up the justification ladder independently.
+
+| Layer | Claim | Ablation arm | Citation we lean on |
+|---|---|---|---|
+| **L1** | Temporal filtering helps RAG even without a KG | Vanilla RAG vs **Temporal-Vanilla-RAG** (chunk metadata filter) | TA-RAG (arxiv 2507.22917) |
+| **L2** | KG contributes over plain RAG | Vanilla RAG vs **KG²RAG** | KG²RAG (NAACL 2025) |
+| **L3** | KG + Temporal beats each alone | All-of-the-above vs **TempoRAG-KG (Full)** | Our contribution |
+
+**Why this matters:** the reviewer's first move will be "did you need all three?". Combining interventions without layered ablations is the classic refereeing red flag. Our 4-arm matrix (Vanilla / Temporal-Vanilla / KG²RAG / Full) answers it directly.
+
+## 1d. Locked design decisions (2026-04-18/19)
+
+Decisions frozen this sprint — changing any of them requires re-scoping cost + re-running projections.
+
+| # | Decision | Rationale |
+|---|---|---|
+| 1 | Triple temporal format: `int year` (valid_from, valid_to) | Matches current prompt + tests; ISO 8601 + precision flag deferred to future work |
+| 2 | Metrics: **LLM-Judge (0-10) + BERTScore + cost-per-Q**, NOT F1/EM | 10-K answers are paragraph-length; F1/EM undercounts. Judge matches FinReflectKG-MultiHop for comparability. |
+| 3 | QA source: **hybrid** — filtered FinReflectKG-MultiHop 555 → **79 Qs** over our 10 tickers (intra 35 / inter_year 38 / cross_company 6) + ~50 home-grown temporal edge cases | Pure home-grown is unreproducible; pure MultiHop under-tests edge cases. 10-ticker expansion unlocked the cross_company scope (was 0 under Mag5). |
+| 3b | Ticker set: **10 tech-megacap** (AAPL/MSFT/GOOGL/AMZN/META + CSCO/ORCL/INTC/NVDA/ADBE) × FY2022-2024 | Chosen 2026-04-19 to close the cross_company scope gap while keeping prompt domain coherent (all 10 are NASDAQ 100 tech/comm — same 10-K structure, no prompt re-tune needed). See `data/qa/multihop_filtered.jsonl` + `docs/multihop_filter_report.md`. |
+| 4 | Extraction: single-pass (KG²RAG parity), **not** reflection | Budget + comparability to KG²RAG backbone |
+| 5 | Tables: **future work** — v2 text-only extraction | Same scope as KG²RAG; avoids docling dependency |
+| 6 | XBRL: **ground-truth validation only** (not primary data source) | Narrative facts XBRL can't cover are what multi-hop needs |
+| 7 | Hallucination guard: evidence must be substring of chunk.text | Stronger than KG²RAG's post-filter (whole sentence vs single token) — **shipped 2026-04-19** |
 
 ## 2. Current state snapshot
 
 | Category | Status |
 |---|---|
-| Literature review (16 papers) | ✅ Done |
-| EDA (HotpotQA 35%, MuSiQue 38.3% temporal) | ✅ Done |
-| Proposal submitted (March 23) | ✅ Done |
-| TA feedback received (3 methodological items) | ✅ Documented |
-| April revision plan | ✅ Documented (memory + this file) |
-| GitHub repo scaffolding | ✅ Pushed to `main` |
-| Python venv (3.9) + requirements | ✅ Set up locally |
-| `.env` with real API keys | ⏳ User to create |
-| Phase 1 — Infrastructure | ⏳ Next |
-| Phase 2 — Pilot de-risking | ⏳ After Phase 1 |
-| Phase 3–7 | ⏳ Sequential |
+| EDA on HotpotQA/MuSiQue (35% / 38.3% temporal) | ✅ Done, kept as motivation |
+| Proposal v1 submitted (2026-03-23) | ✅ Done |
+| TA feedback (2026-04-16) | ✅ Documented |
+| v1 plan/todo archived | ✅ Done |
+| v2 plan (this file) | ✅ v2.1 updated 2026-04-19 (post-landscape research) |
+| `src/cache.py` + tests | ✅ Done (reusable as-is) |
+| `src/eval.py` + tests | ✅ Done for F1/EM; **needs upgrade** to LLM-Judge + BERTScore |
+| `src/iaa.py` + tests | ✅ Done (α reported without threshold) |
+| `src/sampling.py` + `sample_10k_chunks` | ✅ A1 delivered for Mag5 FY2019-2023 (3,810 chunks) — **needs re-run** for 5 new tickers + FY2024 |
+| `src/parse_10k.py` + tests | ✅ A3 delivered for Mag5 (25/25 filings × 5 items) — **needs extension** to 10 tickers × FY2022-2024 (20 more filings) |
+| `scripts/download_10k.py` | ✅ A3 delivered for Mag5 — **needs re-run** for 5 new tickers + FY2024 |
+| `prompts/extract_v1.txt` (financial) | ✅ A2 drafted; **awaiting teammate review** (`docs/prompt_review.md`) — same prompt covers 10 tech tickers (no domain drift) |
+| `prompts/archive/extract_v1_wikipedia.txt` | ✅ v1 prompt archived |
+| `src/kg_extract.py` + tests (zero-cost Python) | ✅ delivered + **hallucination guard added 2026-04-19** (28 tests passing) + DEFAULT_COMPANY_NAMES extended to 10 tickers |
+| 10-K scoping note | ✅ Done (`docs/10k_scoping.md`) — **needs update** for 10-ticker budget re-projection |
+| Team pivot sync | ✅ Agreed (per user, 2026-04-17) |
+| Landscape memory + prior-work comparison | ✅ Done (`memory/project_prior_work_landscape.md`, 2026-04-19) |
+| Temporal methods lit scan | ✅ Done (`docs/temporal_methods_scan.md`, K4) |
+| English TA summary for team | ⏳ Pending (K2 optional; ta_consultation doc may suffice) |
+| **Prompt review sign-off** | 🔴 **BLOCKING** — nobody assigned yet |
+| FinReflectKG HF subset download (baseline arm) | ✅ **Done for 10 tickers (74,979 triples, 76.6% default rate)** — one coverage gap: META FY2022 = 0 triples in the HF release |
+| Hybrid QA set assembly | ⏳ MultiHop filter DONE (79 Qs, `data/qa/multihop_filtered.jsonl`); home-grown ~50 Qs still to author (A4b) |
+| Eval harness upgrade (LLM-Judge + BERTScore) | ✅ Done — `score_with_judge`, `score_bertscore`, `aggregate_by_scope` + 36 tests (T3.2) |
+| Retrieval pipeline arms (G1-G4) | ⏳ Pending — largest remaining work item |
 
----
+## 3. Operating constraints
 
-## 3. Budget and operating constraints
+- **Budget:** $20 hard cap. Current spend: **$0**. Re-baselined projection under **10-ticker scope** (~4,600 chunks projected from 30 filings × ~152 chunks/filing observed in A1): **~$2.65 for B1 pilot + full build** (single-pass + 10% re-run buffer), leaving ~$15 for eval + judge. ~20% increase vs Mag5-only; still well under cap. See `docs/10k_scoping.md` §10 (to be updated).
+- **Deadline:** Progress report **2026-05-15** (~4 weeks from TA pivot)
+- **Cache-first:** every paid API call via `src.cache.Cache` (already enforced in `src/kg_extract.py`)
+- **Free tier priority:** Groq LLaMA-3.1-8B is the primary generator; Gemini 1.5 Flash for extraction + LLM-Judge
+- **Pilot gate:** no full KG build until 20-chunk P1 pilot passes GO
+- **Prompt review gate:** no paid API call until `docs/prompt_review.md` signed off
+- **Seed:** `RANDOM_SEED=42` everywhere
+- **Hard cost guards** on every paid script (abort if exceeded)
+- **Hallucination guard:** enforced in `src/kg_extract._validate_triple` (evidence must appear in chunk text)
 
-- **Hard cap:** $20 total across all LLM API spend
-- **Cache-first policy:** Every paid API call must go through `src.cache.Cache`
-- **Free tier priority:** Groq LLaMA-3.1-8B is the primary generator (free)
-- **Pilot gate:** No full-scale extraction until 20-chunk pilot passes go/no-go
-- **Seed:** `RANDOM_SEED=42` everywhere (set in `.env`)
-- **Determinism:** Sampling, train/test splits, bootstrap samples all seeded
+## 4. Story spine (what the progress report argues)
 
----
+> **Small models augmented with temporal-KG retrieval can match or close the gap with larger models on temporally-grounded multi-hop financial QA — and each of the three layers (Temporal, KG, Temporal+KG) contributes independent lift.**
+>
+> Our evidence (4-arm × 2-generator matrix):
+> | Arm | Retriever | Temporal filter | Cites |
+> |---|---|---|---|
+> | Vanilla | BM25/dense | — | baseline |
+> | Temporal-Vanilla-RAG (L1) | BM25/dense | chunk-metadata filter | TA-RAG |
+> | KG²RAG (L2) | KG-guided chunk expansion | — | KG²RAG (NAACL 2025) |
+> | TempoRAG-KG Full (L3) | KG-guided + edge-level `[valid_from, valid_to]` filter | **ours** |
+>
+> × 2 generators {Groq LLaMA-3.1-8B, GPT-4o-mini} × stratified scope {intra-doc, inter-year, cross-company} = **24 cells**.
+>
+> **Primary metric:** LLM-Judge 0-10 + BERTScore. **Primary comparison:** Δ(Judge) per generator for RQ4; arm-level lift (L1, L2, L3) for the ablation.
 
-## 4. Dependency graph
+Secondary contributions:
+- Temporal failure taxonomy (5 types: Stale / Conflict / Missing / Relative / Hop-failure) re-interpreted for financial context
+- Test scenarios showing failure→fix cases (TA feedback #4)
+- Comparison against **FinReflectKG** (default filing-year temporal) on same 10 tickers — quantifies the value of explicit-extraction temporal over metadata-default
+
+## 5. Dependency graph
 
 ```
-Phase 0 — Bootstrap (DONE)
-    │
-    ▼
-Phase 1 — Infrastructure (parallelizable)
-    ├─ T1 Sampling
-    ├─ T2 Cache layer
-    ├─ T3 Eval harness (F1/EM/bootstrap)
-    ├─ T4 IAA script (Krippendorff α)
-    └─ T5 Extraction prompt v1
-                    │
-                    ▼
-            ╔══════════════════╗
-            ║  CHECKPOINT 1    ║  All unit tests green; prompt reviewed
-            ╚══════════════════╝
-                    │
-                    ▼
-Phase 2 — Pilot de-risking
-    ├─ T6 Pilot extraction (20 chunks, Gemini Flash)
-    └─ T7 Pilot report + GO/NO-GO decision
-                    │
-                    ▼
-Phase 3 — Baseline + KG + Annotation (parallelizable after T7)
-    ├─ T8 Full KG build
-    ├─ T9 KG²RAG baseline reproduction
-    └─ T10 RQ3 annotation (100 passages, 2 annotators)
-                    │
-                    ▼
-Phase 4 — Pipeline
-    ├─ T11 Temporal filter (±1 yr tolerance)
-    ├─ T12a GEAR beam search
-    ├─ T12b GoG fill-in
-    └─ T12c End-to-end integration test
-                    │
-                    ▼
-            ╔══════════════════╗
-            ║  CHECKPOINT 2    ║  Pipeline returns answers on 10 Q end-to-end
-            ╚══════════════════╝
-                    │
-                    ▼
-Phase 5 — Evaluation (parallelizable)
-    ├─ T13 RQ3 extraction eval
-    ├─ T14 RQ1 failure mode analysis
-    ├─ T15 RQ2 ablation (3 conditions × 2 datasets)
-    └─ T16 RQ4 generator ablation
-                    │
-                    ▼
-            ╔══════════════════╗
-            ║  CHECKPOINT 3    ║  All 4 RQs have numbers + bootstrap CIs
-            ╚══════════════════╝
-                    │
-                    ▼
-Phase 6 — Progress Report
-    └─ T17 Write progress_report.tex (8 sections)
-                    │
-                    ▼
-Phase 7 — Final Report
-    └─ T18 Final LaTeX + slides + optional demo
+Phase 0 — Adaptation  [partially stale after 10-ticker expansion 2026-04-19]
+  ├─ A1 Adapt src/sampling.py for 10-K chunk sampling          ⚠️ needs re-run (5 new tickers + FY2024)
+  ├─ A2 Rewrite prompts/extract_v1.txt for financial domain    ✅ DRAFT (review pending; no rewrite for new tickers — same domain)
+  ├─ A3a 10-K acquisition + HTML section parser (Mag5)         ✅ DONE (25/25 filings FY2019-2023)
+  ├─ A3b 10-K acquisition extension (new 5 + FY2024)           ⏳ pending  — 20 more filings to download
+  ├─ A4a MultiHop filter (555 → 79 Qs over 10 tickers)         ✅ DONE (`data/qa/multihop_filtered.jsonl`, 2026-04-19)
+  ├─ A4b Home-grown QA (~50 Qs, cross-company + inter-year)    ⏳ pending
+  ├─ A5 Download FinReflectKG HF subset — baseline arm         ⏳ running 2nd pass (10 tickers, job b43mjr50m)
+  └─ A6 Hallucination guard in kg_extract                      ✅ DONE (2026-04-19)
+          │
+          ▼
+    ╔══════════════╗
+    ║ CHECKPOINT 0 ║  prompt review signed off, QA set ≥100, FinReflectKG subset on disk
+    ╚══════════════╝
+          │
+          ▼
+Phase 1 — Pilot  (2 days)
+  ├─ P1 Pilot extraction on 20 chunks (hard $0.20 cap)
+  └─ P2 Pilot report + GO/NO-GO
+          │
+          ▼
+Phase 2 — KG build + Eval harness + Gold annotation  (1 week, parallel)
+  ├─ B1 Full KG build over ~4,600 chunks (hard $2.65 cap)
+  ├─ B2 FinReflectKG baseline KG on same 10 tickers (zero API cost — HF subset)   [NEW role]
+  ├─ B3 Gold annotations (50 passages, 2 annotators, α reported without threshold)
+  └─ T3.2 Upgrade src/eval.py — LLM-Judge (Gemini Flash as judge) + BERTScore    [NEW]
+          │
+          ▼
+Phase 3 — Pipeline (4 retrieval arms)  (1 week)
+  ├─ G1 Edge-level temporal filter (interval overlap; tolerance=0 default)
+  ├─ G2 Vanilla RAG (BM25/dense over chunks)
+  ├─ G3 Temporal-Vanilla-RAG (L1 — chunk-metadata filter, TA-RAG style)          [NEW ARM]
+  ├─ G4 KG²RAG (L2 — KG-guided expansion, no temporal)
+  ├─ G5 TempoRAG-KG Full (L3 — G4 + edge-level temporal filter)
+  └─ G6 End-to-end integration smoke test (10 Qs across all 4 arms)
+          │
+          ▼
+    ╔══════════════╗
+    ║ CHECKPOINT 1 ║  all 4 arms answer 10-Q smoke set; temporal filter measurably affects ≥3 Q
+    ╚══════════════╝
+          │
+          ▼
+Phase 4 — Evaluation  (1 week, parallel)
+  ├─ E1 RQ4 primary sweep — 4 arms × 2 generators × stratified scope (hard $5 cap)
+  ├─ E2 RQ3 extraction accuracy vs 50-passage gold
+  ├─ E3 RQ1 failure taxonomy on 50 errors
+  ├─ E4 Test scenarios (10 failure→fix cases, TA feedback #4)
+  └─ E5 XBRL ground-truth validation on numeric triples (edgartools; zero API)   [NEW]
+          │
+          ▼
+    ╔══════════════╗
+    ║ CHECKPOINT 2 ║  L1/L2/L3 lift numbers + RQ4 Δ-Judge with bootstrap CI
+    ╚══════════════╝
+          │
+          ▼
+Phase 5 — Progress Report  (4 days)
+  └─ R1 Write progress_report.tex
 ```
 
----
+**Timeline:** 4 weeks total if Phase 2 & 4 parallelize across 4 teammates. Phase 3 retrieval pipeline (G1-G6) is the single largest remaining work item (~1 person-week).
 
-## 5. Task details
+## 6. Task details
 
-Each task is a **vertical slice** — independently verifiable by running a test, producing a file, or completing a review. Tasks that should run in parallel are tagged.
+### Phase 0 — Adaptation
 
-### Phase 1 — Infrastructure
+#### A1 — Adapt `src/sampling.py` for 10-K  ✅ DELIVERED
 
-#### T1 — Deterministic sampling
+- **Goal:** Chunk-level deterministic sampling over the 10-K corpus.
+- **Status:** Done. `sample_10k_chunks()` produces `data/samples/10k_chunks.jsonl` — **3,810 chunks** (byte-identical on re-run). Chunk record includes `{chunk_id, ticker, fy, item, text, sha256, token_count, filing_date, period_of_report}`.
+- **Files:** `src/sampling.py`, `tests/test_sampling.py`, `data/samples/10k_chunks.jsonl`
 
-- **Goal:** Produce reproducible sampled question sets used by every downstream run.
-- **Dependencies:** None (raw data in `data/`, EDA in `results/temporal_eda_results.json`)
-- **Parallelizable with:** T2, T3, T4, T5
-- **Acceptance criteria:**
-  - [ ] `src/sampling.py` exposes `sample_hotpot()` and `sample_musique()` functions
-  - [ ] Reads `RANDOM_SEED` from `.env` (default 42)
-  - [ ] Emits `data/samples/hotpot_1000.json` and `data/samples/musique_500.json`
-  - [ ] Each record: `{"id": str, "question": str, "temporal": bool, "hop_count": int|null, "patterns": list[str]}`
-  - [ ] HotpotQA sample = exactly 500 temporal + 500 non-temporal
-  - [ ] MuSiQue sample = 500 stratified across 2/3/4 hops proportional to full dev set
-  - [ ] Re-running is byte-identical (SHA256 stable)
-- **Verification:**
-  - `pytest tests/test_sampling.py -v` → all pass
-  - `sha256sum data/samples/*.json` identical across two independent runs
-- **Artifacts:** `src/sampling.py`, `tests/test_sampling.py`, `data/samples/hotpot_1000.json`, `data/samples/musique_500.json`
+#### A2 — Rewrite `prompts/extract_v1.txt` for financial domain  ✅ DRAFT
+
+- **Goal:** Extraction prompt producing temporal-tagged triples from 10-K prose.
+- **Status:** Draft delivered. Contains sections for fiscal-year resolution via chunk metadata, forward-looking guidance (`temporal_type="forward_looking"`), period-over-period comparison, and "what NOT to extract" (boilerplate + hypothetical risk prose). Wikipedia version archived at `prompts/archive/extract_v1_wikipedia.txt`.
+- **Blocker:** 🔴 **Awaiting teammate review in `docs/prompt_review.md` — nobody assigned yet.**
+- **Files:** `prompts/extract_v1.txt`, `prompts/archive/extract_v1_wikipedia.txt`, `docs/prompt_review.md`
+
+#### A3a — 10-K acquisition + section parser (Mag5)  ✅ DELIVERED
+
+- **Goal:** Download 25 filings; extract Items 1, 1A, 7, 7A, 8 as plain text.
+- **Status:** Done. 25/25 filings downloaded + parsed, 0 silent skips, all 5 target sections present in every filing. See `docs/a3_report.md`.
+- **Files:** `scripts/download_10k.py`, `src/parse_10k.py`, `tests/test_parse_10k.py`, `data/10k/raw/**`, `data/10k/sections/**`, `data/10k/manifest.json`
+
+#### A3b — 10-K acquisition extension (new 5 tickers + FY2024)  **[NEW 2026-04-19]**
+
+- **Goal:** Extend the 10-K corpus to 10 tickers × FY2022-2024 for alignment with FinReflectKG-MultiHop. Reuses A3 machinery.
+- **Scope:**
+  - 5 new tickers × FY2022-2024: **CSCO, ORCL, INTC, NVDA, ADBE** = 15 filings
+  - Mag5 × FY2024: AAPL, MSFT, GOOGL, AMZN, META = 5 filings
+  - Mag5 × FY2019-2021 (10 filings) are kept but dead for MultiHop eval (paper only covers 2022-2024); useful for home-grown retro questions
+- **Dependencies:** None (same script path + SEC EDGAR)
+- **Acceptance:**
+  - [ ] 20 new filings downloaded to `data/10k/raw/{ticker}/FY{YYYY}.html`
+  - [ ] `data/10k/manifest.json` updated; 45 filings total (25 Mag5 FY2019-2023 + 20 new)
+  - [ ] All 5 sections parsable (same gate as A3a — 0 silent skips)
+  - [ ] `docs/a3b_report.md` — extension log
+- **Effort:** ~3-4 hours (rate-limited to SEC 10 req/sec)
+- **Files:** `scripts/download_10k.py` (add tickers), `data/10k/raw/**`, `data/10k/sections/**`
+
+#### A4a — Filter FinReflectKG-MultiHop 555 → our 10-ticker set  ✅ DELIVERED 2026-04-19
+
+- **Goal:** External-validity QA slice from the FinReflectKG-MultiHop paper, filtered to our ticker set.
+- **Status:** Done. **79 Qs** kept (intra 35 / inter_year 38 / cross_company 6). See `docs/multihop_filter_report.md`. Schema preserves evidence chunks for the judge.
+- **Files:** `scripts/filter_multihop_qa.py`, `data/qa/multihop_filtered.jsonl`, `docs/multihop_filter_report.md`, `data/multihop_qa/final_master_dataset.json` (raw 555)
+
+#### A4b — Home-grown temporal QA set  **[PENDING]**
+
+- **Goal:** ~50 hand-authored Qs filling the gaps MultiHop under-covers: (a) explicit forward-looking, (b) fiscal-vs-calendar disambiguation, (c) additional cross-company pairs beyond the 6 MultiHop gave us, (d) inter-year comparisons grounded in Mag5 FY2019-2021 chunks.
+- **Dependencies:** A3a (for FY2019-2021 chunks), A3b (for FY2024 + new tickers)
+- **Acceptance:**
+  - [ ] `data/qa/home_grown.jsonl` — 50 Qs, schema-compatible with A4a output (same `scope` field vocabulary: intra / inter_year / cross_company)
+  - [ ] Each record: `{"qid", "question", "answer", "scope", "hop_count", "tickers", "years", "source_chunks", "evidence", "source_dataset": "home_grown_v1"}`
+  - [ ] ≥15 explicitly cross-company (on top of MultiHop's 6)
+  - [ ] ≥15 explicitly inter-year (matching MultiHop's hardest bucket)
+  - [ ] Spot check by 1 teammate on 10 random Qs
+- **Effort:** ~1-1.5 working days (authoring is the bulk; distributed across 4 teammates)
+- **Files:** `data/qa/home_grown.jsonl`, `docs/home_grown_authoring.md`
+
+#### A5 — Download FinReflectKG HF subset (baseline KG arm)
+
+- **Goal:** Obtain 10-ticker × 2022-2024 subset of FinReflectKG as a **baseline KG arm** for comparing explicit-extraction temporal vs default filing-year temporal.
+- **Status:** ✅ **10-ticker download complete 2026-04-19 (74,979 triples, 76.6% `extraction_type=default`).** META FY2022 has 0 triples in the HF release — known coverage gap; home-grown (A4b) can backfill if needed.
+- **Dependencies:** None (HF streaming, no API cost)
+- **Acceptance:**
+  - [x] `scripts/download_finreflectkg.py` with `TARGET_TICKERS` = 10 tech
+  - [x] `data/finreflectkg/triples.jsonl` — **74,979 triples delivered** (actuals per-ticker in `docs/finreflectkg_subset_report.md`)
+  - [x] Schema preserved: `entity, entity_type, relationship, target, target_type, start_date, end_date, extraction_type, chunk_text` (18 fields)
+  - [ ] `docs/finreflectkg_subset_report.md` refreshed with 10-ticker breakdown
+- **Effort:** ~40 min wall-clock (streaming filter across 17.5M rows)
+- **Files:** `scripts/download_finreflectkg.py`, `data/finreflectkg/*.jsonl`, `docs/finreflectkg_subset_report.md`
+
+#### A6 — Hallucination guard in kg_extract  ✅ DELIVERED 2026-04-19
+
+- **Goal:** Reject LLM-extracted triples whose `evidence` field is not a substring of the source chunk (normalized whitespace).
+- **Status:** Done. `_validate_triple(triple, chunk_text)` and `parse_response(raw, chunk_text)` now enforce the substring check. 3 new tests: `test_parse_response_rejects_fabricated_evidence`, `test_parse_response_accepts_evidence_with_reflowed_whitespace`, `test_parse_response_rejects_evidence_with_altered_number`. 92/92 tests passing.
+- **Files:** `src/kg_extract.py`, `tests/test_kg_extract.py`
+
+### Checkpoint 0
+
+- [x] 25 Mag5 FY2019-2023 filings parsed, section manifest clean
+- [ ] 20 new filings (5 new tickers + Mag5 FY2024) parsed clean [A3b]
+- [x] 3,810 Mag5 FY2019-2023 chunks sampled deterministically
+- [ ] Full corpus re-sampled to ~4,600 chunks across 45 filings [A1 re-run after A3b]
+- [x] Financial extraction prompt drafted
+- [x] Hallucination guard shipped
+- [ ] **Prompt reviewer assigned + sign-off in `docs/prompt_review.md`**
+- [x] A4a MultiHop filter delivered (79 Qs)
+- [ ] A4b Home-grown QA set (~50 Qs)
+- [ ] A5 FinReflectKG 10-ticker subset downloaded (`b43mjr50m` running)
+- [ ] `pytest tests/` green after each addition
+
+### Phase 1 — Pilot
+
+#### P1 — Pilot extraction (20 chunks)
+
+- **Goal:** Run Gemini Flash on 20 financial chunks; catch prompt/schema bugs before full cost.
+- **Dependencies:** A2 reviewed, A6 shipped (both status above)
+- **Acceptance:**
+  - [x] `src/kg_extract.py` with `extract_triples(chunk, prompt, client, cache)` and hallucination guard
+  - [ ] `scripts/run_pilot.py` processes 20 chunks across ≥3 tickers for coverage
+  - [ ] `results/pilot/log.jsonl`: latency, cost, triple count, parse failures, **hallucination-guard rejects**, raw response
+  - [ ] **Hard guard:** total cost ≤ $0.20 (projected ~$0.006 at Gemini Flash rates)
+- **Effort:** ~2 hours (kg_extract is already done)
+- **Files:** `scripts/run_pilot.py`, `results/pilot/*.jsonl`
+
+#### P2 — Pilot report + GO/NO-GO
+
+- **Goal:** Decide if the prompt + schema survive financial prose.
+- **Dependencies:** P1
+- **Acceptance:**
+  - [ ] `docs/pilot_report.md` with avg triples/chunk, non-null validity rate, parse-fail rate, cost/chunk, projected full-run cost, 5 good + 5 problematic examples, explicit **GO or NO-GO**
+  - [ ] If NO-GO: iterate A2 → P1 → P2 (prompt loop)
+  - [ ] If GO: team sign-off
 - **Effort:** ~2 hours
+- **Files:** `docs/pilot_report.md`
 
-#### T2 — Cache layer
+### Phase 2 — KG build + Baseline + Gold annotation (parallel)
 
-- **Goal:** Disk-backed JSON cache wrapping every paid API call. Zero cost on repeats.
-- **Dependencies:** None
-- **Parallelizable with:** T1, T3, T4, T5
-- **Acceptance criteria:**
-  - [ ] `src/cache.py` provides class `Cache(cache_dir: Path)`
-  - [ ] Methods: `get(key) -> dict | None`, `put(key, value) -> None`, `key_for(model, prompt, params) -> str`
-  - [ ] Key = `sha256(f"{model}|{prompt}|{json.dumps(params, sort_keys=True)}")`
-  - [ ] Files stored under `cache/{key[:2]}/{key[2:]}.json` (avoids one-giant-dir)
-  - [ ] Thread-safe reads; writes are last-writer-wins (acceptable)
-  - [ ] Never raises on cache miss — returns `None`
-- **Verification:**
-  - `pytest tests/test_cache.py -v` covers: hit, miss, put→get roundtrip, different params produce different keys, persistence across `Cache` instance recreation
-- **Artifacts:** `src/cache.py`, `tests/test_cache.py`
-- **Effort:** ~2 hours
+#### B1 — Full KG build
 
-#### T3 — Eval harness
+- **Goal:** Extract triples from all ~4,600 chunks (projected after A1 re-run on 45-filing corpus); build NetworkX graph.
+- **Dependencies:** P2 (GO), A1 re-run complete
+- **Acceptance:**
+  - [ ] `src/kg_build.py` with resume-on-failure
+  - [ ] `results/kg/graph.pkl` — NetworkX `MultiDiGraph`, edges carry `{valid_from, valid_to, confidence, source_chunk_id, source_filing, temporal_type}`
+  - [ ] `results/kg/build_stats.json`: triple count, non-null-validity rate, hallucination-guard rejections per ticker, total cost, wall-clock
+  - [ ] **Hard guard:** total cost ≤ **$2.65** (single-pass projection at ~$0.57/k-chunk × 4,600 + 10% re-run buffer)
+- **Effort:** 1 working day mostly wall-clock (cache-cold first pass; reruns are free)
+- **Files:** `src/kg_build.py`, `results/kg/*`
 
-- **Goal:** Token-level F1, Exact Match (EM), and bootstrap CI.
-- **Dependencies:** None
-- **Parallelizable with:** T1, T2, T4, T5
-- **Acceptance criteria:**
-  - [ ] `src/eval.py` provides: `f1_token(pred, gold)`, `em(pred, gold)`, `bootstrap_ci(scores, n=1000, alpha=0.05)`
-  - [ ] Normalization: lowercase, strip articles (a/an/the), strip punctuation, collapse whitespace (SQuAD convention)
-  - [ ] `aggregate(preds, golds)` returns `{"f1_mean": float, "f1_ci": (lo, hi), "em_mean": float, "em_ci": (lo, hi), "n": int}`
-  - [ ] Handles multi-answer gold sets (take max F1 over alternatives)
-- **Verification:**
-  - `pytest tests/test_eval.py -v`
-  - Spot check: reproduce 3 known-answer F1 scores from HotpotQA official scorer within 0.001
-- **Artifacts:** `src/eval.py`, `tests/test_eval.py`
-- **Effort:** ~2 hours
+#### B2 — FinReflectKG baseline KG  **[REPURPOSED]**
 
-#### T4 — IAA script (Krippendorff's α, interval)
+- **Goal:** Build a parallel KG from the downloaded FinReflectKG subset, on the same 10-ticker scope — so we can compare explicit-temporal (ours) against filing-year-default (theirs) under identical retrieval.
+- **Dependencies:** A5 (10-ticker subset downloaded)
+- **Acceptance:**
+  - [ ] `src/baselines/finreflectkg_to_graph.py` — convert FinReflectKG triples into the same NetworkX schema as B1 (mapping `start_date`/`end_date` strings → `valid_from`/`valid_to` ints where parseable; `None` otherwise)
+  - [ ] `results/kg/finreflectkg_graph.pkl`
+  - [ ] `results/kg/finreflectkg_stats.json`: triple count, % with parseable dates vs nulls, % default vs explicit
+  - [ ] Sanity: same 10 tickers, FY2022-2024 overlap ≥80% of years present
+- **Effort:** ~1 day
+- **Files:** `src/baselines/finreflectkg_to_graph.py`, `results/kg/finreflectkg_*`
 
-- **Goal:** Compute Krippendorff's α with interval distance for year annotations (required for RQ3 response to TA feedback).
-- **Dependencies:** `krippendorff` package in `requirements.txt`
-- **Parallelizable with:** T1, T2, T3, T5
-- **Acceptance criteria:**
-  - [ ] `src/iaa.py` exposes `krippendorff_alpha_interval(ratings: list[list[int|None]]) -> float`
-  - [ ] Accepts missing values (None / np.nan)
-  - [ ] CLI: `python -m src.iaa annotations.csv` prints α
-  - [ ] Unit test matches Krippendorff (2004) canonical example within 0.005
-- **Verification:**
-  - `pytest tests/test_iaa.py -v`
-- **Artifacts:** `src/iaa.py`, `tests/test_iaa.py`
-- **Effort:** ~1 hour
+#### T3.2 — Upgrade `src/eval.py` — LLM-Judge + BERTScore  **[NEW]**
 
-#### T5 — Extraction prompt v1
+- **Goal:** Replace F1/EM with paragraph-level metrics suitable for 10-K answers.
+- **Dependencies:** None (pure library work)
+- **Acceptance:**
+  - [ ] `src/eval.py::score_with_judge(question, pred, gold, judge_client) -> float` — Gemini Flash judge prompt returns integer 0-10 (matching FinReflectKG-MultiHop for comparability); cached
+  - [ ] `src/eval.py::score_bertscore(preds, golds) -> list[float]` — wraps `bert-score` library (F1 variant)
+  - [ ] Stratified aggregation helper: `aggregate_by_scope(results, scope_field) -> dict`
+  - [ ] Bootstrap CI helper preserved from v1
+  - [ ] Tests with mocked judge (never hit real API in pytest)
+- **Effort:** ~4 hours
+- **Files:** `src/eval.py`, `tests/test_eval.py`, `prompts/judge_v1.txt`
 
-- **Goal:** Finalize Gemini Flash extraction prompt. Handle (a) multi-tenure entities and (b) relative/ambiguous temporal references.
-- **Dependencies:** None
-- **Parallelizable with:** T1, T2, T3, T4
-- **Acceptance criteria:**
-  - [ ] `prompts/extract_v1.txt` committed
-  - [ ] Explicit instruction for **multi-tenure** ("output one triple per continuous period")
-  - [ ] Explicit instruction for **relative refs** ("set both `valid_from` and `valid_to` to null; set `metadata.temporal_type` to `relative`")
-  - [ ] JSON schema documented in prompt
-  - [ ] 3 worked examples: (i) explicit year, (ii) multi-tenure, (iii) relative reference
-  - [ ] Reviewed by one teammate (comment committed to `docs/prompt_review.md` or PR)
-- **Verification:**
-  - Teammate review recorded
-- **Artifacts:** `prompts/extract_v1.txt`, `docs/prompt_review.md`
-- **Effort:** ~1 hour
+#### B3 — Gold annotation (50 passages)
+
+- **Goal:** 50-passage gold set for RQ3 extraction eval. Smaller than v1's 100 because budget-timeline.
+- **Dependencies:** A3
+- **Acceptance:**
+  - [ ] `docs/annotation_protocol.md` — 5 worked examples from 10-K prose
+  - [ ] 50 chunks annotated independently by 2 annotators
+  - [ ] `src/iaa.py` run → **α reported without threshold** (per TA feedback #6)
+  - [ ] Disagreements adjudicated; final gold at `data/annotations/rq3_gold_v2.jsonl`
+  - [ ] `docs/annotation_iaa.md` reports α + adjudication counts (no pass/fail assertion)
+- **Effort:** ~1 week wall-clock across 2 annotators
+- **Files:** `data/annotations/rq3_gold_v2.jsonl`, `docs/annotation_*.md`
+
+### Phase 3 — Pipeline (4 retrieval arms for L1/L2/L3 ablation)
+
+#### G1 — Edge-level temporal filter
+
+- **Goal:** Keep KG edges whose validity interval covers query year. **Default tolerance=0** (TA feedback #1: drop ±1 proof; tolerance is a knob, not a claim).
+- **Dependencies:** B1
+- **Acceptance:**
+  - [ ] `src/pipeline/temporal_filter.py` — `filter_edges(edges, query_year, tolerance=0)`
+  - [ ] Null-validity retained (conservative)
+  - [ ] Interval-overlap semantics (valid_from ≤ q_year ≤ valid_to), handling `None` endpoints
+  - [ ] Unit tests: vf=null, vt=null, both null, inside/outside window, forward-looking
+- **Effort:** ~3 hours
+- **Files:** `src/pipeline/temporal_filter.py`, `tests/test_temporal_filter.py`
+
+#### G2 — Vanilla RAG arm
+
+- **Goal:** Baseline BM25/dense retrieval over raw 10-K chunks, no KG, no temporal.
+- **Dependencies:** A3, T3.2
+- **Acceptance:**
+  - [ ] `src/pipeline/vanilla_rag.py` — `retrieve(question, k=5) -> list[chunk_id]`
+  - [ ] Dense retriever: sentence-transformers `all-MiniLM-L6-v2` (free) over chunk text
+  - [ ] Unit tests on 5-Q toy set
+- **Effort:** ~4 hours
+- **Files:** `src/pipeline/vanilla_rag.py`, `tests/test_vanilla_rag.py`
+
+#### G3 — Temporal-Vanilla-RAG arm  **[L1 — NEW]**
+
+- **Goal:** Vanilla RAG + chunk-metadata temporal filter (TA-RAG style). Proves L1: temporal filtering helps even without a KG.
+- **Dependencies:** G2
+- **Acceptance:**
+  - [ ] `src/pipeline/temporal_vanilla_rag.py` — `retrieve(question, query_year, k=5) -> list[chunk_id]`
+  - [ ] Filter applied at chunk level using `chunk.fy` metadata (from `data/samples/10k_chunks.jsonl`)
+  - [ ] Interval-overlap semantics identical to G1 for fair L1 vs L3 comparison
+  - [ ] Unit tests: chunks from wrong FY are filtered out
+- **Effort:** ~2 hours (shares retriever with G2)
+- **Files:** `src/pipeline/temporal_vanilla_rag.py`, `tests/test_temporal_vanilla_rag.py`
+
+#### G4 — KG²RAG arm  **[L2]**
+
+- **Goal:** KG-guided chunk expansion (port of KG²RAG's retrieval path to financial KG). No temporal filter — isolates KG contribution.
+- **Dependencies:** B1
+- **Acceptance:**
+  - [ ] `src/pipeline/kg2rag.py` — seed node identification + 1-hop expansion + chunk union
+  - [ ] Returns ranked `list[chunk_id]` same shape as G2
+  - [ ] Unit test on toy graph
+- **Effort:** ~6 hours (most subtle of the four arms)
+- **Files:** `src/pipeline/kg2rag.py`, `tests/test_kg2rag.py`
+
+#### G5 — TempoRAG-KG Full arm  **[L3]**
+
+- **Goal:** G4 + G1 composed. Proves L3: KG + Temporal beats each alone.
+- **Dependencies:** G1, G4
+- **Acceptance:**
+  - [ ] `src/pipeline/temporag_kg_full.py` — KG²RAG retrieval, temporal filter applied to retrieved edges before chunk union
+  - [ ] Falls back to KG²RAG behavior when query_year is None
+  - [ ] Unit test: compared with G4 on temporal question, at least 1 edge filtered out
+- **Effort:** ~2 hours (composition)
+- **Files:** `src/pipeline/temporag_kg_full.py`, `tests/test_temporag_kg_full.py`
+
+#### G6 — End-to-end integration + answer generation
+
+- **Goal:** One `answer(question, arm, generator)` entry point exercising all 4 arms × 2 generators; 10-Q smoke test.
+- **Dependencies:** G2, G3, G4, G5
+- **Acceptance:**
+  - [ ] `src/pipeline/run.py` — `answer(question, arm, generator, query_year=None) -> {"answer", "context", "edges", "arm", "generator"}`
+  - [ ] 10-Q smoke test: all 4 arms × 2 generators return non-empty answers
+  - [ ] Manual spot-check on 3 temporal Qs: L3 retrieves strictly fewer-or-equal edges than L2
+- **Effort:** ~4 hours
+- **Files:** `src/pipeline/run.py`, `tests/test_pipeline_integration.py`
 
 ### Checkpoint 1
 
-**Gate to Phase 2:**
-- [ ] All of T1–T5 marked done
-- [ ] `pytest` on full suite passes (0 failures)
-- [ ] Prompt reviewed by at least one non-author
-- [ ] `.env` populated with real `GEMINI_API_KEY` and `GROQ_API_KEY`
+- [ ] All 4 arms (G2/G3/G4/G5) pass unit tests
+- [ ] 10-Q smoke test green across 4 arms × 2 generators (8 cells)
+- [ ] On 3 temporal Qs: L3 demonstrably filters ≥1 edge vs L2
 
-### Phase 2 — Pilot de-risking
+### Phase 4 — Evaluation (parallel)
 
-#### T6 — Pilot extraction (20 chunks)
+#### E1 — RQ4 primary sweep  **[4-arm × 2-generator × stratified]**
 
-- **Goal:** Run Gemini 1.5 Flash on 20 HotpotQA chunks through the cache; capture operational metrics before scaling.
-- **Dependencies:** T1 (for chunk source), T2 (cache), T5 (prompt)
-- **Acceptance criteria:**
-  - [ ] `src/kg_extract.py` exposes `extract_triples(chunk_text, prompt, cache) -> list[dict]`
-  - [ ] `scripts/run_pilot.py` processes 20 chunks and writes `results/pilot/log.jsonl` + `results/pilot/raw.jsonl`
-  - [ ] Log records: latency, estimated cost, parsed triple count, parse failures, raw response
-  - [ ] **Hard guard:** total cost ≤ $0.50 — abort if exceeded
-- **Verification:**
-  - `python scripts/run_pilot.py` completes with exit 0
-  - `jq '. | length' results/pilot/log.jsonl` returns 20
-- **Artifacts:** `src/kg_extract.py`, `scripts/run_pilot.py`, `results/pilot/log.jsonl`, `results/pilot/raw.jsonl`
-- **Effort:** ~3 hours
-
-#### T7 — Pilot report + GO/NO-GO
-
-- **Goal:** Decide whether the extraction prompt is good enough for the full KG build.
-- **Dependencies:** T6
-- **Acceptance criteria:**
-  - [ ] `docs/pilot_report.md` with: avg triples/chunk, non-null validity rate, parse-fail rate, cost/chunk, projected full-run cost, 5 good + 5 problematic examples, explicit **GO or NO-GO** decision
-  - [ ] If NO-GO: revise prompt → re-pilot (loop T5 → T6 → T7)
-  - [ ] If GO: team sign-off logged
-- **Verification:**
-  - Report exists with decision section
-  - Team member acknowledgment in git log or PR comment
-- **Artifacts:** `docs/pilot_report.md`
-- **Effort:** ~2 hours
-
-### Phase 3 — Baseline + KG + Annotation (parallel)
-
-#### T8 — Full KG build
-
-- **Goal:** Extract triples from all chunks in sampled HotpotQA + MuSiQue; build NetworkX graph; serialize.
-- **Dependencies:** T7 (go decision)
-- **Parallelizable with:** T9, T10
-- **Acceptance criteria:**
-  - [ ] `src/kg_build.py` orchestration with resume-on-failure support
-  - [ ] Chunking: 512 tokens, 100-token overlap (per KG²RAG)
-  - [ ] `results/kg/graph.pkl` — NetworkX `MultiDiGraph`, edges carry `{valid_from, valid_to, confidence, source_chunk_id, source_doc_id}`
-  - [ ] `results/kg/build_stats.json` with: total triples, non-null-validity rate, total cost, wall-clock
-  - [ ] **Hard guard:** total cost ≤ $5 — abort if exceeded
-- **Verification:**
-  - Load graph in Python REPL; sample 10 random edges; spot-check correctness
-- **Artifacts:** `src/kg_build.py`, `results/kg/graph.pkl`, `results/kg/build_stats.json`
-- **Effort:** 1 working day (mostly wall-clock)
-
-#### T9 — KG²RAG baseline reproduction
-
-- **Goal:** Reproduce KG²RAG on sampled HotpotQA with Groq LLaMA-3.1-8B; confirm faithful reimplementation.
-- **Dependencies:** T8, T3
-- **Parallelizable with:** T8 (after KG ready), T10
-- **Acceptance criteria:**
-  - [ ] `src/baselines/kg2rag.py` implements KG-guided chunk expansion + MST context organization per Zhu et al. 2025
-  - [ ] Run on 1000 sampled HotpotQA questions
-  - [ ] F1 overall within 2.0 points of paper number (Table 3 reports ~85.6)
-  - [ ] `results/runs/kg2rag_baseline.json` with bootstrap CI
-- **Verification:**
-  - Reproduction delta ≤ 2.0 F1 points documented in results file
-- **Artifacts:** `src/baselines/kg2rag.py`, `results/runs/kg2rag_baseline.json`
+- **Goal:** Produce the money table: L1/L2/L3 lift per arm, and ΔJudge(8B) vs ΔJudge(4o-mini) for the capability-parity story.
+- **Dependencies:** B1, B2, T3.2, G6, A4 (QA set)
+- **Acceptance:**
+  - [ ] `scripts/run_rq4.py` sweeps **4 arms** {Vanilla, Temporal-Vanilla (L1), KG²RAG (L2), Full (L3)} × **2 generators** {Groq LLaMA-3.1-8B, GPT-4o-mini} × **3 scopes** {intra-doc, inter-year, cross-company} = **24 cells**
+  - [ ] Additional **FinReflectKG-KG arm** on the same 4-arm × 2-generator matrix (subset of questions that match FinReflectKG coverage) — isolates explicit-temporal lift over default-filing-year
+  - [ ] Reports **LLM-Judge (0-10)** + **BERTScore F1** with bootstrap CI per cell
+  - [ ] Cost-per-question per cell (RQ4 secondary artefact)
+  - [ ] Layer-level lifts: `Δ_L1 = Temporal-Vanilla − Vanilla`, `Δ_L2 = KG²RAG − Vanilla`, `Δ_L3 = Full − max(L1, L2)`
+  - [ ] Capability-parity test: does LLaMA-3.1-8B on Full arm ≥ GPT-4o-mini on Vanilla arm?
+  - [ ] **Hard guard:** total cost ≤ $5
 - **Effort:** 2 days
+- **Files:** `scripts/run_rq4.py`, `results/runs/rq4.json`, `results/runs/rq4_finreflectkg_arm.json`
 
-#### T10 — RQ3 annotation
+#### E2 — RQ3 extraction accuracy
 
-- **Goal:** Hand-annotate 100 HotpotQA passages with ground-truth `[valid_from, valid_to]`.
-- **Dependencies:** T1 (passages sampled), T4 (α script)
-- **Parallelizable with:** T8, T9 (different humans)
-- **Acceptance criteria:**
-  - [ ] `docs/annotation_protocol.md` with 5–10 worked examples (explicit year, multi-tenure, relative, conflict, missing)
-  - [ ] 100 passages annotated independently by 2 annotators
-  - [ ] `src/iaa.py` run → α ≥ 0.70 target (moderate-to-strong)
-  - [ ] Disagreements adjudicated; final gold at `data/annotations/rq3_gold_v1.jsonl`
-  - [ ] `docs/annotation_iaa.md` reports α + adjudication counts
-- **Verification:**
-  - α ≥ 0.70 documented
-- **Artifacts:** `docs/annotation_protocol.md`, `docs/annotation_iaa.md`, `data/annotations/rq3_gold_v1.jsonl`
-- **Effort:** ~1 working week wall-clock, 10–15 hr per annotator
+- **Goal:** Precision/Recall/F1 on 50-passage gold, plus hallucination-guard rejection rate breakdown.
+- **Dependencies:** B1, B3
+- **Acceptance:**
+  - [ ] `scripts/eval_rq3.py` with per-pattern breakdown (explicit fiscal year, forward-looking, relative)
+  - [ ] `results/runs/rq3_extraction.json` + hallucination-guard reject rate
+- **Effort:** ~6 hours
 
-### Phase 4 — Pipeline
+#### E3 — RQ1 failure taxonomy
 
-#### T11 — Temporal filter
+- **Goal:** Classify 50 baseline errors into 5 types.
+- **Dependencies:** E1
+- **Acceptance:**
+  - [ ] `scripts/rq1_failure_analysis.py` extracts error set (cells where Vanilla answer was judged ≤4)
+  - [ ] 50 manually classified into {Stale, Conflict, Missing, Relative, Hop-failure}
+  - [ ] `results/runs/rq1_failures.md` with distribution + examples
+- **Effort:** ~1 day
 
-- **Goal:** Keep edges whose validity interval covers the query year, with ±1 year tolerance.
-- **Dependencies:** T8
-- **Acceptance criteria:**
-  - [ ] `src/pipeline/temporal_filter.py` exposes `filter_edges(edges, query_year, tolerance=1) -> list`
-  - [ ] Equation: `(vf is None or vf ≤ query_year + τ) AND (vt is None or vt ≥ query_year − τ)`
-  - [ ] Null-validity edges retained (conservative); counted separately in a returned stats dict
-  - [ ] Unit tests cover: `vf=null`, `vt=null`, both null, both set (inside/outside window, on boundary)
-- **Verification:**
-  - `pytest tests/test_temporal_filter.py -v`
-- **Artifacts:** `src/pipeline/temporal_filter.py`, `tests/test_temporal_filter.py`
-- **Effort:** ~3 hours
+#### E4 — Test scenarios (TA feedback #4)
 
-#### T12a — GEAR beam search
-
-- **Goal:** Beam-search graph traversal scoring neighbors by cosine similarity to subgoal.
-- **Dependencies:** T8
-- **Acceptance criteria:**
-  - [ ] `src/pipeline/gear.py` exposes `beam_search(graph, start_nodes, subgoal_emb, beam=3, depth=2)`
-  - [ ] Deterministic tie-breaking (stable ordering)
-  - [ ] Unit test on 5-node toy graph
-- **Verification:**
-  - `pytest tests/test_gear.py -v`
-- **Artifacts:** `src/pipeline/gear.py`, `tests/test_gear.py`
+- **Goal:** 10 concrete failure→fix case studies for the progress report.
+- **Dependencies:** E1
+- **Acceptance:**
+  - [ ] `docs/test_scenarios.md` — 10 cases, each with: question, baseline answer (wrong), edges retrieved by each arm, filtered answer (correct), brief analysis
+  - [ ] ≥3 cases illustrate L1 lift (temporal-only fix without KG)
+  - [ ] ≥3 cases illustrate L3 lift that neither L1 nor L2 alone achieves
 - **Effort:** ~4 hours
 
-#### T12b — GoG fill-in
+#### E5 — XBRL ground-truth validation  **[NEW]**
 
-- **Goal:** LLM fill-in on dead-end beams; retain facts with confidence ≥ 0.7.
-- **Dependencies:** T2 (cache), T12a
-- **Acceptance criteria:**
-  - [ ] `src/pipeline/gog.py` exposes `fill_in(query, partial_graph, confidence_threshold=0.7)`
-  - [ ] Uses primary generator (Groq LLaMA-3.1-8B) via cache
-  - [ ] Unit test with mocked LLM response
-- **Verification:**
-  - `pytest tests/test_gog.py -v`
-- **Artifacts:** `src/pipeline/gog.py`, `tests/test_gog.py`
-- **Effort:** ~3 hours
-
-#### T12c — End-to-end integration
-
-- **Goal:** Prove the pipeline end-to-end on real questions.
-- **Dependencies:** T11, T12a, T12b
-- **Acceptance criteria:**
-  - [ ] `src/pipeline/run.py` exposes `answer(question: str) -> dict` with keys `answer`, `context`, `filtered_edges`, `gog_fills`
-  - [ ] Integration test on 10 HotpotQA questions — each returns non-empty answer
-  - [ ] Latency < 10s/query (soft target)
-- **Verification:**
-  - `pytest tests/test_pipeline_integration.py -v`
-- **Artifacts:** `src/pipeline/run.py`, `tests/test_pipeline_integration.py`
-- **Effort:** ~4 hours
+- **Goal:** Catch numeric hallucinations in extracted triples by cross-checking against SEC XBRL Company Facts API (us-gaap ontology).
+- **Dependencies:** B1 (KG built)
+- **Acceptance:**
+  - [ ] `scripts/xbrl_validate.py` — for each numeric triple (predicate suggests a financial metric), query `data.sec.gov/api/xbrl/companyfacts/CIK<n>.json` and check match within tolerance (±1% for floats)
+  - [ ] Uses `edgartools` library (free, no API cost)
+  - [ ] `results/runs/xbrl_validation.json`: % match, % null (XBRL doesn't cover), % disagreement with examples
+  - [ ] Use as extraction-quality signal in progress report, NOT as a filter during retrieval
+- **Effort:** ~1 day
+- **Files:** `scripts/xbrl_validate.py`, `results/runs/xbrl_validation.json`
 
 ### Checkpoint 2
 
-**Gate to Phase 5:**
-- [ ] All pipeline unit tests green
-- [ ] Integration test: 10 Q → 10 answers returned
-- [ ] Manual spot-check on 3 temporal questions shows filter affecting results
-- [ ] `results/kg/build_stats.json` non-null validity rate ≥ 30% (otherwise filter is mostly no-op — flag as limitation)
+- [ ] L1/L2/L3 lift numbers with bootstrap CI
+- [ ] Capability-parity table (8B-Full vs 4o-Vanilla)
+- [ ] FinReflectKG-arm comparison numbers
+- [ ] XBRL validation report
+- [ ] RQ3 extraction P/R + hallucination-guard reject rate
+- [ ] RQ1 taxonomy populated
+- [ ] 10 test scenarios documented
 
-### Phase 5 — Evaluation
+### Phase 5 — Progress Report
 
-#### T13 — RQ3 extraction eval
+#### R1 — Progress report writeup
 
-- **Goal:** Evaluate extraction accuracy vs. 100-passage gold set.
-- **Dependencies:** T3, T8, T10
-- **Acceptance criteria:**
-  - [ ] `scripts/eval_rq3.py` computes precision/recall/F1 with ±1 yr tolerance
-  - [ ] Breakdown by pattern: explicit year, implicit/relative (Type 3b), conflicting
-  - [ ] `results/runs/rq3_extraction.json` populated
-- **Effort:** 1 day
-
-#### T14 — RQ1 failure mode analysis
-
-- **Goal:** Classify 100 KG²RAG errors into 5 types (1, 2, 3, 3b, 4).
-- **Dependencies:** T9
-- **Acceptance criteria:**
-  - [ ] `scripts/rq1_failure_analysis.py` extracts error set
-  - [ ] 100 errors manually classified
-  - [ ] `results/runs/rq1_failures.md` with distribution + examples
-- **Effort:** 1 day
-
-#### T15 — RQ2 ablation
-
-- **Goal:** 3-condition ablation (Vanilla / KG²RAG / Full) × 2 datasets.
-- **Dependencies:** T9, T12c
-- **Acceptance criteria:**
-  - [ ] `scripts/run_ablation.py` runs all 6 condition × dataset combinations
-  - [ ] F1/EM with CIs on overall + temporal + non-temporal subsets
-  - [ ] `results/runs/rq2_ablation.json`
-  - [ ] **Hard guard:** total cost ≤ $2
-- **Effort:** 2 days
-
-#### T16 — RQ4 generator ablation
-
-- **Goal:** Full TempoRAG-KG with 4 generators × temporal subset.
-- **Dependencies:** T15
-- **Acceptance criteria:**
-  - [ ] `scripts/run_rq4.py` sweeps LLaMA-8B / LLaMA-70B / Flash / 4o-mini
-  - [ ] ΔF1 = (Full − KG²RAG) computed per generator
-  - [ ] Inverse-scaling hypothesis tested
-  - [ ] **Hard guard:** cost ≤ $3
-- **Effort:** 2 days
-
-### Checkpoint 3
-
-**Gate to Phase 6:**
-- [ ] RQ1–RQ4 all have numerical results with bootstrap CIs
-- [ ] Failure mode examples collected for writeup
-- [ ] Null-retention coverage documented
-
-### Phase 6 — Progress Report
-
-#### T17 — Progress Report writeup
-
-- **Goal:** 8-section report per agreed structure.
-- **Dependencies:** Either all of Phase 5, OR write ahead with "pending" tables + revised methodology
-- **Acceptance criteria:**
-  - [ ] `proposal/progress_report.tex` with sections: Abstract, Introduction, Response to TA Feedback, Revised Scope, New RQ4, Updated Methodology, Progress to Date, Risks & Mitigations, Revised Timeline, References, Appendix
-  - [ ] All 3 TA feedback items explicitly addressed
+- **Goal:** 8-section report addressing all TA feedback.
+- **Dependencies:** Phase 4 (or write ahead with pending tables)
+- **Acceptance:**
+  - [ ] `proposal/progress_report.tex`: Abstract, Intro, Response to TA Feedback (7 points), Updated Methodology (10-K pivot), Experimental Setup, Results (RQ4 primary, RQ1/RQ3 secondary), Test Scenarios, Limitations & Risks, Revised Timeline, References
   - [ ] Cost breakdown table included
-  - [ ] PDF builds cleanly
-- **Effort:** 2–3 days
+  - [ ] Builds cleanly; PDF committed
+- **Effort:** 3–4 days
+- **Files:** `proposal/progress_report.tex`, `proposal/progress_report.pdf`
 
-### Phase 7 — Final deliverables
-
-#### T18 — Final artifacts
-
-- **Goal:** Final report + slides + optional Streamlit demo.
-- **Acceptance criteria:**
-  - [ ] `proposal/final_report.tex` with full results
-  - [ ] `slides/final_presentation.pdf`
-  - [ ] Repo `README.md` updated with final status
-  - [ ] (Optional) Streamlit demo if time remains
-- **Effort:** 3–5 days
-
----
-
-## 6. Risk register
+## 7. Risk register
 
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| Extraction quality on implicit/relative refs low | Medium | High | Conservative null-retention; report coverage explicitly |
-| HotpotQA not a true temporal benchmark | High (known) | Medium | Acknowledge in limitations; TimeQuestions as stretch |
-| Budget overrun on extraction | Low (pilot-gated) | High | Hard cost guards in every script; cache-first |
-| Annotation α < 0.70 | Medium | Medium | Expand protocol with more examples; adjudicate rounds |
-| KG²RAG reproduction drifts > 2 F1 | Medium | Medium | Document delta; ensure fair comparison despite gap |
-| Multi-tenure entities break schema | Low | Medium | Prompt explicitly handles; pilot validates |
-| Teammate workload imbalance | Medium | Medium | Task assignments in `tasks/todo.md`; weekly sync |
+| MultiHop 555-Q subset too small after strict ticker filter | Low | Medium | 10-ticker expansion yields **79 Qs (intra=35, inter_year=38, cross_company=6)** — largely retired; A4b home-grown set still targets cross_company thinness |
+| Extraction accuracy on forward-looking statements is low | Medium | Medium | Treat forward-looking as reportable subtype, not failure; hallucination guard catches evidence-less inventions |
+| Hallucination guard rejects too much (>20% of triples) | Medium | Medium | Tune whitespace-normalization; if still too strict, relax to token-set overlap as second pass |
+| Gemini Flash pricing changes before pilot | Low | Low | Re-check at P1; pivot to GPT-4o-mini if blown |
+| SEC HTML parse breaks on some filings | Low | Low | A3 delivered 25/25 clean — risk largely retired |
+| Team throughput < 4 person-weeks in the 4-week window | Medium | High | E5 XBRL + E3 failure taxonomy are degradable |
+| RQ4 ΔJudge shows no capability-parity | Medium | High (story) | Story pivots to "L1 + L2 + L3 each add measurable lift" — ablation still holds |
+| L1 (Temporal-Vanilla) ≈ L3 (Full) — KG adds nothing | Medium | High (story) | Critical result — honestly report; L3 value shifts to cross-company queries where KG shortcuts matter |
+| FinReflectKG-arm comparison confounded by their default-filing-year-only temporal | Low | Medium | Limit FinReflectKG-arm to questions whose gold year matches filing year; document the restriction |
+| Retrieval pipeline (G2-G5) is the largest single work item, ~1 person-week | High | High | Pair-program G4 (most subtle); G3/G5 are compositions, unlikely to surprise |
 
----
+## 8. Parallelization
 
-## 7. Conventions
+| Phase | Parallel tasks | Owner suggestion |
+|---|---|---|
+| Phase 0 remaining | A3b (10-K extension), A4b (home-grown QA), A5 re-run (in flight), K4 lit scan | A3b Supanut (SEC fetch); A4b teammate; A5 Supanut (bg job); K4 any teammate |
+| Phase 2 | B1, B2, B3, T3.2 | B1 Supanut (cost guard); B2+T3.2 Supanut (both Python-only); B3 two annotators |
+| Phase 3 | G1+G2 first (shared by all arms); then G3/G4/G5 parallel | G4 pair-program (subtle); G3/G5 split |
+| Phase 4 | E1, E2, E3, E4, E5 | E1 Supanut (largest); E5 Supanut (XBRL); others split |
 
-- **Python:** 3.9+, venv at `./venv`
-- **Secrets:** `.env` only; never commit
-- **API calls:** always via `src.cache.Cache` wrapper
-- **Seed:** 42 (in `.env` as `RANDOM_SEED`)
-- **Tests:** under `tests/`, run `pytest tests/` (targeting ≥ 80% line coverage for `src/` eventually; not strict during early phases)
-- **Branches:** `feat/<task-id>-<short-name>` (e.g. `feat/t1-sampling`) — one PR per task, self-merge acceptable
-- **Commits:** imperative mood, reference task ID (e.g., `T2: add disk-backed JSON cache`)
-- **Results files:** JSON under `results/runs/`, markdown reports under `docs/` or `results/runs/`
+## 9. Conventions (unchanged from v1)
 
----
+- Python 3.9+, venv at `./venv`
+- Secrets in `.env`, never commit
+- All paid API calls via `src.cache.Cache`
+- Seed 42 everywhere
+- Tests under `tests/`, run `pytest tests/`
+- Branches `feat/<task-id>-<short-name>` (e.g. `feat/a1-sampling-10k`)
+- Commits in imperative mood, reference task ID
 
-## 8. Parallelization summary
-
-| Can run in parallel | Tasks |
-|---|---|
-| Phase 1 fully parallel | T1, T2, T3, T4, T5 |
-| Phase 3 fully parallel (after T7) | T8, T9, T10 |
-| Phase 5 fully parallel (after T12c) | T13, T14, T15, T16 |
-
-Phase 2 and Phase 4 have internal sequential dependencies.
-
----
-
-## 9. How to resume this project
+## 10. How to resume this project
 
 1. Read this file (`tasks/plan.md`).
-2. Read `tasks/todo.md` for the current active checklist.
-3. Check latest state: `git log --oneline -10` and `pytest tests/`.
-4. Pick the next unchecked task in the current phase.
-5. Create branch `feat/<task-id>-<name>`; implement; test; PR.
-6. Update `tasks/todo.md` checkbox when merged.
+2. Read `tasks/todo.md` for the active checklist.
+3. Read `docs/10k_scoping.md` for data-layer context.
+4. Check memory: `memory/project_prior_work_landscape.md` for the comparative map; `memory/project_justification_chain.md` for the L1/L2/L3 argument.
+5. Check state: `git log --oneline -10` and `pytest tests/`.
+6. Pick the next unchecked task in the current phase.
+7. Create `feat/<task-id>-<name>` branch; implement; test; commit; merge.
+8. Update `tasks/todo.md` checkbox when merged.
+
+## Appendix A — Granularity sub-study (deferred)
+
+The locked decision is `int year` for `valid_from`/`valid_to`. A follow-up empirical question — "would quarter-level (`YYYY-Qn`) or ISO 8601 + precision flag yield measurable lift?" — is deferred to future work, with a lightweight pilot design in case we revisit:
+
+1. Count % of temporal mentions in the 3,810-chunk corpus that are quarter-or-finer granular (via regex on a 100-chunk sample).
+2. If >10% quarter-finer, re-run extraction with ISO 8601 + precision flag on the same 100 chunks and measure triple count + judge score on 10 questions per granularity level.
+3. Compare lift vs integration cost (schema migration touches graph edges, temporal filter, eval harness).
+
+This is an appendix, not a blocker. Progress report can cite it as "acknowledged limitation + clear next step".
+
+## Appendix B — Reusable external artefacts
+
+| Artefact | Source | Role in v2 |
+|---|---|---|
+| FinReflectKG 17.5M triples | HF `domyn/FinReflectKG` | Baseline KG arm (A5 → B2) |
+| FinReflectKG-MultiHop 555 Qs | HF (public subset, to be confirmed) | QA set foundation (A4) |
+| FinanceBench 150 Qs | published dataset | Fallback if MultiHop subset too small |
+| SEC XBRL Company Facts API | `data.sec.gov/api/xbrl/` (free) | Ground-truth numeric validation (E5) |
+| KG²RAG repo | `nju-websoft/KG2RAG` | Reference for KG-guided retrieval implementation (G4) |
