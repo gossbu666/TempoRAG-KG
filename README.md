@@ -14,6 +14,24 @@ A 2×2 retrieval ablation crossing a deterministic **temporal year mask** with a
 
 ---
 
+## Contents
+
+- [Headline findings](#headline-findings)
+- [Streamlit demo](#streamlit-demo)
+- [Quick start](#quick-start)
+- [What's in the repo](#whats-in-the-repo)
+- [Pipeline at a glance](#pipeline-at-a-glance)
+- [Reproducing the report numbers](#reproducing-the-report-numbers)
+- [Research questions and findings](#research-questions-and-findings)
+- [Contributions](#contributions)
+- [Limitations](#limitations)
+- [Citation](#citation)
+- [Acknowledgments](#acknowledgments)
+- [Team](#team)
+- [License](#license)
+
+---
+
 ## Headline findings
 
 1. **Temporal year-mask alone (L1) lifts token-F1 universally** — 7-model
@@ -229,9 +247,79 @@ Full prose, IV/DV/H statements, and per-cell numbers in
 
 ---
 
+## Limitations
+
+Five threats to validity, fully discussed in
+[`proposal/final_report.pdf`](proposal/final_report.pdf) §6.1:
+
+1. **Small per-cell QA counts.** The 129-item QA set is hand-vetted but small;
+   `forward_looking` (_n_=2) and `fiscal_vs_calendar` (_n_=5) cells cannot
+   support confident sub-claims on their own. A synthetic expansion pipeline
+   produced 4 strict-vetted candidates that we chose not to fold into the
+   evaluation (would not move CIs by > ±0.005).
+2. **Item 1A coverage gap.** The KG extraction prompt expects
+   entity-relation triples; SEC 10-K Item 1A (Risk Factors) is narrative
+   prose, leading to a 35.4 % fatal rate on Item 1A chunks. We accept this
+   gap rather than retune the prompt; alternative narrative-aware prompts
+   are left as future work.
+3. **Tersification artefact in fiscal\_vs\_calendar.** The L1 regression on
+   that scope (−0.079, _n_=5) is dominated by SQuAD-style token-F1
+   penalising correct-but-terse answers against verbose gold text, not by
+   retrieval failure.
+4. **No prompt-level mitigation tested for A4 IDK.** All seven models share
+   one answer prompt; we did not test interventions like
+   "attempt-then-flag-uncertainty" that would convert IDKs into low-confidence
+   answers.
+5. **Corpus scope.** Ten technology issuers across six fiscal years; results
+   should not be extrapolated to other sectors or to filings outside this
+   window without further evaluation.
+
+Reliability sample (κ between two LLM judges) is reported in Report §6.1 and
+Appendix D as `LLM-vs-LLM` agreement; we explicitly do **not** claim it as
+human inter-rater reliability.
+
+---
+
+## Citation
+
+If you use TempoRAG-KG in your research or coursework, please cite the team's
+final report:
+
+```bibtex
+@techreport{kompayak2026temporag,
+  title  = {{TempoRAG-KG}: Temporal Knowledge Graph-Augmented Retrieval
+            for Multi-Hop Question Answering over SEC 10-K Filings},
+  author = {Kompayak, Supanut and Jaemyaem, Aphisit and
+            Niamsa-ard, Dechathon and Htet, Kaung Hein},
+  year   = {2026},
+  institution = {Asian Institute of Technology, NLU Course},
+  note   = {Course project final report. \url{https://github.com/gossbu666/TempoRAG-KG}}
+}
+```
+
+---
+
+## Acknowledgments
+
+- **SEC EDGAR** for the public-domain 10-K filings used as the evaluation
+  corpus.
+- **Kishore et al. (2025)** —
+  [`FinReflectKG-MultiHop`](https://arxiv.org/abs/2510.02906) —
+  for the multi-hop QA seed set (79 / 129 items derive from a filtered subset).
+- **Zhu et al. (2025)** — KG²RAG — for the foundational graph-walk retriever
+  design we extend at L2 / L3.
+- **Edge et al. (2024)** — GraphRAG — for framing the role of
+  community-detection in graph-based retrieval.
+- **AIT NLU course staff** for project guidance and TA feedback that drove
+  the v1 → v2 pivot to a temporally-grounded corpus.
+- The seven answer-model providers (OpenAI, OpenRouter, Groq) for free-tier or
+  low-cost API access that kept the project within a US$20 student budget.
+
+---
+
 ## Team
 
-- **Supanut Kompayak** (st126055) — lead
+- **Supanut Kompayak** (st126055)
 - **Aphisit Jaemyaem** (st126130)
 - **Dechathon Niamsa-ard** (st126235)
 - **Kaung Hein Htet** (st126477)
