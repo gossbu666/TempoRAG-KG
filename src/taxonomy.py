@@ -24,7 +24,6 @@ RULE_PRECEDENCE: list[str] = [
 ]
 
 _IDK_RE = re.compile(r"(?i)i\s*don[\'’]?t\s*know")
-_WORD_RE = re.compile(r"[a-z0-9]+")
 
 # Stop-word set — intentionally small. Only discarded when the *entire*
 # ngram is stop-words; a stop-word alongside content words is fine.

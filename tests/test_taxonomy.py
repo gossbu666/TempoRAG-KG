@@ -25,8 +25,14 @@ def test_gold_ngrams_returns_3plus_word_ngrams():
     ngrams = gold_ngrams("Apple reported revenue of $394 billion in fiscal 2022")
     assert "apple reported revenue" in ngrams
     assert "394 billion in" in ngrams
-    # stop-word-only ngrams should be rejected
-    assert "of the in" not in ngrams
+
+    # Sentence chosen so that 3 consecutive stop-words appear naturally:
+    # "is in the" are all in _STOPWORDS → the all-stop-word window must
+    # be rejected, while "and the data" mixes stop-words with a content
+    # word ('data') and must be kept.
+    sw = gold_ngrams("It is in the of and the data exists")
+    assert "is in the" not in sw
+    assert "and the data" in sw
 
 
 def test_gold_ngrams_rejects_short_gold():
