@@ -1,52 +1,77 @@
-# Python
+# ─── Python ────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
 *.egg-info/
 .pytest_cache/
 
-# Virtual environments
+# ─── Virtual environments ──────────────────────────────────────────
 venv/
 .venv/
 env/
 
-# Secrets
+# ─── Secrets ───────────────────────────────────────────────────────
 .env
 .env.local
 *.key
 
-# OS
+# ─── OS / IDE / agent state ────────────────────────────────────────
 .DS_Store
 Thumbs.db
-
-# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+.claude/
 
-# Raw datasets (too large for git — use scripts/download_data.sh)
+# ─── Raw datasets (too large; regenerate via scripts) ──────────────
+data/10k/
+data/finreflectkg/
+data/multihop_qa/
 data/hotpot_dev_distractor_v1.json
 data/musique_*.jsonl
 data/musique_*.json
 data/dev_test_singlehop_questions_v1.0.json
 
-# API response cache (can grow large, never commit)
+# ─── API response caches (always derivable) ────────────────────────
+data/cache/
 cache/
 
-# Intermediate / temp results
+# ─── KG raw per-chunk outputs (filtered triples are committed) ─────
+data/kg/full/
+data/kg/pilot/
+
+# ─── Pilot / temp / log files ──────────────────────────────────────
 results/pilot/
 results/runs/
 *.tmp
 *.log
 logs/
 
-# Jupyter
+# ─── Jupyter ───────────────────────────────────────────────────────
 .ipynb_checkpoints/
 
-# Build / dist
+# ─── Build / dist ──────────────────────────────────────────────────
 build/
 dist/
 
-# Git worktrees for parallel branch work
+# ─── Git worktrees for parallel branch work ────────────────────────
 .worktrees/
+
+# ─── LaTeX build artefacts (keep only .tex and final .pdf) ─────────
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc
+
+# ─── Reference papers (kept local for the team) ────────────────────
+Paper/
+
+# ─── Stale archives + leftovers ────────────────────────────────────
+Progress_DDR5.zip
+prompts/archive/
+tasks/archive/
