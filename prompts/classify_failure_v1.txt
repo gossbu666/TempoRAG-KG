@@ -1,0 +1,30 @@
+You are classifying why a 10-K QA system failed on one question.
+
+INPUT:
+  Question   : {QUESTION}
+  Gold answer: {GOLD}
+  Model pred : {PREDICTION}
+  Top-k retrieved chunks (each is a passage from a 10-K filing):
+{CONTEXT}
+  F1 score   : {F1}
+
+CATEGORIES (pick exactly one for `primary`):
+  A1 retrieval_miss  - The gold fact is NOT present in any of the
+    retrieved chunks above, so the model never saw it.
+  A2 hallucination   - The gold fact IS present in at least one chunk,
+    but the prediction asserts something else (wrong number, wrong
+    entity, invented fact).
+  B1 corpus_limit    - The gold fact is NOT something a 10-K filing
+    would normally contain, regardless of retrieval. Examples:
+    stock price on a specific date, analyst opinion, board-meeting
+    content, future-dated guidance not yet disclosed.
+
+OPTIONAL `secondary` ∈ {A1, A2, A3, A4, B1, B2, B3, B4, B5} or null —
+include only if a distinct second failure mode clearly also applies
+(e.g. the model both missed retrieval AND the corpus would not have
+answered it anyway).
+
+Respond with ONLY JSON on one line, no fences, no prose:
+{"primary": "A1" | "A2" | "B1",
+ "secondary": "<code>" | null,
+ "reason": "<=25 words>"}
