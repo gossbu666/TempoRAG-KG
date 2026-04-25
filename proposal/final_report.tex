@@ -399,24 +399,25 @@ addressing TA feedback that asked us to make the KG cost explicit.
 
 \begin{table}[h]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lr}
 \toprule
 Component & Cost \\
 \midrule
-\textbf{Non-KG (L0/L1)} & \\
-\quad Embedding (one-time, 7{,}467 chunks) & \$0.07 \\
-\quad Answer calls (3 OpenAI models $\times$ 258 Q) & \$0.55 \\
+\textbf{Non-KG (L0 / L1)} & \\
+\quad Embedding index (7{,}467 chunks) & \$0.07 \\
+\quad Answer calls (3 OpenAI models, 258 Q) & \$0.55 \\
 \midrule
 \textbf{KG-only (L2)} & \\
-\quad KG extraction (gpt-4.1-nano, 7{,}467 chunks) & \$3.50 \\
-\quad Marginal answer calls vs.\ L0 & \$0.55 \\
-\midrule
-\textbf{KG + temporal (L3)} & \\
-\quad Reuses KG extract from L2 & --- \\
+\quad KG extraction (gpt-4.1-nano, full corpus) & \$3.50 \\
 \quad Marginal answer calls & \$0.55 \\
 \midrule
-Stage-2 failure-taxonomy classifier (gpt-4o-mini, 1{,}183 calls) & \$0.30 \\
+\textbf{KG + temporal (L3)} & \\
+\quad Reuses L2 KG extract & --- \\
+\quad Marginal answer calls & \$0.55 \\
+\midrule
+Taxonomy LLM judge (1{,}183 gpt-4o-mini calls) & \$0.30 \\
 \midrule
 \textbf{Total project spend} & \textbf{\$5.20} \\
 \bottomrule
