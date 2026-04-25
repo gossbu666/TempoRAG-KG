@@ -63,6 +63,17 @@ CONDITION_LABELS = {
 CORPUS_YEARS = [2019, 2020, 2021, 2022, 2023, 2024]
 
 
+def _md_safe(s: str) -> str:
+    """Escape dollar signs so Streamlit's markdown renderer doesn't
+    interpret them as LaTeX math delimiters. Financial answers are full
+    of `$394,328 million`-style strings; without escaping, Streamlit
+    renders them in italic math mode and drops the commas.
+    """
+    if not isinstance(s, str):
+        return str(s)
+    return s.replace("$", "\\$")
+
+
 # ──────────────────────────────────────────────────────────────────────────
 # Cached resources
 # ──────────────────────────────────────────────────────────────────────────
@@ -313,7 +324,7 @@ if do_ask or do_compare:
         if gold_rec:
             gold = gold_rec["answer"]
             gold_str = gold if isinstance(gold, str) else ", ".join(gold)
-            st.success(f"**Gold answer:** {gold_str}")
+            st.success(f"**Gold answer:** {_md_safe(gold_str)}")
             st.caption(
                 f"scope={gold_rec.get('scope')} · hop={gold_rec.get('hop_count')}"
                 f" · source={gold_rec.get('source_dataset')}"
@@ -331,7 +342,7 @@ if do_ask or do_compare:
             st.markdown(f"#### {CONDITION_LABELS[cond]}{f1_str}")
             a_col, r_col = st.columns([4, 5])
             with a_col:
-                st.info(ans["answer"])
+                st.info(_md_safe(ans["answer"]))
                 cache_tag = "✓ cache" if ans.get("cache_hit") else "live call"
                 st.caption(f"`{model_id}` · {cache_tag}")
             with r_col:
@@ -358,7 +369,7 @@ if do_ask or do_compare:
         a_col, r_col = st.columns([4, 5])
         with a_col:
             st.subheader("Answer")
-            st.info(ans["answer"])
+            st.info(_md_safe(ans["answer"]))
             if ans.get("parse_error"):
                 st.warning(f"Parse note: {ans['parse_error']}")
             cache_tag = "✓ cache" if ans.get("cache_hit") else "live call"
@@ -367,7 +378,8 @@ if do_ask or do_compare:
             if gold_rec:
                 st.markdown("**Gold answer** _(matched from labeled QA)_")
                 gold = gold_rec["answer"]
-                st.success(gold if isinstance(gold, str) else ", ".join(gold))
+                gold_str = gold if isinstance(gold, str) else ", ".join(gold)
+                st.success(_md_safe(gold_str))
                 f1 = f1_token(ans["answer"], gold)
                 st.metric(
                     "Token-F1 vs gold",
