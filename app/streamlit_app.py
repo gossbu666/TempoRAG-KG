@@ -131,6 +131,14 @@ st.set_page_config(
 
 load_dotenv()
 
+# Apply any pending session-state writes BEFORE widgets are instantiated.
+# Streamlit forbids assigning to session_state[key] after the widget with
+# that key has been created in the same render, so sample-question
+# buttons stash their target year set under a sentinel key and we copy
+# it across here on the next render.
+if "_pending_years" in st.session_state:
+    st.session_state["years_input"] = st.session_state.pop("_pending_years")
+
 st.title("TempoRAG-KG — 10-K multi-hop QA demo")
 st.caption(
     "Temporal Knowledge Graph-Augmented RAG over 25 SEC 10-K filings "
@@ -216,8 +224,10 @@ with st.sidebar:
     for i, (label, sq, sy) in enumerate(SAMPLES):
         if st.button(label, key=f"sample_{i}", help=sq, use_container_width=True):
             st.session_state["question"] = sq
+            # Stash the target years under a sentinel; the next render
+            # applies it to `years_input` before the multiselect runs.
             if condition in ("L1", "L3"):
-                st.session_state["years_input"] = sy
+                st.session_state["_pending_years"] = sy
             st.rerun()
 
 # ──────────────────────────────────────────────────────────────────────────
