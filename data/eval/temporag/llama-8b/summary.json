@@ -1,0 +1,26 @@
+{
+  "f1_mean": 0.15306011518867804,
+  "f1_ci": [
+    0.12171835375480126,
+    0.18626281872787806
+  ],
+  "em_mean": 0.0,
+  "em_ci": [
+    0.0,
+    0.0
+  ],
+  "coverage": 0.5116279069767442,
+  "idk_rate": 0.4883720930232558,
+  "n_answered": 66,
+  "f1_answered_mean": 0.29916295241423435,
+  "f1_answered_ci": [
+    0.26398607901213117,
+    0.3342435868724486
+  ],
+  "n": 129,
+  "model": "llama-8b",
+  "model_id": "meta-llama/llama-3.1-8b-instruct",
+  "provider": "openrouter",
+  "cache_hits": 52,
+  "elapsed_sec": 157.84370708465576
+}
