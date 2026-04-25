@@ -47,3 +47,6 @@ logs/
 # Build / dist
 build/
 dist/
+
+# Git worktrees for parallel branch work
+.worktrees/
