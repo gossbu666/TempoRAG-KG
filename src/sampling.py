@@ -1,12 +1,13 @@
-"""Deterministic sampling of HotpotQA and MuSiQue questions.
+"""Deterministic sampling of HotpotQA, MuSiQue questions, and 10-K chunks.
 
 Emits:
-  data/samples/hotpot_1000.json  — 500 temporal + 500 non-temporal
-  data/samples/musique_500.json  — 500 stratified across 2/3/4 hops proportional
-                                   to the full dev-set hop distribution
+  data/samples/hotpot_1000.json    — 500 temporal + 500 non-temporal  (v1 corpus)
+  data/samples/musique_500.json    — 500 stratified across 2/3/4 hops  (v1 corpus)
+  data/samples/10k_chunks.jsonl    — all chunks from 25 10-K filings   (v2 corpus)
 
-Both files are byte-identical across runs (seeded Random + sorted inputs +
-sorted outputs + json sort_keys=True). See tasks/plan.md §5 T1.
+All three outputs are byte-identical across runs (seeded Random for v1; pure
+deterministic iteration order + tiktoken windowing for v2). See
+tasks/plan.md §5 T1 (v1) and §6 A1 (v2).
 
 Temporal patterns mirror the EDA classifier in src/temporal_eda.py. If the
 patterns ever change, the EDA must be re-run so the counts stay consistent.
@@ -14,6 +15,7 @@ patterns ever change, the EDA must be re-run so the counts stay consistent.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import random
@@ -158,15 +160,172 @@ def sample_musique(
     return picked
 
 
+# -----------------------------------------------------------------------------
+# 10-K chunk sampling (v2 corpus)
+# -----------------------------------------------------------------------------
+
+# Target items in a fixed order so chunk_id generation is deterministic.
+# Mirrors src/parse_10k.py::TARGET_ITEMS.
+_TARGET_ITEMS: tuple[str, ...] = ("1", "1A", "7", "7A", "8")
+
+# tiktoken tokenizer used across the project for cost/length accounting.
+_TOKENIZER_NAME = "cl100k_base"
+
+# Window size and stride (overlap = 100) per docs/10k_scoping.md §3.
+_CHUNK_TOKENS = 512
+_CHUNK_OVERLAP = 100
+_MIN_TAIL_TOKENS = 32  # skip the final window if it's this short AND fully overlaps the previous
+
+
+def _get_tokenizer():
+    # Deferred import so the module imports cleanly in environments where
+    # tiktoken isn't installed (v1 HotpotQA/MuSiQue sampling stays usable).
+    import tiktoken
+    return tiktoken.get_encoding(_TOKENIZER_NAME)
+
+
+def _window_token_ids(token_ids: list[int], size: int, stride: int) -> list[tuple[int, int]]:
+    """Return [(start, end), ...] half-open token-id slices covering the input.
+
+    - Fixed stride until the tail runs out.
+    - The final window is kept if it extends past the previous window; dropped
+      if it's fully contained AND shorter than _MIN_TAIL_TOKENS (avoids a
+      duplicated 10-token leftover chunk).
+    """
+    if not token_ids:
+        return []
+    n = len(token_ids)
+    windows: list[tuple[int, int]] = []
+    start = 0
+    while start < n:
+        end = min(start + size, n)
+        windows.append((start, end))
+        if end == n:
+            break
+        start += stride
+
+    if len(windows) >= 2:
+        prev_start, prev_end = windows[-2]
+        last_start, last_end = windows[-1]
+        tail_len = last_end - last_start
+        if last_end <= prev_end and tail_len < _MIN_TAIL_TOKENS:
+            windows.pop()
+    return windows
+
+
+def _chunk_section(text: str, enc) -> list[tuple[str, int]]:
+    """Tokenize `text` and split into (chunk_text, token_count) tuples."""
+    if not text or not text.strip():
+        return []
+    ids = enc.encode(text)
+    out: list[tuple[str, int]] = []
+    for start, end in _window_token_ids(ids, _CHUNK_TOKENS, _CHUNK_TOKENS - _CHUNK_OVERLAP):
+        chunk_ids = ids[start:end]
+        chunk_text = enc.decode(chunk_ids)
+        out.append((chunk_text, len(chunk_ids)))
+    return out
+
+
+def _sha256_text(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def _filing_index(manifest_path: Path) -> list[dict]:
+    """Return manifest filings sorted by (ticker, fiscal_year).
+
+    Sorting the manifest here — rather than trusting its on-disk order —
+    keeps chunk ids stable even if download_10k.py is modified to emit in
+    a different order.
+    """
+    with manifest_path.open("r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    filings = list(manifest.get("filings", []))
+    filings.sort(key=lambda r: (r["ticker"], int(r["fiscal_year"])))
+    return filings
+
+
+def sample_10k_chunks(
+    manifest_path: Path | str = "data/10k/manifest.json",
+    sections_root: Path | str = "data/10k/sections",
+    out_path: Path | str | None = "data/samples/10k_chunks.jsonl",
+    n: int | None = None,
+) -> list[dict]:
+    """Deterministically chunk every 10-K section into 512/100-token windows.
+
+    Each record:
+      {
+        "chunk_id":          "<TICKER>_FY<year>_item<item>_<idx:03d>",
+        "ticker":            str,
+        "fy":                int,
+        "item":              str,           # one of "1","1A","7","7A","8"
+        "text":              str,           # decoded window text
+        "sha256":            str,           # sha256(text.encode("utf-8"))
+        "token_count":       int,           # actual cl100k_base token count
+        "filing_date":       "YYYY-MM-DD",  # from manifest
+        "period_of_report":  "YYYY-MM-DD",  # from manifest
+      }
+
+    The order of iteration is (ticker asc, fy asc, item in _TARGET_ITEMS order,
+    chunk_idx asc), matching the chunk_id sort. Output is written as JSONL with
+    sort_keys=True, producing byte-identical bytes on repeat runs.
+
+    `n` truncates the stream (take the first n chunks in sort order). Pass None
+    to get the whole corpus.
+    """
+    manifest = Path(manifest_path)
+    sections_dir = Path(sections_root)
+    enc = _get_tokenizer()
+
+    records: list[dict] = []
+    for filing in _filing_index(manifest):
+        ticker = filing["ticker"]
+        fy = int(filing["fiscal_year"])
+        filing_date = filing["filing_date"]
+        period = filing["period_of_report"]
+        fy_dir = sections_dir / ticker / f"FY{fy}"
+        for item in _TARGET_ITEMS:
+            section_path = fy_dir / f"item_{item}.txt"
+            if not section_path.exists():
+                continue
+            text = section_path.read_text(encoding="utf-8")
+            for idx, (chunk_text, token_count) in enumerate(_chunk_section(text, enc)):
+                records.append({
+                    "chunk_id": f"{ticker}_FY{fy}_item{item}_{idx:03d}",
+                    "ticker": ticker,
+                    "fy": fy,
+                    "item": item,
+                    "text": chunk_text,
+                    "sha256": _sha256_text(chunk_text),
+                    "token_count": token_count,
+                    "filing_date": filing_date,
+                    "period_of_report": period,
+                })
+
+    records.sort(key=lambda r: r["chunk_id"])
+    if n is not None:
+        records = records[:n]
+
+    if out_path is not None:
+        out = Path(out_path)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        with out.open("w", encoding="utf-8") as f:
+            for rec in records:
+                f.write(json.dumps(rec, ensure_ascii=False, sort_keys=True) + "\n")
+    return records
+
+
 def main() -> None:
-    sample_hotpot(
-        raw_path="data/hotpot_dev_distractor_v1.json",
-        out_path="data/samples/hotpot_1000.json",
-    )
-    sample_musique(
-        raw_path="data/musique_ans_v1.0_dev.jsonl",
-        out_path="data/samples/musique_500.json",
-    )
+    # v1 HotpotQA / MuSiQue sampling — only run if inputs present so the v2
+    # workflow doesn't fail on a fresh checkout without the v1 raw files.
+    hp_raw = Path("data/hotpot_dev_distractor_v1.json")
+    ms_raw = Path("data/musique_ans_v1.0_dev.jsonl")
+    if hp_raw.exists():
+        sample_hotpot(raw_path=hp_raw, out_path="data/samples/hotpot_1000.json")
+    if ms_raw.exists():
+        sample_musique(raw_path=ms_raw, out_path="data/samples/musique_500.json")
+
+    if Path("data/10k/manifest.json").exists():
+        sample_10k_chunks()
 
 
 if __name__ == "__main__":

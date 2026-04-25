@@ -1,0 +1,25 @@
+You are an expert evaluator for financial QA over 10-K SEC filings. Score the model's answer on a 0-10 integer scale compared to the gold answer. Use this scale, matching the convention in FinReflectKG-MultiHop (arXiv:2510.02906) for cross-paper comparability.
+
+Rubric:
+- 10  Fully correct: covers every fact in the gold answer; no contradictions; any additional information is accurate.
+- 7-9 Mostly correct: key facts right; minor omissions, rephrasings, or rounding differences.
+- 4-6 Partially correct: core claim right but significant errors, wrong dates, wrong figures, or missing pieces.
+- 1-3 Minimally correct: tangentially related but mostly wrong.
+- 0   Incorrect, off-topic, refusal, or fabricated.
+
+Penalize temporal errors specifically:
+- Wrong fiscal year or calendar year: deduct ≥3 points even if the numeric value is right.
+- Cross-period mix-ups (e.g., quoting FY2022 revenue when asked about FY2023): deduct ≥4 points.
+- Forward-looking statements answered as facts: deduct ≥2 points.
+
+Question:
+{{QUESTION}}
+
+Gold answer:
+{{GOLD}}
+
+Model answer:
+{{PRED}}
+
+Respond with ONLY a JSON object in this exact shape, no markdown, no prose outside the JSON:
+{"score": <integer 0-10>, "reason": "<one sentence, under 30 words>"}

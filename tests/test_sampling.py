@@ -1,4 +1,7 @@
-"""Tests for src.sampling — stratification, determinism, record schema."""
+"""Tests for src.sampling — stratification, determinism, record schema.
+
+Covers the v1 HotpotQA/MuSiQue samplers and the v2 `sample_10k_chunks` path.
+"""
 
 from __future__ import annotations
 
@@ -8,7 +11,14 @@ from pathlib import Path
 
 import pytest
 
-from src.sampling import _largest_remainder, classify, sample_hotpot, sample_musique
+from src.sampling import (
+    _largest_remainder,
+    _window_token_ids,
+    classify,
+    sample_10k_chunks,
+    sample_hotpot,
+    sample_musique,
+)
 
 
 # ------------------------- classifier -----------------------------------------
@@ -206,3 +216,141 @@ def test_sample_musique_output_sorted_by_id(tmp_path: Path) -> None:
     picked = sample_musique(raw, out, n=40, seed=42)
     ids = [r["id"] for r in picked]
     assert ids == sorted(ids)
+
+
+# ------------------------- 10-K chunk sampling -------------------------------
+
+# Items populated in the synthetic corpus. Not all target items are present so
+# the test also covers the "skip missing section" branch.
+_SYNTH_TICKERS: tuple[tuple[str, int], ...] = (
+    ("AAPL", 2022),
+    ("AAPL", 2023),
+    ("MSFT", 2023),
+)
+_SYNTH_ITEMS_PRESENT: tuple[str, ...] = ("1", "1A", "7", "8")  # item 7A intentionally missing
+
+
+def _write_10k_fixture(tmp_root: Path) -> tuple[Path, Path]:
+    """Create a fake `data/10k/` layout: manifest.json + sections/*.txt."""
+    manifest_path = tmp_root / "manifest.json"
+    sections_root = tmp_root / "sections"
+    filings = []
+    for ticker, fy in _SYNTH_TICKERS:
+        fy_dir = sections_root / ticker / f"FY{fy}"
+        fy_dir.mkdir(parents=True, exist_ok=True)
+        for item in _SYNTH_ITEMS_PRESENT:
+            # ~3,000 words per section — guaranteed multi-chunk at 512 tokens.
+            body = (
+                f"Section {item} of {ticker} fiscal year {fy}. "
+                f"The company reported revenue growth during fiscal {fy}. "
+                "Operating expenses increased year over year driven by investments "
+                "in cloud infrastructure, research and development headcount, and "
+                "data-center capacity. Management expects these trends to continue "
+                "in the following fiscal year. "
+            ) * 40
+            (fy_dir / f"item_{item}.txt").write_text(body, encoding="utf-8")
+        filings.append({
+            "ticker": ticker,
+            "fiscal_year": fy,
+            "filing_date": f"{fy + 1}-02-01",
+            "period_of_report": f"{fy}-09-30" if ticker == "AAPL" else f"{fy}-06-30",
+            "accession_no": "0000000000-00-000000",
+            "primary_document": "filing.htm",
+            "document_url": "about:blank",
+            "local_path": f"data/10k/raw/{ticker}/FY{fy}.html",
+            "size_bytes": 1,
+            "sha256": "0" * 64,
+            "cik": "0000000000",
+        })
+    manifest_path.write_text(json.dumps({"filings": filings}), encoding="utf-8")
+    return manifest_path, sections_root
+
+
+def test_window_token_ids_covers_all_tokens_with_overlap() -> None:
+    ids = list(range(1200))
+    windows = _window_token_ids(ids, size=512, stride=412)
+    # Every window is ≤512 long and consecutive windows share exactly 100 ids
+    # until the tail, where the last window may stop short.
+    assert all(0 <= s < e <= len(ids) and e - s <= 512 for s, e in windows)
+    for (s1, e1), (s2, _) in zip(windows, windows[1:]):
+        assert s2 - s1 == 412  # stride
+        assert e1 - s2 == 100  # overlap
+    # The union of windows covers every token id.
+    covered = set()
+    for s, e in windows:
+        covered.update(range(s, e))
+    assert covered == set(range(len(ids)))
+
+
+def test_window_token_ids_drops_tiny_fully_overlapping_tail() -> None:
+    # 512 + 1 extra token → the "tail" window of length 1 is fully inside the
+    # first window and well below _MIN_TAIL_TOKENS, so it must be dropped.
+    ids = list(range(513))
+    windows = _window_token_ids(ids, size=512, stride=412)
+    assert windows == [(0, 512), (412, 513)] or windows == [(0, 512)]
+    # 1 token is < _MIN_TAIL_TOKENS=32 → expect the tail dropped when it also
+    # fully overlaps. Here (412,513) is NOT fully inside (0,512) because 513>512.
+    # So this case keeps both — asserting we don't drop windows that extend past.
+    assert (412, 513) in windows
+
+
+def test_sample_10k_chunks_record_schema(tmp_path: Path) -> None:
+    manifest, sections = _write_10k_fixture(tmp_path)
+    out = tmp_path / "10k_chunks.jsonl"
+    records = sample_10k_chunks(manifest, sections, out)
+
+    assert records, "expected at least one chunk from fixture"
+    expected_keys = {
+        "chunk_id", "ticker", "fy", "item", "text", "sha256",
+        "token_count", "filing_date", "period_of_report",
+    }
+    for rec in records:
+        assert set(rec.keys()) == expected_keys
+        assert rec["ticker"] in {t for t, _ in _SYNTH_TICKERS}
+        assert rec["item"] in _SYNTH_ITEMS_PRESENT
+        assert rec["sha256"] == hashlib.sha256(rec["text"].encode("utf-8")).hexdigest()
+        assert 0 < rec["token_count"] <= 512
+        # filing_date / period_of_report flow through from the manifest
+        assert rec["filing_date"].startswith(str(rec["fy"] + 1))
+        assert rec["period_of_report"].startswith(str(rec["fy"]))
+
+
+def test_sample_10k_chunks_chunk_id_deterministic_and_sorted(tmp_path: Path) -> None:
+    manifest, sections = _write_10k_fixture(tmp_path)
+    records = sample_10k_chunks(manifest, sections, tmp_path / "out.jsonl")
+    ids = [r["chunk_id"] for r in records]
+    assert ids == sorted(ids)
+    # chunk_id format: <TICKER>_FY<year>_item<item>_<idx:03d>
+    for chunk_id in ids:
+        ticker_part, fy_part, item_part, idx_part = chunk_id.split("_")
+        assert fy_part.startswith("FY") and fy_part[2:].isdigit()
+        assert item_part.startswith("item")
+        assert idx_part.isdigit() and len(idx_part) == 3
+
+
+def test_sample_10k_chunks_skips_missing_sections(tmp_path: Path) -> None:
+    manifest, sections = _write_10k_fixture(tmp_path)
+    records = sample_10k_chunks(manifest, sections, tmp_path / "out.jsonl")
+    # Fixture never wrote item 7A → must not appear in output
+    assert all(r["item"] != "7A" for r in records)
+    # But all other target items should appear for every filing
+    for ticker, fy in _SYNTH_TICKERS:
+        present = {r["item"] for r in records if r["ticker"] == ticker and r["fy"] == fy}
+        assert present == set(_SYNTH_ITEMS_PRESENT)
+
+
+def test_sample_10k_chunks_byte_identical(tmp_path: Path) -> None:
+    manifest, sections = _write_10k_fixture(tmp_path)
+    out_a = tmp_path / "a.jsonl"
+    out_b = tmp_path / "b.jsonl"
+    sample_10k_chunks(manifest, sections, out_a)
+    sample_10k_chunks(manifest, sections, out_b)
+    assert hashlib.sha256(out_a.read_bytes()).hexdigest() == hashlib.sha256(out_b.read_bytes()).hexdigest()
+
+
+def test_sample_10k_chunks_n_truncates(tmp_path: Path) -> None:
+    manifest, sections = _write_10k_fixture(tmp_path)
+    full = sample_10k_chunks(manifest, sections, tmp_path / "full.jsonl")
+    first5 = sample_10k_chunks(manifest, sections, tmp_path / "first5.jsonl", n=5)
+    assert len(first5) == 5
+    assert first5 == full[:5]

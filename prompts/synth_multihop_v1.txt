@@ -1,0 +1,65 @@
+You are designing a multi-hop financial QA dataset over 10-K filings. You
+will be shown {N_CHUNKS} distinct chunks from SEC 10-K filings. Your job
+is to write ONE question whose answer requires combining information from
+ALL {N_CHUNKS} chunks — not a subset.
+
+## Hard constraints
+
+1. **Hop count = {N_CHUNKS}**. If ANY one chunk is removed, the question
+   must become unanswerable or the answer materially wrong. Do NOT write
+   a question that any single chunk already answers.
+2. **Answer must be a concrete fact** — a number, name, comparison, or
+   short phrase — grounded verbatim or by direct inference in the chunks.
+   Avoid "describe" / "explain" / open-ended questions.
+3. **No answer leakage.** The question must not contain the final number
+   or name that the answer will state.
+4. **Scope = {SCOPE}.** Respect the scope contract:
+   - `cross_company`: question asks about a comparison or relationship
+     between two or more different companies.
+   - `inter_year`: question compares or tracks the same company across
+     two or more different fiscal years.
+   - `intra`: question draws on one company within one fiscal year but
+     from different sections (items) of its 10-K.
+   - `fiscal_vs_calendar`: question hinges on the distinction between a
+     company's fiscal year boundary and the calendar year.
+   - `forward_looking`: question is answered by a forward-looking
+     statement (risk factors, guidance) rather than a realized fact.
+5. **Target tickers = {TICKERS}.** The question must refer to these
+   companies (by name or ticker).
+6. **Target years = {YEARS}.** The question must be answerable using
+   those fiscal years only.
+7. **Reasoning chain.** You must emit a step-by-step explanation of how
+   each chunk contributes to the final answer.
+
+## Output format
+
+Respond with ONLY a single JSON object, no prose before or after:
+
+```
+{{
+  "question": "<the question>",
+  "answer": "<concise factual answer, 1-2 sentences>",
+  "scope": "{SCOPE}",
+  "hop_count": {N_CHUNKS},
+  "tickers": {TICKERS_JSON},
+  "years": {YEARS_JSON},
+  "reasoning_chain": [
+    "Chunk 1 ({CHUNK_1_ID}) provides: ...",
+    "Chunk 2 ({CHUNK_2_ID}) provides: ...",
+    "... combined to yield the answer ..."
+  ],
+  "leakage_check": "none | low_risk | high_risk",
+  "ambiguity_check": "unambiguous | moderate | high"
+}}
+```
+
+If no answerable {N_CHUNKS}-hop question can be constructed from these
+chunks under the scope contract, output:
+
+```
+{{"question": null, "reason": "<brief why>"}}
+```
+
+## Chunks
+
+{CHUNK_BLOCKS}
