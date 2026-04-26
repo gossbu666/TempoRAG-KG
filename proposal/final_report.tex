@@ -651,6 +651,18 @@ measurement artefact in Section~\ref{sec:limits}, not a model
 failure --- a finding that the failure-taxonomy classifier
 (Section~\ref{sec:discussion}) confirms quantitatively.
 
+\paragraph{KG expansion can inject a wrong-column risk.}
+On \textit{inter\_year} ($n=53$), L3 sits $0.012$ below L1.
+Representative cross-condition case:
+\textit{``How did Amazon's AWS segment net sales change from
+fiscal 2019 to fiscal 2021?''} L0 / L2 abstain; L1 returns
+$\$35{,}026\text{M}\!\to\!\$62{,}202\text{M}$ (F1 = 0.718); L3
+retrieves a multi-metric Item~7 chunk via the KG walk and the
+answer model picks the \emph{operating income} column, returning
+$\$9{,}201\text{M}\!\to\!\$62{,}202\text{M}$ (F1 = 0.700).
+Token-F1 misses the wrong-row error because the FY2021 number,
+verb, and frame all match.
+
 \begin{table}[h]
 \centering
 \small
@@ -906,6 +918,21 @@ lift even when the retriever is perfect. We had to construct a
 purpose-built corpus to make the temporal mechanism observable. The
 lesson: do the EDA before locking the benchmark; what looks like
 ``multi-hop'' in the literature can be temporally trivial.
+
+\paragraph{We predicted Token-F1 would track correctness; in
+practice it has a ceiling.}
+Across all $3{,}612$ cells, \emph{no} question reaches
+F1 $\geq 0.8$ in any condition. The bound is set by tersification
+(gold strings on this corpus are verbose; correct terse answers
+lose token overlap) plus the wrong-column extraction failure
+illustrated in Section~\ref{sec:r-scope} --- L3 returns
+$\$9{,}201$\,M instead of $\$35{,}026$\,M and still scores $0.700$
+because every other token in the answer matches the gold frame.
+The lesson is that Token-F1 is necessary but not sufficient. A
+future iteration would supplement it with (i)~entity-set extraction
+match against a gold entity slot and (ii)~canonical-numeric-value
+match for financial metrics; together these would penalise the
+wrong-column failure mode that token overlap currently hides.
 
 \paragraph{We predicted the synth verifier would accept ~50\% of generated questions; in the end, the strict pipeline accepted 3\%.}
 Our N-1-chunk hop verifier asks gpt-4o-mini to answer the synth

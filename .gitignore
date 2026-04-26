@@ -71,6 +71,10 @@ dist/
 # ─── Reference papers (kept local for the team) ────────────────────
 Paper/
 
+# ─── Video recordings (too large; share via Drive/YouTube) ─────────
+*.mp4
+*.mov
+
 # ─── Stale archives + leftovers ────────────────────────────────────
 Progress_DDR5.zip
 prompts/archive/

@@ -223,10 +223,10 @@ with st.sidebar:
         ("Inter-year trajectory",
          "How did Amazon's AWS operating income evolve from 2020 to 2023?",
          [2020, 2021, 2022, 2023]),
-        ("Cross-company hop=3",
-         "Which company had higher data-center revenue in FY2024, NVIDIA "
-         "or Intel?",
-         [2024]),
+        ("Inter-year AWS (headline demo)",
+         "How did Amazon's AWS segment net sales change from fiscal "
+         "2019 to fiscal 2021?",
+         [2019, 2021]),
         ("Fiscal-vs-calendar boundary",
          "What was Cisco's total revenue for the fiscal year ending "
          "July 27, 2024?",
